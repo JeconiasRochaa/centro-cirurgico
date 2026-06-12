@@ -28,10 +28,6 @@
             box-sizing: border-box;
         }
 
-        html {
-            font-size: 16px;
-        }
-
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: var(--bg-primary);
@@ -58,46 +54,42 @@
             height: 100dvh;
             display: flex;
             flex-direction: column;
-            max-width: 100%;
+            max-width: 100vw;
             overflow: hidden;
         }
 
-        /* ============ HEADER ============ */
+        /* HEADER */
         .header {
             background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
             border-bottom: 2px solid var(--border-color);
-            padding: 1vh 2vw;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            min-height: 8vh;
-            gap: 2vw;
+            gap: 20px;
             flex-shrink: 0;
         }
 
         .hospital-brand {
             display: flex;
             align-items: center;
-            gap: 2vw;
+            gap: 20px;
             flex: 1;
             min-width: 0;
         }
 
         .logo-container {
-            width: 7vw;
-            height: 7vw;
-            min-width: 50px;
-            min-height: 50px;
-            max-width: 120px;
-            max-height: 120px;
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
             background: white;
-            border-radius: 1.5vw;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             border: 2px solid var(--gold);
-            box-shadow: 0 0 2vw rgba(191, 149, 63, 0.25);
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
             flex-shrink: 0;
         }
 
@@ -105,11 +97,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 15%;
-        }
-
-        .logo-placeholder {
-            font-size: 3vw;
+            padding: 10px;
         }
 
         .hospital-info {
@@ -117,9 +105,9 @@
         }
 
         .hospital-info h1 {
-            font-size: 2.2vw;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: 0.15vw;
+            letter-spacing: 1px;
             color: #f1f5f9;
             text-transform: uppercase;
             white-space: nowrap;
@@ -129,10 +117,10 @@
         }
 
         .hospital-info .subtitle {
-            font-size: 1.2vw;
+            font-size: 12px;
             color: var(--gold);
-            letter-spacing: 0.3vw;
-            margin-top: 0.3vh;
+            letter-spacing: 2px;
+            margin-top: 4px;
             font-weight: 500;
         }
 
@@ -142,31 +130,29 @@
         }
 
         .time-display {
-            font-size: 5vw;
+            font-size: 44px;
             font-weight: 700;
             color: var(--gold);
-            letter-spacing: 0.3vw;
+            letter-spacing: 2px;
             font-family: 'Courier New', monospace;
             line-height: 1;
         }
 
         .date-display {
-            font-size: 1.4vw;
+            font-size: 14px;
             color: var(--text-secondary);
-            letter-spacing: 0.15vw;
-            margin-top: 0.5vh;
-            white-space: nowrap;
+            letter-spacing: 1px;
+            margin-top: 5px;
         }
 
-        /* ============ STATUS BAR ============ */
+        /* STATUS BAR */
         .status-bar {
             background: rgba(13, 18, 41, 0.97);
             border-bottom: 1px solid var(--border-color);
-            padding: 1.5vh 2vw;
+            padding: 12px 30px;
             display: flex;
             justify-content: center;
-            gap: 8vw;
-            flex-wrap: wrap;
+            gap: 80px;
             flex-shrink: 0;
         }
 
@@ -175,24 +161,24 @@
         }
 
         .status-value {
-            font-size: 4vw;
+            font-size: 34px;
             font-weight: 700;
             color: var(--gold);
             line-height: 1;
         }
 
         .status-label {
-            font-size: 1.1vw;
+            font-size: 10px;
             color: var(--text-muted);
-            letter-spacing: 0.2vw;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-top: 0.4vh;
+            margin-top: 4px;
         }
 
-        /* ============ PANEL CONTENT ============ */
+        /* PANEL CONTENT */
         .panel-content {
             flex: 1;
-            padding: 1.5vh 2vw;
+            padding: 20px 30px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -201,16 +187,16 @@
 
         .table-wrapper {
             flex: 1;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: auto;
             border-radius: 8px;
         }
 
         table {
             width: 100%;
-            min-width: 100%;
+            min-width: 1100px;
             border-collapse: separate;
-            border-spacing: 0 0.5vh;
-            table-layout: auto;
+            border-spacing: 0 5px;
         }
 
         thead {
@@ -221,11 +207,11 @@
 
         thead th {
             background: var(--bg-tertiary);
-            padding: 1.5vh 1vw;
+            padding: 14px 10px;
             text-align: left;
             color: var(--gold);
-            font-size: 1.1vw;
-            letter-spacing: 0.2vw;
+            font-size: 11px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             border-bottom: 2px solid var(--border-color);
             white-space: nowrap;
@@ -233,11 +219,11 @@
         }
 
         thead th:first-child {
-            border-radius: 0.8vw 0 0 0;
+            border-radius: 8px 0 0 0;
         }
 
         thead th:last-child {
-            border-radius: 0 0.8vw 0 0;
+            border-radius: 0 8px 0 0;
         }
 
         tbody tr {
@@ -246,25 +232,26 @@
         }
 
         tbody td {
-            padding: 1.5vh 1vw;
-            font-size: 1.3vw;
+            padding: 14px 10px;
+            font-size: 14px;
             color: #cbd5e1;
             border-bottom: 1px solid #1a2744;
             white-space: nowrap;
             font-weight: 500;
+            vertical-align: middle;
         }
 
         tbody td:first-child {
-            border-radius: 0.8vw 0 0 0.8vw;
+            border-radius: 8px 0 0 8px;
         }
 
         tbody td:last-child {
-            border-radius: 0 0.8vw 0.8vw 0;
+            border-radius: 0 8px 8px 0;
         }
 
         .row-ongoing {
             background: rgba(59, 130, 246, 0.08) !important;
-            border-left: 0.4vw solid var(--blue) !important;
+            border-left: 3px solid var(--blue) !important;
             animation: rowAlert 2s infinite;
         }
 
@@ -276,31 +263,31 @@
         .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 0.5vw;
-            padding: 0.8vh 1.2vw;
-            border-radius: 2vw;
-            font-size: 1vw;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
             font-weight: 600;
-            letter-spacing: 0.1vw;
+            letter-spacing: 1px;
             white-space: nowrap;
         }
 
         .status-waiting {
             background: rgba(245, 158, 11, 0.12);
-            border: 2px solid var(--orange);
+            border: 1px solid var(--orange);
             color: var(--orange-light);
         }
 
         .status-progress {
             background: rgba(59, 130, 246, 0.15);
-            border: 2px solid var(--blue);
+            border: 1px solid var(--blue);
             color: var(--blue-light);
             animation: statusPulse 1.5s infinite;
         }
 
         .status-done {
             background: rgba(16, 185, 129, 0.12);
-            border: 2px solid var(--green);
+            border: 1px solid var(--green);
             color: var(--green-light);
         }
 
@@ -310,19 +297,19 @@
         }
 
         .specialty-tag {
-            font-size: 0.9vw;
+            font-size: 10px;
             color: var(--gold);
             background: rgba(191, 149, 63, 0.1);
-            padding: 0.2vh 0.6vw;
-            border-radius: 1vw;
+            padding: 2px 8px;
+            border-radius: 10px;
             display: inline-block;
-            margin-top: 0.2vh;
+            margin-top: 3px;
         }
 
         .duration-timer {
             font-family: 'Courier New', monospace;
             font-weight: 700;
-            font-size: 1.6vw;
+            font-size: 16px;
         }
 
         .duration-ongoing { 
@@ -339,75 +326,140 @@
 
         .empty-state {
             text-align: center;
-            padding: 5vh 2vw;
+            padding: 60px 20px;
             color: var(--text-muted);
-            font-size: 2vw;
-            letter-spacing: 0.2vw;
+            font-size: 20px;
+            letter-spacing: 2px;
         }
 
         .footer {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
-            padding: 1vh 2vw;
+            padding: 10px 30px;
             display: flex;
             justify-content: space-between;
-            font-size: 0.9vw;
+            font-size: 10px;
             color: var(--text-muted);
-            letter-spacing: 0.1vw;
-            flex-wrap: wrap;
-            gap: 1vw;
+            letter-spacing: 1px;
             flex-shrink: 0;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        /* Scrollbar personalizada */
+        /* Scrollbar */
         .table-wrapper::-webkit-scrollbar {
-            width: 0.8vw;
-            height: 0.8vw;
+            width: 8px;
+            height: 8px;
         }
 
         .table-wrapper::-webkit-scrollbar-track {
             background: var(--bg-secondary);
-            border-radius: 0.4vw;
+            border-radius: 4px;
         }
 
         .table-wrapper::-webkit-scrollbar-thumb {
             background: var(--border-color);
-            border-radius: 0.4vw;
+            border-radius: 4px;
         }
 
-        .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #2a4a7e;
+        /* ============ TELAS MENORES ============ */
+        @media (max-width: 1400px) {
+            .header {
+                padding: 12px 20px;
+            }
+            
+            .logo-container {
+                width: 65px;
+                height: 65px;
+                min-width: 65px;
+            }
+            
+            .hospital-info h1 {
+                font-size: 20px;
+            }
+            
+            .hospital-info .subtitle {
+                font-size: 10px;
+            }
+            
+            .time-display {
+                font-size: 36px;
+            }
+            
+            .date-display {
+                font-size: 12px;
+            }
+            
+            .status-bar {
+                padding: 10px 20px;
+                gap: 50px;
+            }
+            
+            .status-value {
+                font-size: 28px;
+            }
+            
+            .status-label {
+                font-size: 9px;
+            }
+            
+            .panel-content {
+                padding: 15px 20px;
+            }
+            
+            table {
+                min-width: 950px;
+            }
+            
+            thead th {
+                padding: 10px 8px;
+                font-size: 10px;
+            }
+            
+            tbody td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            
+            .status-indicator {
+                font-size: 9px;
+                padding: 4px 10px;
+            }
+            
+            .duration-timer {
+                font-size: 14px;
+            }
+            
+            .footer {
+                padding: 8px 20px;
+                font-size: 9px;
+            }
         }
 
-        /* ============ MEDIA QUERIES PARA DIFERENTES TELAS ============ */
-
-        /* Telas muito pequenas (celulares antigos) */
-        @media (max-width: 480px) {
+        /* TELAS MUITO PEQUENAS */
+        @media (max-width: 900px) {
             .header {
                 flex-direction: column;
-                padding: 2vw;
-                gap: 2vw;
-                min-height: auto;
+                padding: 10px 15px;
+                gap: 10px;
             }
 
             .hospital-brand {
-                flex-direction: row;
-                gap: 3vw;
+                gap: 12px;
             }
 
             .logo-container {
-                width: 12vw;
-                height: 12vw;
-                min-width: 40px;
-                min-height: 40px;
+                width: 50px;
+                height: 50px;
+                min-width: 50px;
             }
 
             .hospital-info h1 {
-                font-size: 4vw;
+                font-size: 17px;
             }
 
             .hospital-info .subtitle {
-                font-size: 2.5vw;
+                font-size: 9px;
             }
 
             .time-box {
@@ -415,332 +467,58 @@
             }
 
             .time-display {
-                font-size: 8vw;
+                font-size: 30px;
             }
 
             .date-display {
-                font-size: 3vw;
+                font-size: 11px;
             }
 
             .status-bar {
-                gap: 8vw;
-                padding: 2vw;
+                gap: 25px;
+                padding: 8px 15px;
             }
 
             .status-value {
-                font-size: 7vw;
+                font-size: 24px;
             }
 
             .status-label {
-                font-size: 2.5vw;
+                font-size: 7px;
             }
 
             .panel-content {
-                padding: 2vw;
+                padding: 10px 15px;
             }
 
             table {
-                min-width: 600px;
+                min-width: 750px;
             }
 
             thead th {
-                font-size: 2.5vw;
-                padding: 1.5vw 2vw;
+                font-size: 9px;
+                padding: 8px 6px;
             }
 
             tbody td {
-                font-size: 2.8vw;
-                padding: 1.5vw 2vw;
+                font-size: 11px;
+                padding: 8px 6px;
             }
 
             .status-indicator {
-                font-size: 2.2vw;
-                padding: 1vw 2vw;
+                font-size: 8px;
+                padding: 3px 8px;
             }
 
             .duration-timer {
-                font-size: 3vw;
-            }
-
-            .empty-state {
-                font-size: 4vw;
+                font-size: 12px;
             }
 
             .footer {
-                font-size: 2vw;
+                font-size: 8px;
+                padding: 6px 15px;
                 flex-direction: column;
                 text-align: center;
-            }
-        }
-
-        /* Tablets e telas médias */
-        @media (min-width: 481px) and (max-width: 1024px) {
-            .logo-container {
-                width: 10vw;
-                height: 10vw;
-            }
-
-            .hospital-info h1 {
-                font-size: 3vw;
-            }
-
-            .hospital-info .subtitle {
-                font-size: 1.8vw;
-            }
-
-            .time-display {
-                font-size: 6vw;
-            }
-
-            .date-display {
-                font-size: 2vw;
-            }
-
-            .status-value {
-                font-size: 5.5vw;
-            }
-
-            .status-label {
-                font-size: 1.5vw;
-            }
-
-            thead th {
-                font-size: 1.5vw;
-            }
-
-            tbody td {
-                font-size: 1.8vw;
-            }
-
-            .status-indicator {
-                font-size: 1.4vw;
-            }
-
-            .duration-timer {
-                font-size: 2.2vw;
-            }
-        }
-
-        /* Tablets em paisagem e laptops pequenos */
-        @media (min-width: 1025px) and (max-width: 1366px) {
-            .logo-container {
-                width: 8vw;
-                height: 8vw;
-            }
-
-            .hospital-info h1 {
-                font-size: 2.5vw;
-            }
-
-            .time-display {
-                font-size: 5.5vw;
-            }
-
-            .status-value {
-                font-size: 4.5vw;
-            }
-        }
-
-        /* Full HD (1920x1080) - Tamanho padrão */
-        @media (min-width: 1367px) and (max-width: 1920px) {
-            .logo-container {
-                width: 7vw;
-                height: 7vw;
-            }
-
-            .hospital-info h1 {
-                font-size: 2.2vw;
-            }
-
-            .time-display {
-                font-size: 5vw;
-            }
-        }
-
-        /* 2K / QHD (2560x1440) */
-        @media (min-width: 1921px) and (max-width: 2560px) {
-            .logo-container {
-                width: 6vw;
-                height: 6vw;
-                max-width: 140px;
-                max-height: 140px;
-            }
-
-            .hospital-info h1 {
-                font-size: 2vw;
-            }
-
-            .hospital-info .subtitle {
-                font-size: 1.1vw;
-            }
-
-            .time-display {
-                font-size: 4.5vw;
-            }
-
-            .date-display {
-                font-size: 1.3vw;
-            }
-
-            .status-value {
-                font-size: 3.5vw;
-            }
-
-            .status-label {
-                font-size: 1vw;
-            }
-
-            thead th {
-                font-size: 1vw;
-                padding: 2vh 1.2vw;
-            }
-
-            tbody td {
-                font-size: 1.2vw;
-                padding: 2vh 1.2vw;
-            }
-
-            .status-indicator {
-                font-size: 0.9vw;
-            }
-
-            .duration-timer {
-                font-size: 1.5vw;
-            }
-
-            .footer {
-                font-size: 0.8vw;
-            }
-        }
-
-        /* 4K (3840x2160) */
-        @media (min-width: 2561px) {
-            .header {
-                padding: 2vh 3vw;
-                min-height: 10vh;
-            }
-
-            .logo-container {
-                width: 5vw;
-                height: 5vw;
-                max-width: 180px;
-                max-height: 180px;
-            }
-
-            .hospital-info h1 {
-                font-size: 1.8vw;
-            }
-
-            .hospital-info .subtitle {
-                font-size: 1vw;
-            }
-
-            .time-display {
-                font-size: 4vw;
-            }
-
-            .date-display {
-                font-size: 1.1vw;
-            }
-
-            .status-bar {
-                padding: 2vh 3vw;
-                gap: 10vw;
-            }
-
-            .status-value {
-                font-size: 3vw;
-            }
-
-            .status-label {
-                font-size: 0.9vw;
-            }
-
-            .panel-content {
-                padding: 2vh 3vw;
-            }
-
-            thead th {
-                font-size: 0.9vw;
-                padding: 2.5vh 1.5vw;
-                letter-spacing: 0.3vw;
-            }
-
-            tbody td {
-                font-size: 1.1vw;
-                padding: 2.5vh 1.5vw;
-            }
-
-            .status-indicator {
-                font-size: 0.8vw;
-                padding: 1vh 1.5vw;
-            }
-
-            .specialty-tag {
-                font-size: 0.7vw;
-            }
-
-            .duration-timer {
-                font-size: 1.3vw;
-            }
-
-            .empty-state {
-                font-size: 1.5vw;
-            }
-
-            .footer {
-                font-size: 0.7vw;
-                padding: 1.5vh 3vw;
-            }
-        }
-
-        /* Orientação paisagem em mobile */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .header {
-                min-height: 12vh;
-                padding: 1vh 3vw;
-            }
-
-            .logo-container {
-                width: 8vh;
-                height: 8vh;
-                min-width: 40px;
-                min-height: 40px;
-            }
-
-            .hospital-info h1 {
-                font-size: 3vh;
-            }
-
-            .time-display {
-                font-size: 6vh;
-            }
-
-            .status-bar {
-                padding: 1vh 3vw;
-            }
-
-            .status-value {
-                font-size: 5vh;
-            }
-
-            .panel-content {
-                padding: 1vh 3vw;
-            }
-
-            thead th {
-                font-size: 2vh;
-                padding: 1.5vh 1vw;
-            }
-
-            tbody td {
-                font-size: 2.2vh;
-                padding: 1.5vh 1vw;
-            }
-
-            .footer {
-                padding: 1vh 3vw;
-                font-size: 1.5vh;
             }
         }
     </style>
@@ -753,7 +531,7 @@
         <div class="header">
             <div class="hospital-brand">
                 <div class="logo-container" id="logoContainer">
-                    <span class="logo-placeholder">🏥</span>
+                    <span style="font-size: 32px;">🏥</span>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
@@ -835,7 +613,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        const TODAY = new Date().toISOString().split('T')[0];
+        // Variável que sempre terá a data atual
+        let TODAY = new Date().toISOString().split('T')[0];
         let currentSurgeries = [];
 
         // ECG
@@ -866,11 +645,11 @@
             lines.forEach(line => {
                 ctx.beginPath();
                 ctx.strokeStyle = '#bf953f';
-                ctx.lineWidth = Math.max(1.5, window.innerWidth * 0.001);
+                ctx.lineWidth = 1.8;
                 
                 const t = timestamp * 0.001 * line.speed + line.offset;
                 
-                for (let x = 0; x < canvas.width; x += Math.max(2, Math.floor(window.innerWidth / 800))) {
+                for (let x = 0; x < canvas.width; x += 2) {
                     const phase = (x * 0.006 + t) % 4;
                     let y = line.y;
                     
@@ -903,12 +682,25 @@
         }
         requestAnimationFrame(drawECG);
 
+        // ========== FUNÇÃO PARA VERIFICAR MUDANÇA DE DIA ==========
+        function checkNewDay() {
+            const newDate = new Date().toISOString().split('T')[0];
+            if (newDate !== TODAY) {
+                console.log('🔄 Novo dia detectado! Atualizando painel...');
+                TODAY = newDate;
+                updatePanel(); // Atualiza o painel com a nova data
+            }
+        }
+
         function updateClock() {
             const now = new Date();
             document.getElementById('liveTime').textContent = now.toLocaleTimeString('pt-BR');
             document.getElementById('liveDate').textContent = now.toLocaleDateString('pt-BR', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
+            
+            // Verifica se o dia mudou a cada atualização do relógio
+            checkNewDay();
         }
 
         function calculateDuration(surgery) {
@@ -918,6 +710,7 @@
                 const startDate = new Date(surgery.date);
                 startDate.setHours(startH, startM, 0);
                 const diffMinutes = Math.floor((now - startDate) / 60000);
+                if (diffMinutes < 0) return { hours: 0, minutes: 0, isRunning: true };
                 return { hours: Math.floor(diffMinutes / 60), minutes: diffMinutes % 60, isRunning: true };
             } else if (surgery.status === 'concluida' && surgery.duration) {
                 return { hours: Math.floor(surgery.duration / 60), minutes: surgery.duration % 60, isRunning: false };
@@ -939,6 +732,7 @@
         }
 
         function updatePanel() {
+            // Filtra apenas cirurgias do dia ATUAL
             const todaySurgeries = currentSurgeries.filter(s => s.date === TODAY);
             
             document.getElementById('inProgress').textContent = String(todaySurgeries.filter(s => s.status === 'em_andamento').length).padStart(2, '0');
@@ -986,12 +780,14 @@
             document.getElementById('updateTime').textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
         }
 
+        // Firebase - tempo real
         const surgeriesRef = ref(db, 'surgeries');
         onValue(surgeriesRef, (snapshot) => {
             currentSurgeries = snapshot.val() ? Object.values(snapshot.val()) : [];
             updatePanel();
         });
 
+        // Carregar logo
         const logoRef = ref(db, 'settings/logo');
         onValue(logoRef, (snapshot) => {
             const logoData = snapshot.val();
@@ -1000,12 +796,38 @@
             }
         });
 
+        // Inicialização
         updateClock();
+        updatePanel();
+        
+        // Atualiza relógio e verifica mudança de dia a cada segundo
         setInterval(updateClock, 1000);
+        
+        // Atualiza durações a cada segundo
         setInterval(updateDurations, 1000);
+        
+        // Força verificação de novo dia a cada 30 segundos
+        setInterval(checkNewDay, 30000);
+        
+        // Atualiza painel completo a cada 30 segundos
         setInterval(updatePanel, 30000);
         
-        window.addEventListener('resize', updatePanel);
+        // Verifica mudança de dia quando a aba volta a ficar visível
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                checkNewDay();
+                updatePanel();
+            }
+        });
+        
+        // Verifica mudança de dia ao redimensionar
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            checkNewDay();
+        });
+
+        console.log('✅ Painel TV iniciado - Data atual:', TODAY);
+        console.log('🔄 Verificação de novo dia ativa - Próxima verificação em 1 segundo');
     </script>
 </body>
 </html>
