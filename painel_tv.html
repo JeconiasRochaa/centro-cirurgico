@@ -74,6 +74,10 @@
             padding: 10px;
         }
 
+        .logo-placeholder {
+            font-size: 40px;
+        }
+
         .hospital-info h1 {
             font-size: 26px;
             font-weight: 700;
@@ -260,18 +264,52 @@
 
         .connection-status {
             position: fixed;
-            bottom: 10px;
-            right: 10px;
+            bottom: 20px;
+            right: 20px;
             background: #10b981;
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 10px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
             z-index: 1000;
+            font-weight: 600;
         }
 
         .connection-status.offline {
             background: #ef4444;
+        }
+
+        @media (max-width: 1366px) {
+            .header {
+                padding: 14px 25px;
+                min-height: 85px;
+            }
+            
+            .logo-container {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .hospital-info h1 {
+                font-size: 22px;
+            }
+            
+            .time-display {
+                font-size: 44px;
+            }
+            
+            .panel-content {
+                padding: 18px 25px;
+            }
+            
+            thead th, tbody td {
+                padding: 10px 10px;
+                font-size: 12px;
+            }
+            
+            .status-bar {
+                gap: 50px;
+            }
         }
     </style>
 </head>
@@ -282,7 +320,7 @@
         <div class="header">
             <div class="hospital-brand">
                 <div class="logo-container" id="logoContainer">
-                    <span style="font-size: 40px;">🏥</span>
+                    <span class="logo-placeholder">🏥</span>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
@@ -337,8 +375,8 @@
 
         <div class="footer">
             <span>© 2024 HRPI - Todos os direitos reservados</span>
-            <span>Painel Cirúrgico v5.0 Firebase</span>
-            <span id="updateTime">Atualizado em tempo real</span>
+            <span>Painel Cirúrgico v5.0</span>
+            <span id="updateTime">Conectando...</span>
         </div>
     </div>
 
@@ -347,7 +385,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBiuJsJ-Wt2L6NB0WFlalLLFGcgLWJ49w8",
@@ -363,16 +401,16 @@
         const db = getDatabase(app);
         
         const TODAY = new Date().toISOString().split('T')[0];
-        
-        // Status da conexão
+
+        // Verificar conexão
         const connectedRef = ref(db, '.info/connected');
         onValue(connectedRef, (snap) => {
             const status = document.getElementById('connectionStatus');
             if (snap.val() === true) {
-                status.textContent = '🟢 Online';
+                status.textContent = '🟢 Conectado';
                 status.className = 'connection-status';
             } else {
-                status.textContent = '🔴 Offline';
+                status.textContent = '🔴 Reconectando...';
                 status.className = 'connection-status offline';
             }
         });
@@ -475,6 +513,7 @@
             
             if (todaySurgeries.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>';
+                document.getElementById('updateTime').textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
                 return;
             }
 
@@ -517,9 +556,9 @@
                         <tr class="${rowClass}">
                             <td><strong>${surgery.room}</strong></td>
                             <td>${surgery.time}</td>
-                            <td>${surgery.patient}</td>
-                            <td>${surgery.type}</td>
-                            <td>Dr. ${surgery.doctor}${surgery.specialty ? `<br><span class="specialty-tag">${surgery.specialty}</span>` : ''}</td>
+                            <td>${surgery.patient || '-'}</td>
+                            <td>${surgery.type || '-'}</td>
+                            <td>Dr. ${surgery.doctor || '-'}${surgery.specialty ? `<br><span class="specialty-tag">${surgery.specialty}</span>` : ''}</td>
                             <td>${surgery.specialty || '-'}</td>
                             <td>${surgery.circulante || '-'}</td>
                             <td>${statusHTML}</td>
@@ -536,23 +575,24 @@
         onValue(surgeriesRef, (snapshot) => {
             const data = snapshot.val();
             const surgeries = data ? Object.values(data) : [];
+            console.log('Dados recebidos:', surgeries.length, 'cirurgias');
             updatePanel(surgeries);
+        }, (error) => {
+            console.error('Erro ao carregar dados:', error);
+            document.getElementById('updateTime').textContent = 'Erro de conexão';
         });
 
-        // Carregar logo
+        // Carregar logo do Firebase
         const logoRef = ref(db, 'settings/logo');
         onValue(logoRef, (snapshot) => {
             const logoData = snapshot.val();
             if (logoData) {
-                document.getElementById('logoContainer').innerHTML = `<img src="${logoData}" alt="Logo HRPI">`;
+                document.getElementById('logoContainer').innerHTML = `<img src="${logoData}" alt="Logo HRPI" onerror="this.parentElement.innerHTML='<span style=font-size:40px>🏥</span>'">`;
             }
         });
 
         updateClock();
         setInterval(updateClock, 1000);
-        setInterval(() => {
-            updatePanel(JSON.parse(localStorage.getItem('lastSurgeries') || '[]'));
-        }, 30000);
     </script>
 </body>
 </html>
