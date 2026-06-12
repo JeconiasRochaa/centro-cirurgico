@@ -28,14 +28,16 @@
             box-sizing: border-box;
         }
 
+        html {
+            font-size: 16px;
+        }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             overflow: hidden;
-            /* AUMENTADO: Tamanho base da fonte */
-            font-size: clamp(16px, 2vw, 22px);
         }
 
         #ecgCanvas {
@@ -56,69 +58,81 @@
             height: 100dvh;
             display: flex;
             flex-direction: column;
+            max-width: 100%;
+            overflow: hidden;
         }
 
+        /* ============ HEADER ============ */
         .header {
             background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
             border-bottom: 2px solid var(--border-color);
-            /* AUMENTADO: Padding */
-            padding: clamp(15px, 2.5vh, 25px) clamp(20px, 4vw, 40px);
+            padding: 1vh 2vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /* AUMENTADO: Altura mínima */
-            min-height: clamp(80px, 12vh, 120px);
-            gap: clamp(15px, 3vw, 25px);
+            min-height: 8vh;
+            gap: 2vw;
+            flex-shrink: 0;
         }
 
         .hospital-brand {
             display: flex;
             align-items: center;
-            gap: clamp(15px, 3vw, 25px);
+            gap: 2vw;
             flex: 1;
             min-width: 0;
         }
 
         .logo-container {
-            /* AUMENTADO: Tamanho da logo */
-            width: clamp(70px, 10vw, 110px);
-            height: clamp(70px, 10vw, 110px);
-            min-width: clamp(70px, 10vw, 110px);
+            width: 7vw;
+            height: 7vw;
+            min-width: 50px;
+            min-height: 50px;
+            max-width: 120px;
+            max-height: 120px;
             background: white;
-            border-radius: clamp(10px, 2vw, 16px);
+            border-radius: 1.5vw;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             border: 2px solid var(--gold);
-            box-shadow: 0 0 25px rgba(191, 149, 63, 0.25);
+            box-shadow: 0 0 2vw rgba(191, 149, 63, 0.25);
+            flex-shrink: 0;
         }
 
         .logo-container img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: clamp(8px, 1.5vw, 12px);
+            padding: 15%;
+        }
+
+        .logo-placeholder {
+            font-size: 3vw;
+        }
+
+        .hospital-info {
+            min-width: 0;
         }
 
         .hospital-info h1 {
-            /* AUMENTADO: Título */
-            font-size: clamp(22px, 3.5vw, 36px);
+            font-size: 2.2vw;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 0.15vw;
             color: #f1f5f9;
             text-transform: uppercase;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.2;
         }
 
         .hospital-info .subtitle {
-            /* AUMENTADO: Subtítulo */
-            font-size: clamp(12px, 1.8vw, 18px);
+            font-size: 1.2vw;
             color: var(--gold);
-            letter-spacing: 4px;
-            margin-top: clamp(3px, 0.8vh, 8px);
+            letter-spacing: 0.3vw;
+            margin-top: 0.3vh;
             font-weight: 500;
         }
 
@@ -128,33 +142,32 @@
         }
 
         .time-display {
-            /* AUMENTADO: Relógio */
-            font-size: clamp(40px, 7vw, 72px);
+            font-size: 5vw;
             font-weight: 700;
             color: var(--gold);
-            letter-spacing: 4px;
+            letter-spacing: 0.3vw;
             font-family: 'Courier New', monospace;
             line-height: 1;
         }
 
         .date-display {
-            /* AUMENTADO: Data */
-            font-size: clamp(14px, 2vw, 20px);
+            font-size: 1.4vw;
             color: var(--text-secondary);
-            letter-spacing: 2px;
-            margin-top: clamp(4px, 0.8vh, 8px);
+            letter-spacing: 0.15vw;
+            margin-top: 0.5vh;
             white-space: nowrap;
         }
 
+        /* ============ STATUS BAR ============ */
         .status-bar {
             background: rgba(13, 18, 41, 0.97);
             border-bottom: 1px solid var(--border-color);
-            /* AUMENTADO: Padding */
-            padding: clamp(12px, 2vh, 18px) clamp(20px, 4vw, 40px);
+            padding: 1.5vh 2vw;
             display: flex;
             justify-content: center;
-            gap: clamp(50px, 10vw, 100px);
+            gap: 8vw;
             flex-wrap: wrap;
+            flex-shrink: 0;
         }
 
         .status-item {
@@ -162,58 +175,69 @@
         }
 
         .status-value {
-            /* AUMENTADO: Números do status */
-            font-size: clamp(32px, 5vw, 52px);
+            font-size: 4vw;
             font-weight: 700;
             color: var(--gold);
             line-height: 1;
         }
 
         .status-label {
-            /* AUMENTADO: Labels do status */
-            font-size: clamp(11px, 1.5vw, 15px);
+            font-size: 1.1vw;
             color: var(--text-muted);
-            letter-spacing: 3px;
+            letter-spacing: 0.2vw;
             text-transform: uppercase;
-            margin-top: clamp(4px, 0.5vh, 6px);
+            margin-top: 0.4vh;
         }
 
+        /* ============ PANEL CONTENT ============ */
         .panel-content {
             flex: 1;
-            /* AUMENTADO: Padding */
-            padding: clamp(18px, 3vw, 30px) clamp(20px, 4vw, 40px);
-            overflow-y: auto;
-            overflow-x: auto;
+            padding: 1.5vh 2vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
 
         .table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            overflow: auto;
+            border-radius: 8px;
         }
 
         table {
             width: 100%;
-            min-width: 900px;
+            min-width: 100%;
             border-collapse: separate;
-            border-spacing: 0 clamp(5px, 1vh, 8px);
+            border-spacing: 0 0.5vh;
+            table-layout: auto;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         thead th {
             background: var(--bg-tertiary);
-            /* AUMENTADO: Cabeçalho da tabela */
-            padding: clamp(14px, 2vh, 20px) clamp(12px, 1.5vw, 16px);
+            padding: 1.5vh 1vw;
             text-align: left;
             color: var(--gold);
-            font-size: clamp(12px, 1.5vw, 16px);
-            letter-spacing: 3px;
+            font-size: 1.1vw;
+            letter-spacing: 0.2vw;
             text-transform: uppercase;
             border-bottom: 2px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 10;
             white-space: nowrap;
             font-weight: 700;
+        }
+
+        thead th:first-child {
+            border-radius: 0.8vw 0 0 0;
+        }
+
+        thead th:last-child {
+            border-radius: 0 0.8vw 0 0;
         }
 
         tbody tr {
@@ -222,18 +246,25 @@
         }
 
         tbody td {
-            /* AUMENTADO: Células da tabela */
-            padding: clamp(14px, 2vh, 20px) clamp(12px, 1.5vw, 16px);
-            font-size: clamp(15px, 1.8vw, 20px);
+            padding: 1.5vh 1vw;
+            font-size: 1.3vw;
             color: #cbd5e1;
             border-bottom: 1px solid #1a2744;
             white-space: nowrap;
             font-weight: 500;
         }
 
+        tbody td:first-child {
+            border-radius: 0.8vw 0 0 0.8vw;
+        }
+
+        tbody td:last-child {
+            border-radius: 0 0.8vw 0.8vw 0;
+        }
+
         .row-ongoing {
             background: rgba(59, 130, 246, 0.08) !important;
-            border-left: 5px solid var(--blue) !important;
+            border-left: 0.4vw solid var(--blue) !important;
             animation: rowAlert 2s infinite;
         }
 
@@ -245,13 +276,12 @@
         .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: clamp(6px, 1vw, 10px);
-            /* AUMENTADO: Badge de status */
-            padding: clamp(6px, 1vh, 10px) clamp(14px, 2vw, 20px);
-            border-radius: 25px;
-            font-size: clamp(12px, 1.5vw, 16px);
+            gap: 0.5vw;
+            padding: 0.8vh 1.2vw;
+            border-radius: 2vw;
+            font-size: 1vw;
             font-weight: 600;
-            letter-spacing: 1.5px;
+            letter-spacing: 0.1vw;
             white-space: nowrap;
         }
 
@@ -280,25 +310,19 @@
         }
 
         .specialty-tag {
-            /* AUMENTADO: Tag de especialidade */
-            font-size: clamp(10px, 1.3vw, 14px);
+            font-size: 0.9vw;
             color: var(--gold);
             background: rgba(191, 149, 63, 0.1);
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 0.2vh 0.6vw;
+            border-radius: 1vw;
             display: inline-block;
-            margin-top: 3px;
-        }
-
-        .duration-cell {
-            min-width: 120px;
+            margin-top: 0.2vh;
         }
 
         .duration-timer {
             font-family: 'Courier New', monospace;
             font-weight: 700;
-            /* AUMENTADO: Timer de duração */
-            font-size: clamp(18px, 2.5vw, 26px);
+            font-size: 1.6vw;
         }
 
         .duration-ongoing { 
@@ -315,203 +339,408 @@
 
         .empty-state {
             text-align: center;
-            padding: clamp(60px, 10vh, 100px) clamp(20px, 4vw, 30px);
+            padding: 5vh 2vw;
             color: var(--text-muted);
-            /* AUMENTADO: Estado vazio */
-            font-size: clamp(20px, 3vw, 30px);
-            letter-spacing: 3px;
+            font-size: 2vw;
+            letter-spacing: 0.2vw;
         }
 
         .footer {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
-            /* AUMENTADO: Footer */
-            padding: clamp(10px, 1.5vh, 14px) clamp(20px, 4vw, 40px);
+            padding: 1vh 2vw;
             display: flex;
             justify-content: space-between;
-            font-size: clamp(10px, 1.3vw, 14px);
+            font-size: 0.9vw;
             color: var(--text-muted);
-            letter-spacing: 1.5px;
+            letter-spacing: 0.1vw;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 1vw;
+            flex-shrink: 0;
         }
 
-        .panel-content::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+        /* Scrollbar personalizada */
+        .table-wrapper::-webkit-scrollbar {
+            width: 0.8vw;
+            height: 0.8vw;
         }
 
-        .panel-content::-webkit-scrollbar-track {
+        .table-wrapper::-webkit-scrollbar-track {
             background: var(--bg-secondary);
+            border-radius: 0.4vw;
         }
 
-        .panel-content::-webkit-scrollbar-thumb {
+        .table-wrapper::-webkit-scrollbar-thumb {
             background: var(--border-color);
-            border-radius: 5px;
+            border-radius: 0.4vw;
         }
 
-        /* Telas pequenas */
-        @media (max-width: 768px) {
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #2a4a7e;
+        }
+
+        /* ============ MEDIA QUERIES PARA DIFERENTES TELAS ============ */
+
+        /* Telas muito pequenas (celulares antigos) */
+        @media (max-width: 480px) {
             .header {
                 flex-direction: column;
-                gap: 12px;
-                padding: 12px 18px;
+                padding: 2vw;
+                gap: 2vw;
+                min-height: auto;
+            }
+
+            .hospital-brand {
+                flex-direction: row;
+                gap: 3vw;
+            }
+
+            .logo-container {
+                width: 12vw;
+                height: 12vw;
+                min-width: 40px;
+                min-height: 40px;
+            }
+
+            .hospital-info h1 {
+                font-size: 4vw;
+            }
+
+            .hospital-info .subtitle {
+                font-size: 2.5vw;
             }
 
             .time-box {
                 text-align: center;
             }
 
-            .hospital-info h1 {
-                font-size: clamp(20px, 5vw, 26px);
-            }
-
-            .status-bar {
-                gap: 30px;
-                padding: 10px 18px;
-            }
-
-            .status-value {
-                font-size: clamp(28px, 7vw, 40px);
-            }
-
-            .panel-content {
-                padding: 12px;
-            }
-
-            table {
-                min-width: 700px;
-            }
-
-            thead th, tbody td {
-                padding: 10px 8px;
-                font-size: clamp(13px, 3.5vw, 16px);
-            }
-
-            .footer {
-                flex-direction: column;
-                text-align: center;
-                gap: 8px;
-            }
-        }
-
-        /* Telas grandes (Full HD e 4K) */
-        @media (min-width: 1920px) {
-            .header {
-                padding: 25px 50px;
-                min-height: 130px;
-            }
-
-            .logo-container {
-                width: 120px;
-                height: 120px;
-            }
-
-            .hospital-info h1 {
-                font-size: 38px;
-            }
-
-            .hospital-info .subtitle {
-                font-size: 18px;
-            }
-
             .time-display {
-                font-size: 72px;
+                font-size: 8vw;
             }
 
             .date-display {
-                font-size: 20px;
+                font-size: 3vw;
+            }
+
+            .status-bar {
+                gap: 8vw;
+                padding: 2vw;
             }
 
             .status-value {
-                font-size: 56px;
+                font-size: 7vw;
             }
 
             .status-label {
-                font-size: 16px;
+                font-size: 2.5vw;
             }
 
             .panel-content {
-                padding: 35px 50px;
+                padding: 2vw;
+            }
+
+            table {
+                min-width: 600px;
             }
 
             thead th {
-                font-size: 16px;
-                padding: 22px 18px;
+                font-size: 2.5vw;
+                padding: 1.5vw 2vw;
             }
 
             tbody td {
-                font-size: 22px;
-                padding: 20px 18px;
+                font-size: 2.8vw;
+                padding: 1.5vw 2vw;
             }
 
             .status-indicator {
-                font-size: 16px;
-                padding: 10px 22px;
+                font-size: 2.2vw;
+                padding: 1vw 2vw;
             }
 
             .duration-timer {
-                font-size: 28px;
+                font-size: 3vw;
+            }
+
+            .empty-state {
+                font-size: 4vw;
+            }
+
+            .footer {
+                font-size: 2vw;
+                flex-direction: column;
+                text-align: center;
             }
         }
 
-        /* Telas 4K */
-        @media (min-width: 2560px) {
-            .header {
-                padding: 35px 70px;
-                min-height: 160px;
-            }
-
+        /* Tablets e telas médias */
+        @media (min-width: 481px) and (max-width: 1024px) {
             .logo-container {
-                width: 150px;
-                height: 150px;
+                width: 10vw;
+                height: 10vw;
             }
 
             .hospital-info h1 {
-                font-size: 48px;
+                font-size: 3vw;
+            }
+
+            .hospital-info .subtitle {
+                font-size: 1.8vw;
             }
 
             .time-display {
-                font-size: 90px;
+                font-size: 6vw;
+            }
+
+            .date-display {
+                font-size: 2vw;
             }
 
             .status-value {
-                font-size: 70px;
+                font-size: 5.5vw;
             }
 
-            .panel-content {
-                padding: 45px 70px;
+            .status-label {
+                font-size: 1.5vw;
             }
 
             thead th {
-                font-size: 20px;
-                padding: 28px 22px;
+                font-size: 1.5vw;
             }
 
             tbody td {
-                font-size: 26px;
-                padding: 26px 22px;
+                font-size: 1.8vw;
+            }
+
+            .status-indicator {
+                font-size: 1.4vw;
+            }
+
+            .duration-timer {
+                font-size: 2.2vw;
+            }
+        }
+
+        /* Tablets em paisagem e laptops pequenos */
+        @media (min-width: 1025px) and (max-width: 1366px) {
+            .logo-container {
+                width: 8vw;
+                height: 8vw;
+            }
+
+            .hospital-info h1 {
+                font-size: 2.5vw;
+            }
+
+            .time-display {
+                font-size: 5.5vw;
+            }
+
+            .status-value {
+                font-size: 4.5vw;
+            }
+        }
+
+        /* Full HD (1920x1080) - Tamanho padrão */
+        @media (min-width: 1367px) and (max-width: 1920px) {
+            .logo-container {
+                width: 7vw;
+                height: 7vw;
+            }
+
+            .hospital-info h1 {
+                font-size: 2.2vw;
+            }
+
+            .time-display {
+                font-size: 5vw;
+            }
+        }
+
+        /* 2K / QHD (2560x1440) */
+        @media (min-width: 1921px) and (max-width: 2560px) {
+            .logo-container {
+                width: 6vw;
+                height: 6vw;
+                max-width: 140px;
+                max-height: 140px;
+            }
+
+            .hospital-info h1 {
+                font-size: 2vw;
+            }
+
+            .hospital-info .subtitle {
+                font-size: 1.1vw;
+            }
+
+            .time-display {
+                font-size: 4.5vw;
+            }
+
+            .date-display {
+                font-size: 1.3vw;
+            }
+
+            .status-value {
+                font-size: 3.5vw;
+            }
+
+            .status-label {
+                font-size: 1vw;
+            }
+
+            thead th {
+                font-size: 1vw;
+                padding: 2vh 1.2vw;
+            }
+
+            tbody td {
+                font-size: 1.2vw;
+                padding: 2vh 1.2vw;
+            }
+
+            .status-indicator {
+                font-size: 0.9vw;
+            }
+
+            .duration-timer {
+                font-size: 1.5vw;
+            }
+
+            .footer {
+                font-size: 0.8vw;
+            }
+        }
+
+        /* 4K (3840x2160) */
+        @media (min-width: 2561px) {
+            .header {
+                padding: 2vh 3vw;
+                min-height: 10vh;
+            }
+
+            .logo-container {
+                width: 5vw;
+                height: 5vw;
+                max-width: 180px;
+                max-height: 180px;
+            }
+
+            .hospital-info h1 {
+                font-size: 1.8vw;
+            }
+
+            .hospital-info .subtitle {
+                font-size: 1vw;
+            }
+
+            .time-display {
+                font-size: 4vw;
+            }
+
+            .date-display {
+                font-size: 1.1vw;
+            }
+
+            .status-bar {
+                padding: 2vh 3vw;
+                gap: 10vw;
+            }
+
+            .status-value {
+                font-size: 3vw;
+            }
+
+            .status-label {
+                font-size: 0.9vw;
+            }
+
+            .panel-content {
+                padding: 2vh 3vw;
+            }
+
+            thead th {
+                font-size: 0.9vw;
+                padding: 2.5vh 1.5vw;
+                letter-spacing: 0.3vw;
+            }
+
+            tbody td {
+                font-size: 1.1vw;
+                padding: 2.5vh 1.5vw;
+            }
+
+            .status-indicator {
+                font-size: 0.8vw;
+                padding: 1vh 1.5vw;
+            }
+
+            .specialty-tag {
+                font-size: 0.7vw;
+            }
+
+            .duration-timer {
+                font-size: 1.3vw;
+            }
+
+            .empty-state {
+                font-size: 1.5vw;
+            }
+
+            .footer {
+                font-size: 0.7vw;
+                padding: 1.5vh 3vw;
             }
         }
 
         /* Orientação paisagem em mobile */
-        @media (max-width: 1024px) and (orientation: landscape) {
+        @media (max-height: 500px) and (orientation: landscape) {
             .header {
-                min-height: 70px;
-                padding: 10px 20px;
+                min-height: 12vh;
+                padding: 1vh 3vw;
             }
 
             .logo-container {
-                width: 55px;
-                height: 55px;
+                width: 8vh;
+                height: 8vh;
+                min-width: 40px;
+                min-height: 40px;
             }
 
             .hospital-info h1 {
-                font-size: 18px;
+                font-size: 3vh;
             }
 
             .time-display {
-                font-size: 36px;
+                font-size: 6vh;
+            }
+
+            .status-bar {
+                padding: 1vh 3vw;
+            }
+
+            .status-value {
+                font-size: 5vh;
+            }
+
+            .panel-content {
+                padding: 1vh 3vw;
+            }
+
+            thead th {
+                font-size: 2vh;
+                padding: 1.5vh 1vw;
+            }
+
+            tbody td {
+                font-size: 2.2vh;
+                padding: 1.5vh 1vw;
+            }
+
+            .footer {
+                padding: 1vh 3vw;
+                font-size: 1.5vh;
             }
         }
     </style>
@@ -520,10 +749,11 @@
     <canvas id="ecgCanvas"></canvas>
 
     <div class="container">
+        <!-- HEADER -->
         <div class="header">
             <div class="hospital-brand">
                 <div class="logo-container" id="logoContainer">
-                    <span style="font-size: clamp(30px, 5vw, 50px);">🏥</span>
+                    <span class="logo-placeholder">🏥</span>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
@@ -536,6 +766,7 @@
             </div>
         </div>
 
+        <!-- STATUS BAR -->
         <div class="status-bar">
             <div class="status-item">
                 <div class="status-value" id="inProgress">00</div>
@@ -551,6 +782,7 @@
             </div>
         </div>
 
+        <!-- PANEL CONTENT -->
         <div class="panel-content">
             <div class="table-wrapper">
                 <table>
@@ -578,6 +810,7 @@
             </div>
         </div>
 
+        <!-- FOOTER -->
         <div class="footer">
             <span>© 2024 HRPI - Todos os direitos reservados</span>
             <span>Painel Cirúrgico v5.0</span>
@@ -633,11 +866,11 @@
             lines.forEach(line => {
                 ctx.beginPath();
                 ctx.strokeStyle = '#bf953f';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = Math.max(1.5, window.innerWidth * 0.001);
                 
                 const t = timestamp * 0.001 * line.speed + line.offset;
                 
-                for (let x = 0; x < canvas.width; x += 2) {
+                for (let x = 0; x < canvas.width; x += Math.max(2, Math.floor(window.innerWidth / 800))) {
                     const phase = (x * 0.006 + t) % 4;
                     let y = line.y;
                     
@@ -685,20 +918,15 @@
                 const startDate = new Date(surgery.date);
                 startDate.setHours(startH, startM, 0);
                 const diffMinutes = Math.floor((now - startDate) / 60000);
-                const h = Math.floor(diffMinutes / 60);
-                const m = diffMinutes % 60;
-                return { hours: h, minutes: m, isRunning: true };
+                return { hours: Math.floor(diffMinutes / 60), minutes: diffMinutes % 60, isRunning: true };
             } else if (surgery.status === 'concluida' && surgery.duration) {
-                const h = Math.floor(surgery.duration / 60);
-                const m = surgery.duration % 60;
-                return { hours: h, minutes: m, isRunning: false };
+                return { hours: Math.floor(surgery.duration / 60), minutes: surgery.duration % 60, isRunning: false };
             }
             return null;
         }
 
         function updateDurations() {
-            const durationElements = document.querySelectorAll('.duration-timer');
-            durationElements.forEach(el => {
+            document.querySelectorAll('.duration-timer').forEach(el => {
                 const surgeryId = el.getAttribute('data-id');
                 const surgery = currentSurgeries.find(s => s.id === surgeryId);
                 if (surgery) {
@@ -713,13 +941,9 @@
         function updatePanel() {
             const todaySurgeries = currentSurgeries.filter(s => s.date === TODAY);
             
-            const inProgress = todaySurgeries.filter(s => s.status === 'em_andamento').length;
-            const completed = todaySurgeries.filter(s => s.status === 'concluida').length;
-            const waiting = todaySurgeries.filter(s => s.status === 'pendente').length;
-            
-            document.getElementById('inProgress').textContent = String(inProgress).padStart(2, '0');
-            document.getElementById('completed').textContent = String(completed).padStart(2, '0');
-            document.getElementById('waiting').textContent = String(waiting).padStart(2, '0');
+            document.getElementById('inProgress').textContent = String(todaySurgeries.filter(s => s.status === 'em_andamento').length).padStart(2, '0');
+            document.getElementById('completed').textContent = String(todaySurgeries.filter(s => s.status === 'concluida').length).padStart(2, '0');
+            document.getElementById('waiting').textContent = String(todaySurgeries.filter(s => s.status === 'pendente').length).padStart(2, '0');
 
             const tbody = document.getElementById('surgeriesTableBody');
             
@@ -729,57 +953,42 @@
                 return;
             }
 
-            tbody.innerHTML = todaySurgeries
-                .sort((a, b) => a.time.localeCompare(b.time))
-                .map(surgery => {
-                    let statusHTML = '';
-                    let rowClass = '';
-                    let durationHTML = '';
-                    
-                    if (surgery.status === 'pendente') {
-                        statusHTML = `<span class="status-indicator status-waiting">⏳ Aguardando</span>`;
-                        durationHTML = '<span style="color: #475569;">--:--</span>';
-                    } else if (surgery.status === 'em_andamento') {
-                        statusHTML = `<span class="status-indicator status-progress">⚙️ Em Andamento</span>`;
-                        rowClass = 'row-ongoing';
-                        
-                        const duration = calculateDuration(surgery);
-                        if (duration) {
-                            durationHTML = `<span class="duration-timer duration-ongoing" data-id="${surgery.id}">${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}</span>`;
-                        }
-                    } else {
-                        statusHTML = `<span class="status-indicator status-done">✅ Finalizado</span>`;
-                        
-                        const duration = calculateDuration(surgery);
-                        if (duration) {
-                            durationHTML = `<span class="duration-timer duration-done">${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}</span>`;
-                        } else {
-                            durationHTML = '<span style="color: #475569;">--:--</span>';
-                        }
-                    }
+            tbody.innerHTML = todaySurgeries.sort((a, b) => a.time.localeCompare(b.time)).map(surgery => {
+                let statusHTML = '', rowClass = '', durationHTML = '';
+                
+                if (surgery.status === 'pendente') {
+                    statusHTML = `<span class="status-indicator status-waiting">⏳ Aguardando</span>`;
+                    durationHTML = '<span style="color: #475569;">--:--</span>';
+                } else if (surgery.status === 'em_andamento') {
+                    statusHTML = `<span class="status-indicator status-progress">⚙️ Em Andamento</span>`;
+                    rowClass = 'row-ongoing';
+                    const d = calculateDuration(surgery);
+                    if (d) durationHTML = `<span class="duration-timer duration-ongoing" data-id="${surgery.id}">${String(d.hours).padStart(2, '0')}:${String(d.minutes).padStart(2, '0')}</span>`;
+                } else {
+                    statusHTML = `<span class="status-indicator status-done">✅ Finalizado</span>`;
+                    const d = calculateDuration(surgery);
+                    durationHTML = d ? `<span class="duration-timer duration-done">${String(d.hours).padStart(2, '0')}:${String(d.minutes).padStart(2, '0')}</span>` : '<span style="color: #475569;">--:--</span>';
+                }
 
-                    return `
-                        <tr class="${rowClass}">
-                            <td><strong>${surgery.room}</strong></td>
-                            <td>${surgery.time}</td>
-                            <td>${surgery.patient || '-'}</td>
-                            <td>${surgery.type || '-'}</td>
-                            <td>Dr. ${surgery.doctor || '-'}${surgery.specialty ? `<br><span class="specialty-tag">${surgery.specialty}</span>` : ''}</td>
-                            <td>${surgery.specialty || '-'}</td>
-                            <td>${surgery.circulante || '-'}</td>
-                            <td>${statusHTML}</td>
-                            <td class="duration-cell">${durationHTML}</td>
-                        </tr>
-                    `;
-                }).join('');
+                return `<tr class="${rowClass}">
+                    <td><strong>${surgery.room}</strong></td>
+                    <td>${surgery.time}</td>
+                    <td>${surgery.patient || '-'}</td>
+                    <td>${surgery.type || '-'}</td>
+                    <td>Dr. ${surgery.doctor || '-'}${surgery.specialty ? `<br><span class="specialty-tag">${surgery.specialty}</span>` : ''}</td>
+                    <td>${surgery.specialty || '-'}</td>
+                    <td>${surgery.circulante || '-'}</td>
+                    <td>${statusHTML}</td>
+                    <td>${durationHTML}</td>
+                </tr>`;
+            }).join('');
 
             document.getElementById('updateTime').textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
         }
 
         const surgeriesRef = ref(db, 'surgeries');
         onValue(surgeriesRef, (snapshot) => {
-            const data = snapshot.val();
-            currentSurgeries = data ? Object.values(data) : [];
+            currentSurgeries = snapshot.val() ? Object.values(snapshot.val()) : [];
             updatePanel();
         });
 
@@ -787,14 +996,16 @@
         onValue(logoRef, (snapshot) => {
             const logoData = snapshot.val();
             if (logoData) {
-                document.getElementById('logoContainer').innerHTML = `<img src="${logoData}" alt="Logo HRPI" onerror="this.innerHTML='<span style=font-size:clamp(30px,5vw,50px)>🏥</span>'">`;
+                document.getElementById('logoContainer').innerHTML = `<img src="${logoData}" alt="Logo HRPI">`;
             }
         });
 
         updateClock();
         setInterval(updateClock, 1000);
         setInterval(updateDurations, 1000);
-        setInterval(() => updatePanel(), 30000);
+        setInterval(updatePanel, 30000);
+        
+        window.addEventListener('resize', updatePanel);
     </script>
 </body>
 </html>
