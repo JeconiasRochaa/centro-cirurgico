@@ -470,7 +470,6 @@
             }
         }
 
-        /* Scrollbar */
         .surgery-list::-webkit-scrollbar {
             width: 6px;
         }
@@ -663,7 +662,7 @@
         let isEditing = false;
         let allSurgeries = [];
 
-        // Banco de procedimentos para autocomplete
+        // Banco de procedimentos com Bucomaxilofacial
         const surgeryTypes = [
             'COLECISTECTOMIA',
             'APENDICECTOMIA',
@@ -703,7 +702,28 @@
             'CIRURGIA BARIÁTRICA',
             'MASTOPEXIA',
             'ABDOMINOPLASTIA',
-            'LIPOASPIRAÇÃO'
+            'LIPOASPIRAÇÃO',
+            // Bucomaxilofacial
+            'EXODONTIA DE TERCEIRO MOLAR',
+            'EXODONTIA MÚLTIPLA',
+            'FRATURA DE MANDÍBULA',
+            'FRATURA DE MAXILA',
+            'FRATURA DE ZIGOMÁTICO',
+            'FRATURA DE ÓRBITA',
+            'CIRURGIA ORTOGNÁTICA',
+            'ARTROPLASTIA DE ATM',
+            'RECONSTRUÇÃO DE MANDÍBULA',
+            'RECONSTRUÇÃO DE MAXILA',
+            'ENXERTO ÓSSEO ALVEOLAR',
+            'IMPLANTE DENTÁRIO',
+            'LEVANTAMENTO DE SEIO MAXILAR',
+            'CISTO ODONTOGÊNICO',
+            'TUMOR ODONTOGÊNICO',
+            'OSTEONECROSE DOS MAXILARES',
+            'TRAUMATISMO DENTÁRIO',
+            'CIRURGIA DE FENDA LABIOPALATINA',
+            'SIALOENDOSCOPIA',
+            'CIRURGIA DE GLÂNDULAS SALIVARES'
         ];
 
         // Status da conexão
@@ -745,17 +765,15 @@
                     const logoData = e.target.result;
                     set(ref(db, 'settings/logo'), logoData).then(() => {
                         document.getElementById('logoUpload').innerHTML = `<img src="${logoData}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput">`;
-                        alert('✅ Logo salva no servidor! O painel da TV será atualizado automaticamente.');
                     }).catch(error => {
                         console.error('Erro ao salvar logo:', error);
-                        alert('❌ Erro ao salvar logo. Verifique a conexão.');
                     });
                 };
                 reader.readAsDataURL(file);
             }
         };
 
-        // Autocomplete de procedimentos
+        // Autocomplete
         const surgeryInput = document.getElementById('surgeryType');
         const suggestionsBox = document.getElementById('suggestionsBox');
 
@@ -987,9 +1005,9 @@
                     const startDate = new Date(surgery.date);
                     startDate.setHours(startH, startM, 0);
                     const diff = Math.floor((now - startDate) / 60000);
-                    if (diff > 0) duration = `🕐 Duração: ${Math.floor(diff/60)}h ${diff%60}min`;
+                    if (diff > 0) duration = `🕐 Em andamento: ${Math.floor(diff/60)}h ${diff%60}min`;
                 } else if (surgery.status === 'concluida' && surgery.duration) {
-                    duration = `✅ Duração: ${Math.floor(surgery.duration/60)}h ${surgery.duration%60}min`;
+                    duration = `✅ Duração total: ${Math.floor(surgery.duration/60)}h ${surgery.duration%60}min`;
                 }
 
                 const displayDate = surgery.date === TODAY ? 'HOJE' : new Date(surgery.date + 'T00:00:00').toLocaleDateString('pt-BR');
