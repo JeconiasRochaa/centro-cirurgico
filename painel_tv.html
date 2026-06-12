@@ -20,7 +20,6 @@
             --green-light: #34d399;
             --orange: #f59e0b;
             --orange-light: #fbbf24;
-            --red: #ef4444;
         }
 
         * {
@@ -58,7 +57,6 @@
             flex-direction: column;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
             border-bottom: 2px solid var(--border-color);
@@ -97,10 +95,6 @@
             height: 100%;
             object-fit: contain;
             padding: clamp(5px, 1vw, 10px);
-        }
-
-        .hospital-info {
-            min-width: 0;
         }
 
         .hospital-info h1 {
@@ -144,7 +138,6 @@
             white-space: nowrap;
         }
 
-        /* Status Bar */
         .status-bar {
             background: rgba(13, 18, 41, 0.97);
             border-bottom: 1px solid var(--border-color);
@@ -174,7 +167,6 @@
             margin-top: clamp(2px, 0.3vh, 3px);
         }
 
-        /* Panel Content */
         .panel-content {
             flex: 1;
             padding: clamp(12px, 2.5vw, 25px) clamp(15px, 3vw, 35px);
@@ -280,6 +272,10 @@
             margin-top: 2px;
         }
 
+        .duration-cell {
+            min-width: 100px;
+        }
+
         .duration-timer {
             font-family: 'Courier New', monospace;
             font-weight: 700;
@@ -319,7 +315,6 @@
             gap: 10px;
         }
 
-        /* Scrollbar */
         .panel-content::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -334,7 +329,6 @@
             border-radius: 4px;
         }
 
-        /* Telas muito pequenas */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -379,7 +373,6 @@
             }
         }
 
-        /* Telas muito grandes (4K) */
         @media (min-width: 2560px) {
             .header {
                 padding: 30px 50px;
@@ -411,14 +404,8 @@
                 padding: 20px 16px;
                 font-size: 18px;
             }
-
-            .status-indicator {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
         }
 
-        /* Orientação paisagem em dispositivos móveis */
         @media (max-width: 1024px) and (orientation: landscape) {
             .header {
                 min-height: 60px;
@@ -528,6 +515,7 @@
         
         const TODAY = new Date().toISOString().split('T')[0];
         let currentSurgeries = [];
+        let durationInterval;
 
         // ECG
         const canvas = document.getElementById('ecgCanvas');
@@ -602,6 +590,39 @@
             });
         }
 
+        // Função para calcular duração em tempo real
+        function calculateDuration(surgery) {
+            if (surgery.status === 'em_andamento' && surgery.startTime) {
+                const now = new Date();
+                const [startH, startM] = surgery.startTime.split(':').map(Number);
+                const startDate = new Date(surgery.date);
+                startDate.setHours(startH, startM, 0);
+                const diffMinutes = Math.floor((now - startDate) / 60000);
+                const h = Math.floor(diffMinutes / 60);
+                const m = diffMinutes % 60;
+                return { hours: h, minutes: m, isRunning: true };
+            } else if (surgery.status === 'concluida' && surgery.duration) {
+                const h = Math.floor(surgery.duration / 60);
+                const m = surgery.duration % 60;
+                return { hours: h, minutes: m, isRunning: false };
+            }
+            return null;
+        }
+
+        function updateDurations() {
+            const durationElements = document.querySelectorAll('.duration-timer');
+            durationElements.forEach(el => {
+                const surgeryId = el.getAttribute('data-id');
+                const surgery = currentSurgeries.find(s => s.id === surgeryId);
+                if (surgery) {
+                    const duration = calculateDuration(surgery);
+                    if (duration && duration.isRunning) {
+                        el.textContent = `${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}`;
+                    }
+                }
+            });
+        }
+
         function updatePanel() {
             const todaySurgeries = currentSurgeries.filter(s => s.date === TODAY);
             
@@ -635,23 +656,16 @@
                         statusHTML = `<span class="status-indicator status-progress">⚙️ Em Andamento</span>`;
                         rowClass = 'row-ongoing';
                         
-                        // Calcular duração em tempo real
-                        const now = new Date();
-                        const [startH, startM] = surgery.startTime.split(':').map(Number);
-                        const startDate = new Date(TODAY);
-                        startDate.setHours(startH, startM, 0);
-                        const diffMinutes = Math.floor((now - startDate) / 60000);
-                        const h = Math.floor(diffMinutes / 60);
-                        const m = diffMinutes % 60;
-                        
-                        durationHTML = `<span class="duration-timer duration-ongoing">${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}</span>`;
+                        const duration = calculateDuration(surgery);
+                        if (duration) {
+                            durationHTML = `<span class="duration-timer duration-ongoing" data-id="${surgery.id}">${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}</span>`;
+                        }
                     } else {
                         statusHTML = `<span class="status-indicator status-done">✅ Finalizado</span>`;
                         
-                        if (surgery.duration) {
-                            const h = Math.floor(surgery.duration / 60);
-                            const m = surgery.duration % 60;
-                            durationHTML = `<span class="duration-timer duration-done">${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}</span>`;
+                        const duration = calculateDuration(surgery);
+                        if (duration) {
+                            durationHTML = `<span class="duration-timer duration-done">${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}</span>`;
                         } else {
                             durationHTML = '<span style="color: #475569;">--:--</span>';
                         }
@@ -667,7 +681,7 @@
                             <td>${surgery.specialty || '-'}</td>
                             <td>${surgery.circulante || '-'}</td>
                             <td>${statusHTML}</td>
-                            <td>${durationHTML}</td>
+                            <td class="duration-cell">${durationHTML}</td>
                         </tr>
                     `;
                 }).join('');
@@ -694,8 +708,12 @@
 
         updateClock();
         setInterval(updateClock, 1000);
-        // Atualizar painel a cada 10 segundos para recalcular durações
-        setInterval(() => updatePanel(), 10000);
+        
+        // Atualizar durações a cada 1 segundo
+        setInterval(updateDurations, 1000);
+        
+        // Atualizar painel completo a cada 30 segundos
+        setInterval(() => updatePanel(), 30000);
     </script>
 </body>
 </html>
