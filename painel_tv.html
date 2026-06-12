@@ -34,6 +34,8 @@
             color: var(--text-primary);
             min-height: 100vh;
             overflow: hidden;
+            /* Aumentado para TV 43" */
+            font-size: 18px;
         }
 
         #ecgCanvas {
@@ -58,38 +60,38 @@
             overflow: hidden;
         }
 
-        /* HEADER */
+        /* HEADER - AUMENTADO */
         .header {
             background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border-bottom: 2px solid var(--border-color);
-            padding: 15px 30px;
+            border-bottom: 3px solid var(--border-color);
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
+            gap: 30px;
             flex-shrink: 0;
         }
 
         .hospital-brand {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             flex: 1;
             min-width: 0;
         }
 
         .logo-container {
-            width: 80px;
-            height: 80px;
-            min-width: 80px;
+            width: 100px;
+            height: 100px;
+            min-width: 100px;
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 30px rgba(191, 149, 63, 0.3);
             flex-shrink: 0;
         }
 
@@ -97,7 +99,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 10px;
+            padding: 12px;
         }
 
         .hospital-info {
@@ -105,9 +107,9 @@
         }
 
         .hospital-info h1 {
-            font-size: 24px;
+            font-size: 32px; /* AUMENTADO */
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             color: #f1f5f9;
             text-transform: uppercase;
             white-space: nowrap;
@@ -117,10 +119,10 @@
         }
 
         .hospital-info .subtitle {
-            font-size: 12px;
+            font-size: 16px; /* AUMENTADO */
             color: var(--gold);
-            letter-spacing: 2px;
-            margin-top: 4px;
+            letter-spacing: 4px;
+            margin-top: 6px;
             font-weight: 500;
         }
 
@@ -130,29 +132,29 @@
         }
 
         .time-display {
-            font-size: 44px;
+            font-size: 58px; /* AUMENTADO */
             font-weight: 700;
             color: var(--gold);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             font-family: 'Courier New', monospace;
             line-height: 1;
         }
 
         .date-display {
-            font-size: 14px;
+            font-size: 18px; /* AUMENTADO */
             color: var(--text-secondary);
-            letter-spacing: 1px;
-            margin-top: 5px;
+            letter-spacing: 2px;
+            margin-top: 8px;
         }
 
-        /* STATUS BAR */
+        /* STATUS BAR - AUMENTADO */
         .status-bar {
             background: rgba(13, 18, 41, 0.97);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 30px;
+            border-bottom: 2px solid var(--border-color);
+            padding: 18px 40px;
             display: flex;
             justify-content: center;
-            gap: 80px;
+            gap: 100px;
             flex-shrink: 0;
         }
 
@@ -161,24 +163,24 @@
         }
 
         .status-value {
-            font-size: 34px;
+            font-size: 46px; /* AUMENTADO */
             font-weight: 700;
             color: var(--gold);
             line-height: 1;
         }
 
         .status-label {
-            font-size: 10px;
+            font-size: 14px; /* AUMENTADO */
             color: var(--text-muted);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
-        /* PANEL CONTENT */
+        /* PANEL CONTENT - AUMENTADO */
         .panel-content {
             flex: 1;
-            padding: 20px 30px;
+            padding: 25px 40px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -189,14 +191,14 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: auto;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
         table {
             width: 100%;
-            min-width: 1100px;
+            min-width: 1400px; /* Aumentado para caber todas as colunas */
             border-collapse: separate;
-            border-spacing: 0 5px;
+            border-spacing: 0 8px;
         }
 
         thead {
@@ -207,23 +209,23 @@
 
         thead th {
             background: var(--bg-tertiary);
-            padding: 14px 10px;
+            padding: 18px 14px; /* AUMENTADO */
             text-align: left;
             color: var(--gold);
-            font-size: 11px;
-            letter-spacing: 1.5px;
+            font-size: 15px; /* AUMENTADO */
+            letter-spacing: 2px;
             text-transform: uppercase;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 3px solid var(--border-color);
             white-space: nowrap;
             font-weight: 700;
         }
 
         thead th:first-child {
-            border-radius: 8px 0 0 0;
+            border-radius: 10px 0 0 0;
         }
 
         thead th:last-child {
-            border-radius: 0 8px 0 0;
+            border-radius: 0 10px 0 0;
         }
 
         tbody tr {
@@ -232,26 +234,26 @@
         }
 
         tbody td {
-            padding: 14px 10px;
-            font-size: 14px;
+            padding: 18px 14px; /* AUMENTADO */
+            font-size: 18px; /* AUMENTADO */
             color: #cbd5e1;
-            border-bottom: 1px solid #1a2744;
+            border-bottom: 2px solid #1a2744;
             white-space: nowrap;
             font-weight: 500;
             vertical-align: middle;
         }
 
         tbody td:first-child {
-            border-radius: 8px 0 0 8px;
+            border-radius: 10px 0 0 10px;
         }
 
         tbody td:last-child {
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 10px 10px 0;
         }
 
         .row-ongoing {
             background: rgba(59, 130, 246, 0.08) !important;
-            border-left: 3px solid var(--blue) !important;
+            border-left: 4px solid var(--blue) !important;
             animation: rowAlert 2s infinite;
         }
 
@@ -263,10 +265,10 @@
         .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            gap: 8px;
+            padding: 8px 18px; /* AUMENTADO */
+            border-radius: 25px;
+            font-size: 14px; /* AUMENTADO */
             font-weight: 600;
             letter-spacing: 1px;
             white-space: nowrap;
@@ -274,20 +276,20 @@
 
         .status-waiting {
             background: rgba(245, 158, 11, 0.12);
-            border: 1px solid var(--orange);
+            border: 2px solid var(--orange);
             color: var(--orange-light);
         }
 
         .status-progress {
             background: rgba(59, 130, 246, 0.15);
-            border: 1px solid var(--blue);
+            border: 2px solid var(--blue);
             color: var(--blue-light);
             animation: statusPulse 1.5s infinite;
         }
 
         .status-done {
             background: rgba(16, 185, 129, 0.12);
-            border: 1px solid var(--green);
+            border: 2px solid var(--green);
             color: var(--green-light);
         }
 
@@ -297,19 +299,19 @@
         }
 
         .specialty-tag {
-            font-size: 10px;
+            font-size: 13px; /* AUMENTADO */
             color: var(--gold);
             background: rgba(191, 149, 63, 0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
+            padding: 3px 10px;
+            border-radius: 12px;
             display: inline-block;
-            margin-top: 3px;
+            margin-top: 4px;
         }
 
         .duration-timer {
             font-family: 'Courier New', monospace;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 20px; /* AUMENTADO */
         }
 
         .duration-ongoing { 
@@ -326,140 +328,212 @@
 
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: var(--text-muted);
-            font-size: 20px;
-            letter-spacing: 2px;
+            font-size: 26px; /* AUMENTADO */
+            letter-spacing: 3px;
         }
 
         .footer {
             background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            padding: 10px 30px;
+            border-top: 2px solid var(--border-color);
+            padding: 14px 40px;
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
+            font-size: 14px; /* AUMENTADO */
             color: var(--text-muted);
             letter-spacing: 1px;
             flex-shrink: 0;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
 
-        /* Scrollbar */
+        /* Scrollbar AUMENTADA */
         .table-wrapper::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
         }
 
         .table-wrapper::-webkit-scrollbar-track {
             background: var(--bg-secondary);
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
         .table-wrapper::-webkit-scrollbar-thumb {
             background: var(--border-color);
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
-        /* ============ TELAS MENORES ============ */
-        @media (max-width: 1400px) {
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #2a4a7e;
+        }
+
+        /* ============ AJUSTES PARA TV 43" FULL HD (1920x1080) ============ */
+        @media (min-width: 1920px) {
             .header {
-                padding: 12px 20px;
+                padding: 25px 50px;
             }
             
             .logo-container {
-                width: 65px;
-                height: 65px;
-                min-width: 65px;
+                width: 120px;
+                height: 120px;
+                min-width: 120px;
             }
             
             .hospital-info h1 {
-                font-size: 20px;
-            }
-            
-            .hospital-info .subtitle {
-                font-size: 10px;
-            }
-            
-            .time-display {
                 font-size: 36px;
             }
             
+            .hospital-info .subtitle {
+                font-size: 18px;
+            }
+            
+            .time-display {
+                font-size: 66px;
+            }
+            
             .date-display {
-                font-size: 12px;
+                font-size: 20px;
             }
             
             .status-bar {
-                padding: 10px 20px;
-                gap: 50px;
+                padding: 22px 50px;
+                gap: 120px;
             }
             
             .status-value {
-                font-size: 28px;
+                font-size: 52px;
             }
             
             .status-label {
-                font-size: 9px;
+                font-size: 16px;
             }
             
             .panel-content {
-                padding: 15px 20px;
-            }
-            
-            table {
-                min-width: 950px;
+                padding: 30px 50px;
             }
             
             thead th {
-                padding: 10px 8px;
-                font-size: 10px;
+                font-size: 17px;
+                padding: 22px 16px;
             }
             
             tbody td {
-                padding: 10px 8px;
-                font-size: 12px;
+                font-size: 20px;
+                padding: 22px 16px;
             }
             
             .status-indicator {
-                font-size: 9px;
-                padding: 4px 10px;
+                font-size: 16px;
+                padding: 10px 22px;
             }
             
             .duration-timer {
-                font-size: 14px;
+                font-size: 24px;
+            }
+            
+            .empty-state {
+                font-size: 30px;
             }
             
             .footer {
-                padding: 8px 20px;
-                font-size: 9px;
+                font-size: 16px;
             }
         }
 
-        /* TELAS MUITO PEQUENAS */
+        /* ============ TELAS MENORES (notebooks/tablets) ============ */
+        @media (max-width: 1400px) {
+            .header {
+                padding: 14px 25px;
+            }
+            
+            .logo-container {
+                width: 80px;
+                height: 80px;
+                min-width: 80px;
+            }
+            
+            .hospital-info h1 {
+                font-size: 24px;
+            }
+            
+            .hospital-info .subtitle {
+                font-size: 12px;
+            }
+            
+            .time-display {
+                font-size: 44px;
+            }
+            
+            .date-display {
+                font-size: 14px;
+            }
+            
+            .status-bar {
+                padding: 14px 25px;
+                gap: 60px;
+            }
+            
+            .status-value {
+                font-size: 36px;
+            }
+            
+            .status-label {
+                font-size: 11px;
+            }
+            
+            .panel-content {
+                padding: 18px 25px;
+            }
+            
+            table {
+                min-width: 1200px;
+            }
+            
+            thead th {
+                padding: 14px 10px;
+                font-size: 13px;
+            }
+            
+            tbody td {
+                padding: 14px 10px;
+                font-size: 15px;
+            }
+            
+            .status-indicator {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+            
+            .duration-timer {
+                font-size: 17px;
+            }
+            
+            .empty-state {
+                font-size: 22px;
+            }
+            
+            .footer {
+                font-size: 11px;
+            }
+        }
+
+        /* ============ TELAS MUITO PEQUENAS ============ */
         @media (max-width: 900px) {
             .header {
                 flex-direction: column;
-                padding: 10px 15px;
-                gap: 10px;
-            }
-
-            .hospital-brand {
+                padding: 12px 18px;
                 gap: 12px;
             }
 
             .logo-container {
-                width: 50px;
-                height: 50px;
-                min-width: 50px;
+                width: 60px;
+                height: 60px;
+                min-width: 60px;
             }
 
             .hospital-info h1 {
-                font-size: 17px;
-            }
-
-            .hospital-info .subtitle {
-                font-size: 9px;
+                font-size: 20px;
             }
 
             .time-box {
@@ -467,56 +541,46 @@
             }
 
             .time-display {
-                font-size: 30px;
-            }
-
-            .date-display {
-                font-size: 11px;
+                font-size: 36px;
             }
 
             .status-bar {
-                gap: 25px;
-                padding: 8px 15px;
+                gap: 30px;
+                padding: 10px 18px;
             }
 
             .status-value {
-                font-size: 24px;
-            }
-
-            .status-label {
-                font-size: 7px;
+                font-size: 30px;
             }
 
             .panel-content {
-                padding: 10px 15px;
+                padding: 12px 18px;
             }
 
             table {
-                min-width: 750px;
+                min-width: 950px;
             }
 
             thead th {
-                font-size: 9px;
-                padding: 8px 6px;
+                font-size: 11px;
+                padding: 10px 8px;
             }
 
             tbody td {
-                font-size: 11px;
-                padding: 8px 6px;
+                font-size: 13px;
+                padding: 10px 8px;
             }
 
             .status-indicator {
-                font-size: 8px;
-                padding: 3px 8px;
+                font-size: 10px;
             }
 
             .duration-timer {
-                font-size: 12px;
+                font-size: 14px;
             }
 
             .footer {
-                font-size: 8px;
-                padding: 6px 15px;
+                font-size: 10px;
                 flex-direction: column;
                 text-align: center;
             }
@@ -531,7 +595,7 @@
         <div class="header">
             <div class="hospital-brand">
                 <div class="logo-container" id="logoContainer">
-                    <span style="font-size: 32px;">🏥</span>
+                    <span style="font-size: 40px;">🏥</span>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
@@ -613,7 +677,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        // Variável que sempre terá a data atual
         let TODAY = new Date().toISOString().split('T')[0];
         let currentSurgeries = [];
 
@@ -645,7 +708,7 @@
             lines.forEach(line => {
                 ctx.beginPath();
                 ctx.strokeStyle = '#bf953f';
-                ctx.lineWidth = 1.8;
+                ctx.lineWidth = 2.2;
                 
                 const t = timestamp * 0.001 * line.speed + line.offset;
                 
@@ -682,13 +745,12 @@
         }
         requestAnimationFrame(drawECG);
 
-        // ========== FUNÇÃO PARA VERIFICAR MUDANÇA DE DIA ==========
         function checkNewDay() {
             const newDate = new Date().toISOString().split('T')[0];
             if (newDate !== TODAY) {
                 console.log('🔄 Novo dia detectado! Atualizando painel...');
                 TODAY = newDate;
-                updatePanel(); // Atualiza o painel com a nova data
+                updatePanel();
             }
         }
 
@@ -698,8 +760,6 @@
             document.getElementById('liveDate').textContent = now.toLocaleDateString('pt-BR', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
-            
-            // Verifica se o dia mudou a cada atualização do relógio
             checkNewDay();
         }
 
@@ -732,7 +792,6 @@
         }
 
         function updatePanel() {
-            // Filtra apenas cirurgias do dia ATUAL
             const todaySurgeries = currentSurgeries.filter(s => s.date === TODAY);
             
             document.getElementById('inProgress').textContent = String(todaySurgeries.filter(s => s.status === 'em_andamento').length).padStart(2, '0');
@@ -752,7 +811,7 @@
                 
                 if (surgery.status === 'pendente') {
                     statusHTML = `<span class="status-indicator status-waiting">⏳ Aguardando</span>`;
-                    durationHTML = '<span style="color: #475569;">--:--</span>';
+                    durationHTML = '<span style="color: #64748b; font-size: 18px;">--:--</span>';
                 } else if (surgery.status === 'em_andamento') {
                     statusHTML = `<span class="status-indicator status-progress">⚙️ Em Andamento</span>`;
                     rowClass = 'row-ongoing';
@@ -761,7 +820,7 @@
                 } else {
                     statusHTML = `<span class="status-indicator status-done">✅ Finalizado</span>`;
                     const d = calculateDuration(surgery);
-                    durationHTML = d ? `<span class="duration-timer duration-done">${String(d.hours).padStart(2, '0')}:${String(d.minutes).padStart(2, '0')}</span>` : '<span style="color: #475569;">--:--</span>';
+                    durationHTML = d ? `<span class="duration-timer duration-done">${String(d.hours).padStart(2, '0')}:${String(d.minutes).padStart(2, '0')}</span>` : '<span style="color: #64748b; font-size: 18px;">--:--</span>';
                 }
 
                 return `<tr class="${rowClass}">
@@ -780,14 +839,12 @@
             document.getElementById('updateTime').textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
         }
 
-        // Firebase - tempo real
         const surgeriesRef = ref(db, 'surgeries');
         onValue(surgeriesRef, (snapshot) => {
             currentSurgeries = snapshot.val() ? Object.values(snapshot.val()) : [];
             updatePanel();
         });
 
-        // Carregar logo
         const logoRef = ref(db, 'settings/logo');
         onValue(logoRef, (snapshot) => {
             const logoData = snapshot.val();
@@ -796,23 +853,13 @@
             }
         });
 
-        // Inicialização
         updateClock();
         updatePanel();
-        
-        // Atualiza relógio e verifica mudança de dia a cada segundo
         setInterval(updateClock, 1000);
-        
-        // Atualiza durações a cada segundo
         setInterval(updateDurations, 1000);
-        
-        // Força verificação de novo dia a cada 30 segundos
         setInterval(checkNewDay, 30000);
-        
-        // Atualiza painel completo a cada 30 segundos
         setInterval(updatePanel, 30000);
         
-        // Verifica mudança de dia quando a aba volta a ficar visível
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
                 checkNewDay();
@@ -820,14 +867,14 @@
             }
         });
         
-        // Verifica mudança de dia ao redimensionar
         window.addEventListener('resize', () => {
             resizeCanvas();
             checkNewDay();
         });
 
-        console.log('✅ Painel TV iniciado - Data atual:', TODAY);
-        console.log('🔄 Verificação de novo dia ativa - Próxima verificação em 1 segundo');
+        console.log('✅ Painel TV otimizado para Full HD 43" iniciado');
+        console.log('📺 Resolução: 1920x1080');
+        console.log('📅 Data atual:', TODAY);
     </script>
 </body>
 </html>
