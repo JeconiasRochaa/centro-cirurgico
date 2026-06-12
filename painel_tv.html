@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRPI - Painel Cirúrgico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0a0e1a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #ecgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(180deg, #0d1229 0%, #111d33 100%);
+            border-bottom: 2px solid #1a3050;
+            padding: 18px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100px;
+        }
+
+        .hospital-brand {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .logo-container {
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #bf953f;
+            box-shadow: 0 0 25px rgba(191, 149, 63, 0.25);
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+        .hospital-info h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #f1f5f9;
+            text-transform: uppercase;
+        }
+
+        .hospital-info .subtitle {
+            font-size: 13px;
+            color: #bf953f;
+            letter-spacing: 3px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .time-box {
+            text-align: right;
+        }
+
+        .time-display {
+            font-size: 52px;
+            font-weight: 700;
+            color: #bf953f;
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .date-display {
+            font-size: 15px;
+            color: #94a3b8;
+            letter-spacing: 1.5px;
+            margin-top: 5px;
+        }
+
+        .status-bar {
+            background: rgba(13, 18, 41, 0.97);
+            border-bottom: 1px solid #1a3050;
+            padding: 12px 35px;
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #bf953f;
+        }
+
+        .status-label {
+            font-size: 10px;
+            color: #64748b;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 25px 35px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        thead th {
+            background: #111d33;
+            padding: 16px 12px;
+            text-align: left;
+            color: #bf953f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #1a3050;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            background: #0d1229;
+            transition: all 0.3s;
+        }
+
+        tbody td {
+            padding: 14px 12px;
+            font-size: 14px;
+            color: #cbd5e1;
+            border-bottom: 1px solid #1a2744;
+            white-space: nowrap;
+        }
+
+        .row-ongoing {
+            background: rgba(59, 130, 246, 0.08) !important;
+            border-left: 4px solid #3b82f6 !important;
+            animation: rowAlert 2s infinite;
+        }
+
+        @keyframes rowAlert {
+            0%, 100% { background: rgba(59, 130, 246, 0.08); }
+            50% { background: rgba(59, 130, 246, 0.15); }
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .status-waiting {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid #f59e0b;
+            color: #fbbf24;
+        }
+
+        .status-progress {
+            background: rgba(59, 130, 246, 0.15);
+            border: 2px solid #3b82f6;
+            color: #60a5fa;
+            animation: statusPulse 1.5s infinite;
+        }
+
+        .status-done {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid #10b981;
+            color: #34d399;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .specialty-tag {
+            font-size: 10px;
+            color: #bf953f;
+            background: rgba(191, 149, 63, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .duration-timer {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .duration-ongoing { color: #60a5fa; }
+        .duration-done { color: #34d399; }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #475569;
+            font-size: 22px;
+        }
+
+        .footer {
+            background: #0d1229;
+            border-top: 1px solid #1a3050;
+            padding: 10px 35px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .connection-status {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 10px;
+            z-index: 1000;
+        }
+
+        .connection-status.offline {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="ecgCanvas"></canvas>
+
+    <div class="container">
+        <div class="header">
+            <div class="hospital-brand">
+                <div class="logo-container" id="logoContainer">
+                    <span style="font-size: 40px;">🏥</span>
+                </div>
+                <div class="hospital-info">
+                    <h1>Hospital Regional de Palmeira dos Índios</h1>
+                    <div class="subtitle">HRPI • Centro Cirúrgico • Painel de Procedimentos</div>
+                </div>
+            </div>
+            <div class="time-box">
+                <div class="time-display" id="liveTime">00:00:00</div>
+                <div class="date-display" id="liveDate"></div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value" id="inProgress">00</div>
+                <div class="status-label">Em Andamento</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="completed">00</div>
+                <div class="status-label">Finalizados Hoje</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="waiting">00</div>
+                <div class="status-label">Aguardando</div>
+            </div>
+        </div>
+
+        <div class="panel-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sala</th>
+                        <th>Horário</th>
+                        <th>Paciente</th>
+                        <th>Procedimento</th>
+                        <th>Médico</th>
+                        <th>Especialidade</th>
+                        <th>Circulante</th>
+                        <th>Status</th>
+                        <th>Duração</th>
+                    </tr>
+                </thead>
+                <tbody id="surgeriesTableBody">
+                    <tr>
+                        <td colspan="9">
+                            <div class="empty-state">CONECTANDO AO SERVIDOR...</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <span>© 2024 HRPI - Todos os direitos reservados</span>
+            <span>Painel Cirúrgico v5.0 Firebase</span>
+            <span id="updateTime">Atualizado em tempo real</span>
+        </div>
+    </div>
+
+    <div class="connection-status" id="connectionStatus">🟢 Online</div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuJsJ-Wt2L6NB0WFlalLLFGcgLWJ49w8",
+            authDomain: "centro-cirurgico-eaf76.firebaseapp.com",
+            databaseURL: "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com",
+            projectId: "centro-cirurgico-eaf76",
+            storageBucket: "centro-cirurgico-eaf76.firebasestorage.app",
+            messagingSenderId: "620414910337",
+            appId: "1:620414910337:web:4592fa24f0d8f41d673280"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        const TODAY = new Date().toISOString().split('T')[0];
+        
+        // Status da conexão
+        const connectedRef = ref(db, '.info/connected');
+        onValue(connectedRef, (snap) => {
+            const status = document.getElementById('connectionStatus');
+            if (snap.val() === true) {
+                status.textContent = '🟢 Online';
+                status.className = 'connection-status';
+            } else {
+                status.textContent = '🔴 Offline';
+                status.className = 'connection-status offline';
+            }
+        });
+
+        // ECG
+        const canvas = document.getElementById('ecgCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const lines = [];
+        const numLines = 5;
+        
+        for (let i = 0; i < numLines; i++) {
+            lines.push({
+                y: (canvas.height / (numLines + 1)) * (i + 1),
+                offset: Math.random() * 1000,
+                speed: 0.8 + Math.random() * 0.6
+            });
+        }
+
+        function drawECG(timestamp) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            lines.forEach(line => {
+                ctx.beginPath();
+                ctx.strokeStyle = '#bf953f';
+                ctx.lineWidth = 1.8;
+                
+                const t = timestamp * 0.001 * line.speed + line.offset;
+                
+                for (let x = 0; x < canvas.width; x += 2) {
+                    const phase = (x * 0.006 + t) % 4;
+                    let y = line.y;
+                    
+                    if (phase < 0.25) {
+                        const p = phase / 0.25;
+                        y -= 8 * Math.sin(p * Math.PI);
+                    } else if (phase < 0.4) {
+                        y += 0;
+                    } else if (phase < 0.6) {
+                        const q = (phase - 0.4) / 0.2;
+                        if (q < 0.15) {
+                            y += 6 * Math.sin(q * Math.PI * 6.67);
+                        } else if (q < 0.35) {
+                            y -= 38 * Math.sin((q - 0.15) * Math.PI * 5);
+                        } else if (q < 0.55) {
+                            y += 22 * Math.sin((q - 0.35) * Math.PI * 5);
+                        } else {
+                            y -= 4 * Math.sin((q - 0.55) * Math.PI * 2.22);
+                        }
+                    } else if (phase < 0.85) {
+                        y -= 1.5;
+                    } else if (phase < 1.2) {
+                        const tWave = (phase - 0.85) / 0.35;
+                        y -= 11 * Math.sin(tWave * Math.PI);
+                    } else {
+                        y += Math.sin(phase * 5) * 0.3;
+                    }
+                    
+                    if (x === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                
+                ctx.stroke();
+            });
+            
+            requestAnimationFrame(drawECG);
+        }
+        requestAnimationFrame(drawECG);
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('liveTime').textContent = now.toLocaleTimeString('pt-BR');
+            document.getElementById('liveDate').textContent = now.toLocaleDateString('pt-BR', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
+
+        function updatePanel(surgeries) {
+            const todaySurgeries = surgeries.filter(s => s.date === TODAY);
+            
+            const inProgress = todaySurgeries.filter(s => s.status === 'em_andamento').length;
+            const completed = todaySurgeries.filter(s => s.status === 'concluida').length;
+            const waiting = todaySurgeries.filter(s => s.status === 'pendente').length;
+            
+            document.getElementById('inProgress').textContent = String(inProgress).padStart(2, '0');
+            document.getElementById('completed').textContent = String(completed).padStart(2, '0');
+            document.getElementById('waiting').textContent = String(waiting).padStart(2, '0');
+
+            const tbody = document.getElementById('surgeriesTableBody');
+            
+            if (todaySurgeries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = todaySurgeries
+                .sort((a, b) => a.time.localeCompare(b.time))
+                .map(surgery => {
+                    let statusHTML = '';
+                    let rowClass = '';
+                    let durationHTML = '';
+                    
+                    if (surgery.status === 'pendente') {
+                        statusHTML = `<span class="status-indicator status-waiting">⏳ Aguardando</span>`;
+                        durationHTML = '<span style="color: #475569;">--:--</span>';
+                    } else if (surgery.status === 'em_andamento') {
+                        statusHTML = `<span class="status-indicator status-progress">⚙️ Em Andamento</span>`;
+                        rowClass = 'row-ongoing';
+                        
+                        const now = new Date();
+                        const [startH, startM] = surgery.startTime.split(':').map(Number);
+                        const startDate = new Date(TODAY);
+                        startDate.setHours(startH, startM, 0);
+                        const diffMinutes = Math.floor((now - startDate) / 60000);
+                        const h = Math.floor(diffMinutes / 60);
+                        const m = diffMinutes % 60;
+                        
+                        durationHTML = `<span class="duration-timer duration-ongoing">${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}</span>`;
+                    } else {
+                        statusHTML = `<span class="status-indicator status-done">✅ Finalizado</span>`;
+                        
+                        if (surgery.duration) {
+                            const h = Math.floor(surgery.duration / 60);
+                            const m = surgery.duration % 60;
+                            durationHTML = `<span class="duration-timer duration-done">${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}</span>`;
+                        } else {
+                            durationHTML = '<span style="color: #475569;">--:--</span>';
+                        }
+                    }
+
+                    return `
+                        <tr class="${rowClass}">
+                            <td><strong>${surgery.room}</strong></td>
+                            <td>${surgery.time}</td>
+                            <td>${surgery.patient}</td>
+                            <td>${surgery.type}</td>
+                            <td>Dr. ${surgery.doctor}${surgery.specialty ? `<br><span class="specialty-tag">${surgery.specialty}</span>` : ''}</td>
+                            <td>${surgery.specialty || '-'}</td>
+                            <td>${surgery.circulante || '-'}</td>
+                            <td>${statusHTML}</td>
+                            <td>${durationHTML}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+            document.getElementById('updateTime').textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
+        }
+
+        // Escutar mudanças no Firebase em tempo real
+        const surgeriesRef = ref(db, 'surgeries');
+        onValue(surgeriesRef, (snapshot) => {
+            const data = snapshot.val();
+            const surgeries = data ? Object.values(data) : [];
+            updatePanel(surgeries);
+        });
+
+        // Carregar logo
+        const logoRef = ref(db, 'settings/logo');
+        onValue(logoRef, (snapshot) => {
+            const logoData = snapshot.val();
+            if (logoData) {
+                document.getElementById('logoContainer').innerHTML = `<img src="${logoData}" alt="Logo HRPI">`;
+            }
+        });
+
+        updateClock();
+        setInterval(updateClock, 1000);
+        setInterval(() => {
+            updatePanel(JSON.parse(localStorage.getItem('lastSurgeries') || '[]'));
+        }, 30000);
+    </script>
+</body>
+</html>

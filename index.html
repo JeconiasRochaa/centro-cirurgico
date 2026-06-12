@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>HRPI - Sistema Cirúrgico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #0f172a;
+            gap: 40px;
+        }
+        .option-card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid #334155;
+        }
+        .option-card:hover {
+            border-color: #bf953f;
+            transform: translateY(-5px);
+        }
+        .option-icon { font-size: 60px; margin-bottom: 20px; }
+        .option-title { color: #f1f5f9; font-size: 24px; margin-bottom: 10px; }
+        .option-desc { color: #94a3b8; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="option-card" onclick="window.open('painel_tv.html', '_blank')">
+        <div class="option-icon">📺</div>
+        <div class="option-title">Painel TV</div>
+        <div class="option-desc">Exibição para monitores</div>
+    </div>
+    <div class="option-card" onclick="window.open('registro_cirurgias.html', '_blank')">
+        <div class="option-icon">💻</div>
+        <div class="option-title">Registro</div>
+        <div class="option-desc">Gerenciamento de cirurgias</div>
+    </div>
+</body>
+</html>
