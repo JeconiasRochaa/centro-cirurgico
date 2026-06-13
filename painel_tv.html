@@ -59,7 +59,6 @@
             overflow: hidden;
         }
 
-        /* ============ HEADER ============ */
         .header {
             background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
             border-bottom: 4px solid var(--border-color);
@@ -99,14 +98,6 @@
             height: 100%;
             object-fit: contain;
             padding: 14px;
-        }
-
-        .logo-placeholder {
-            font-size: 48px;
-        }
-
-        .hospital-info {
-            min-width: 0;
         }
 
         .hospital-info h1 {
@@ -150,7 +141,6 @@
             margin-top: 10px;
         }
 
-        /* ============ STATUS BAR ============ */
         .status-bar {
             background: rgba(13, 18, 41, 0.97);
             border-bottom: 2px solid var(--border-color);
@@ -180,7 +170,6 @@
             margin-top: 8px;
         }
 
-        /* ============ PANEL CONTENT ============ */
         .panel-content {
             flex: 1;
             padding: 30px 45px;
@@ -311,24 +300,6 @@
             margin-top: 5px;
         }
 
-        .duration-timer {
-            font-family: 'Courier New', monospace;
-            font-weight: 700;
-            font-size: 24px;
-        }
-
-        .duration-ongoing { 
-            color: var(--blue-light);
-            animation: timerPulse 1s infinite;
-        }
-        
-        .duration-done { color: var(--green-light); }
-
-        @keyframes timerPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
         .empty-state {
             text-align: center;
             padding: 100px 20px;
@@ -351,7 +322,6 @@
             gap: 15px;
         }
 
-        /* Scrollbar GRANDE */
         .table-wrapper::-webkit-scrollbar {
             width: 16px;
             height: 16px;
@@ -367,11 +337,6 @@
             border-radius: 8px;
         }
 
-        .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #2a4a7e;
-        }
-
-        /* ============ TELAS MENORES ============ */
         @media (max-width: 1400px) {
             .header {
                 padding: 18px 30px;
@@ -434,18 +399,6 @@
                 font-size: 13px;
                 padding: 8px 18px;
             }
-            
-            .duration-timer {
-                font-size: 20px;
-            }
-            
-            .empty-state {
-                font-size: 24px;
-            }
-            
-            .footer {
-                font-size: 12px;
-            }
         }
 
         @media (max-width: 900px) {
@@ -503,16 +456,6 @@
             .status-indicator {
                 font-size: 11px;
             }
-
-            .duration-timer {
-                font-size: 16px;
-            }
-
-            .footer {
-                font-size: 10px;
-                flex-direction: column;
-                text-align: center;
-            }
         }
     </style>
 </head>
@@ -520,11 +463,10 @@
     <canvas id="ecgCanvas"></canvas>
 
     <div class="container">
-        <!-- HEADER -->
         <div class="header">
             <div class="hospital-brand">
                 <div class="logo-container" id="logoContainer">
-                    <span class="logo-placeholder">🏥</span>
+                    <span style="font-size: 48px;">🏥</span>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
@@ -537,7 +479,6 @@
             </div>
         </div>
 
-        <!-- STATUS BAR -->
         <div class="status-bar">
             <div class="status-item">
                 <div class="status-value" id="inProgress">00</div>
@@ -553,7 +494,6 @@
             </div>
         </div>
 
-        <!-- PANEL CONTENT -->
         <div class="panel-content">
             <div class="table-wrapper">
                 <table>
@@ -565,9 +505,9 @@
                             <th>Procedimento</th>
                             <th>Médico</th>
                             <th>Especialidade</th>
+                            <th>Anestesista</th>
                             <th>Circulante</th>
                             <th>Status</th>
-                            <th>Duração</th>
                         </tr>
                     </thead>
                     <tbody id="surgeriesTableBody">
@@ -581,10 +521,9 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
         <div class="footer">
             <span>© 2024 HRPI - Todos os direitos reservados</span>
-            <span>Painel Cirúrgico v5.0</span>
+            <span>Painel Cirúrgico v6.0</span>
             <span id="updateTime">Conectando...</span>
         </div>
     </div>
@@ -609,7 +548,6 @@
         let TODAY = new Date().toISOString().split('T')[0];
         let currentSurgeries = [];
 
-        // ECG
         const canvas = document.getElementById('ecgCanvas');
         const ctx = canvas.getContext('2d');
         
@@ -677,7 +615,6 @@
         function checkNewDay() {
             const newDate = new Date().toISOString().split('T')[0];
             if (newDate !== TODAY) {
-                console.log('🔄 Novo dia detectado! Atualizando painel...');
                 TODAY = newDate;
                 updatePanel();
             }
@@ -690,65 +627,6 @@
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
             checkNewDay();
-        }
-
-        // ========== DURAÇÃO CRESCENTE ==========
-        function calculateDuration(surgery) {
-            if (surgery.status === 'em_andamento' && surgery.startTime) {
-                const now = new Date();
-                const [startH, startM] = surgery.startTime.split(':').map(Number);
-                const startDate = new Date(surgery.date);
-                startDate.setHours(startH, startM, 0, 0, 0);
-                
-                const diffMs = now.getTime() - startDate.getTime();
-                let diffMinutes = Math.floor(diffMs / 60000);
-                
-                if (diffMinutes < 0) diffMinutes = 0;
-                
-                const hours = Math.floor(diffMinutes / 60);
-                const minutes = diffMinutes % 60;
-                
-                return { 
-                    hours: hours, 
-                    minutes: minutes, 
-                    totalMinutes: diffMinutes,
-                    isRunning: true 
-                };
-            } 
-            else if (surgery.status === 'concluida' && surgery.duration) {
-                const hours = Math.floor(surgery.duration / 60);
-                const minutes = surgery.duration % 60;
-                return { 
-                    hours: hours, 
-                    minutes: minutes, 
-                    totalMinutes: surgery.duration,
-                    isRunning: false 
-                };
-            }
-            return null;
-        }
-
-        function updateDurations() {
-            const durationElements = document.querySelectorAll('.duration-timer[data-id]');
-            
-            durationElements.forEach(el => {
-                const surgeryId = el.getAttribute('data-id');
-                const surgery = currentSurgeries.find(s => s.id === surgeryId);
-                
-                if (surgery && surgery.status === 'em_andamento') {
-                    const duration = calculateDuration(surgery);
-                    if (duration) {
-                        const timeStr = `${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}`;
-                        el.textContent = timeStr;
-                        
-                        if (duration.totalMinutes > 120) {
-                            el.style.color = '#fbbf24';
-                        } else {
-                            el.style.color = '#60a5fa';
-                        }
-                    }
-                }
-            });
         }
 
         function updatePanel() {
@@ -767,34 +645,15 @@
             }
 
             tbody.innerHTML = todaySurgeries.sort((a, b) => a.time.localeCompare(b.time)).map(surgery => {
-                let statusHTML = '', rowClass = '', durationHTML = '';
+                let statusHTML = '', rowClass = '';
                 
                 if (surgery.status === 'pendente') {
                     statusHTML = `<span class="status-indicator status-waiting">⏳ Aguardando</span>`;
-                    durationHTML = '<span style="color: #64748b; font-size: 22px;">--:--</span>';
-                } 
-                else if (surgery.status === 'em_andamento') {
+                } else if (surgery.status === 'em_andamento') {
                     statusHTML = `<span class="status-indicator status-progress">⚙️ Em Andamento</span>`;
                     rowClass = 'row-ongoing';
-                    
-                    const d = calculateDuration(surgery);
-                    if (d) {
-                        const timeStr = `${String(d.hours).padStart(2, '0')}:${String(d.minutes).padStart(2, '0')}`;
-                        const colorStyle = d.totalMinutes > 120 ? 'style="color: #fbbf24;"' : '';
-                        durationHTML = `<span class="duration-timer duration-ongoing" data-id="${surgery.id}" ${colorStyle}>${timeStr}</span>`;
-                    } else {
-                        durationHTML = `<span class="duration-timer duration-ongoing" data-id="${surgery.id}">00:00</span>`;
-                    }
-                } 
-                else {
+                } else {
                     statusHTML = `<span class="status-indicator status-done">✅ Finalizado</span>`;
-                    
-                    const d = calculateDuration(surgery);
-                    if (d) {
-                        durationHTML = `<span class="duration-timer duration-done">${String(d.hours).padStart(2, '0')}:${String(d.minutes).padStart(2, '0')}</span>`;
-                    } else {
-                        durationHTML = '<span style="color: #64748b; font-size: 22px;">--:--</span>';
-                    }
                 }
 
                 return `<tr class="${rowClass}">
@@ -804,23 +663,21 @@
                     <td>${surgery.type || '-'}</td>
                     <td>Dr. ${surgery.doctor || '-'}${surgery.specialty ? `<br><span class="specialty-tag">${surgery.specialty}</span>` : ''}</td>
                     <td>${surgery.specialty || '-'}</td>
+                    <td>Dr. ${surgery.anesthetist || '-'}</td>
                     <td>${surgery.circulante || '-'}</td>
                     <td>${statusHTML}</td>
-                    <td>${durationHTML}</td>
                 </tr>`;
             }).join('');
 
             document.getElementById('updateTime').textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
         }
 
-        // Firebase - tempo real
         const surgeriesRef = ref(db, 'surgeries');
         onValue(surgeriesRef, (snapshot) => {
             currentSurgeries = snapshot.val() ? Object.values(snapshot.val()) : [];
             updatePanel();
         });
 
-        // Carregar logo
         const logoRef = ref(db, 'settings/logo');
         onValue(logoRef, (snapshot) => {
             const logoData = snapshot.val();
@@ -829,12 +686,9 @@
             }
         });
 
-        // Inicialização
         updateClock();
         updatePanel();
-        
         setInterval(updateClock, 1000);
-        setInterval(updateDurations, 1000);
         setInterval(checkNewDay, 30000);
         setInterval(updatePanel, 30000);
         
@@ -849,10 +703,6 @@
             resizeCanvas();
             checkNewDay();
         });
-
-        console.log('✅ Painel TV - Letras Grandes - TV 43" Full HD');
-        console.log('📅 Data atual:', TODAY);
-        console.log('⏱️ Duração crescente ativada');
     </script>
 </body>
 </html>
