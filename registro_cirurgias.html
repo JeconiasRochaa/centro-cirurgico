@@ -192,9 +192,7 @@
             transition: all 0.3s;
         }
 
-        .btn-report:hover {
-            background: #fef9e7;
-        }
+        .btn-report:hover { background: #fef9e7; }
 
         .form-group {
             margin-bottom: 16px;
@@ -224,7 +222,7 @@
 
         textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -242,7 +240,7 @@
             background: white;
             border: 2px solid var(--gold);
             border-radius: 8px;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             z-index: 100;
             display: none;
@@ -252,16 +250,27 @@
         .suggestions-box.show { display: block; }
 
         .suggestion-item {
-            padding: 10px 15px;
+            padding: 12px 15px;
             cursor: pointer;
             transition: background 0.2s;
             color: var(--text-secondary);
             font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
 
         .suggestion-item:hover {
             background: #fef9e7;
             color: var(--gold);
+        }
+
+        .suggestion-item .add-icon {
+            color: var(--gold);
+            margin-right: 8px;
+            font-weight: bold;
         }
 
         .btn {
@@ -282,14 +291,8 @@
             margin-bottom: 8px;
         }
 
-        .btn-primary:hover {
-            background: var(--gold-hover);
-        }
-
-        .btn-primary:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-        }
+        .btn-primary:hover { background: var(--gold-hover); }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
 
         .btn-danger {
             background: white;
@@ -528,6 +531,10 @@
         .surgery-list::-webkit-scrollbar-track { background: var(--bg-body); }
         .surgery-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
+        .suggestions-box::-webkit-scrollbar { width: 6px; }
+        .suggestions-box::-webkit-scrollbar-track { background: white; }
+        .suggestions-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
         @media (max-width: 1024px) {
             .main-grid { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
@@ -589,9 +596,12 @@
                         <input type="text" id="patient" placeholder="Nome completo do paciente" required>
                     </div>
                     <div class="form-group">
-                        <label>Procedimento(s) - Descreva todos os procedimentos</label>
-                        <textarea id="surgeryType" placeholder="Descreva todos os procedimentos que serão realizados..." required rows="3"></textarea>
+                        <label>Procedimento(s) - Digite para buscar sugestões</label>
+                        <textarea id="surgeryType" placeholder="Digite o nome do procedimento e selecione nas sugestões...&#10;Você pode adicionar múltiplos procedimentos!" required rows="4"></textarea>
                         <div class="suggestions-box" id="suggestionsBox"></div>
+                        <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">
+                            💡 Dica: Digite as iniciais para ver sugestões. Clique para adicionar. Múltiplos procedimentos são separados por linha.
+                        </small>
                     </div>
                     <div class="form-group">
                         <label>Médico Responsável</label>
@@ -744,31 +754,137 @@
         let isEditing = false;
         let allSurgeries = [];
 
+        // ========== BANCO DE PROCEDIMENTOS EXPANDIDO ==========
         const surgeryTypes = [
-            'COLECISTECTOMIA', 'APENDICECTOMIA', 'HERNIOPLASTIA INGUINAL',
-            'HERNIOPLASTIA UMBILICAL', 'CESARIANA', 'HISTERECTOMIA TOTAL',
-            'HISTERECTOMIA PARCIAL', 'MASTECTOMIA', 'TIREOIDECTOMIA TOTAL',
-            'TIREOIDECTOMIA PARCIAL', 'PROSTATECTOMIA', 'NEFRECTOMIA',
-            'COLECTOMIA', 'GASTRECTOMIA', 'BYPASS GÁSTRICO',
-            'CIRURGIA DE CATARATA', 'FACECTOMIA', 'ARTROPLASTIA DE QUADRIL',
-            'ARTROPLASTIA DE JOELHO', 'CIRURGIA DE COLUNA', 'CRANIOTOMIA',
-            'REVASCULARIZAÇÃO MIOCÁRDICA', 'CATETERISMO CARDÍACO',
-            'LAPAROTOMIA EXPLORADORA', 'OSTEOSSÍNTESE DE FÊMUR',
-            'OSTEOSSÍNTESE DE TÍBIA', 'RECONSTRUÇÃO MAMÁRIA', 'RINOPLASTIA',
-            'AMIGDALECTOMIA', 'HEMORROIDECTOMIA', 'SAFENECTOMIA',
-            'POSTECTOMIA', 'LITÍASE RENAL', 'ANEURISMA CEREBRAL',
-            'TRANSPLANTE RENAL', 'CIRURGIA BARIÁTRICA', 'MASTOPEXIA',
-            'ABDOMINOPLASTIA', 'LIPOASPIRAÇÃO',
-            'EXODONTIA DE TERCEIRO MOLAR', 'EXODONTIA MÚLTIPLA',
-            'FRATURA DE MANDÍBULA', 'FRATURA DE MAXILA',
-            'FRATURA DE ZIGOMÁTICO', 'FRATURA DE ÓRBITA',
-            'CIRURGIA ORTOGNÁTICA', 'ARTROPLASTIA DE ATM',
-            'RECONSTRUÇÃO DE MANDÍBULA', 'RECONSTRUÇÃO DE MAXILA',
-            'ENXERTO ÓSSEO ALVEOLAR', 'IMPLANTE DENTÁRIO',
-            'LEVANTAMENTO DE SEIO MAXILAR', 'CISTO ODONTOGÊNICO',
-            'TUMOR ODONTOGÊNICO', 'OSTEONECROSE DOS MAXILARES',
-            'TRAUMATISMO DENTÁRIO', 'CIRURGIA DE FENDA LABIOPALATINA',
-            'SIALOENDOSCOPIA', 'CIRURGIA DE GLÂNDULAS SALIVARES'
+            // Cirurgia Geral
+            'COLECISTECTOMIA',
+            'COLECISTECTOMIA VIDEOLAPAROSCÓPICA',
+            'APENDICECTOMIA',
+            'APENDICECTOMIA VIDEOLAPAROSCÓPICA',
+            'HERNIOPLASTIA INGUINAL',
+            'HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA',
+            'HERNIOPLASTIA UMBILICAL',
+            'HERNIOPLASTIA EPIGÁSTRICA',
+            'HERNIOPLASTIA INCISIONAL',
+            'LAPAROTOMIA EXPLORADORA',
+            'COLECTOMIA',
+            'COLECTOMIA VIDEOLAPAROSCÓPICA',
+            'GASTRECTOMIA',
+            'GASTRECTOMIA VIDEOLAPAROSCÓPICA',
+            'BYPASS GÁSTRICO',
+            'CIRURGIA BARIÁTRICA',
+            'ESPLENECTOMIA',
+            'HEMORROIDECTOMIA',
+            'FISTULECTOMIA ANAL',
+            
+            // Ginecologia e Obstetrícia
+            'CESARIANA',
+            'HISTERECTOMIA TOTAL',
+            'HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA',
+            'HISTERECTOMIA PARCIAL',
+            'HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
+            'MASTECTOMIA',
+            'MASTECTOMIA COM RECONSTRUÇÃO',
+            'RECONSTRUÇÃO MAMÁRIA',
+            'MASTOPEXIA',
+            'OOFRECTOMIA',
+            'SALPINGECTOMIA',
+            'LAQUEADURA TUBÁRIA',
+            
+            // Neurocirurgia
+            'CRANIOTOMIA',
+            'CRANIOTOMIA PARA TUMOR CEREBRAL',
+            'ANEURISMA CEREBRAL',
+            'HÉRNIA DE DISCO CERVICAL',
+            'HÉRNIA DE DISCO LOMBAR',
+            'CIRURGIA DE COLUNA',
+            'ARTRODESE DE COLUNA',
+            'DESCOMPRESSÃO MEDULAR',
+            
+            // Cirurgia Cardíaca e Vascular
+            'REVASCULARIZAÇÃO MIOCÁRDICA',
+            'TROCA VALVAR AÓRTICA',
+            'TROCA VALVAR MITRAL',
+            'CATETERISMO CARDÍACO',
+            'SAFENECTOMIA',
+            'ESCLEROTERAPIA DE VARIZES',
+            'COLOCAÇÃO DE MARCA-PASSO',
+            
+            // Ortopedia
+            'ARTROPLASTIA DE QUADRIL',
+            'ARTROPLASTIA DE JOELHO',
+            'OSTEOSSÍNTESE DE FÊMUR',
+            'OSTEOSSÍNTESE DE TÍBIA',
+            'OSTEOSSÍNTESE DE ÚMERO',
+            'OSTEOSSÍNTESE DE RÁDIO',
+            'OSTEOSSÍNTESE DE TORNOZELO',
+            'RECONSTRUÇÃO DE LCA',
+            'MENISCECTOMIA',
+            'ARTROSCOPIA DE JOELHO',
+            'ARTROSCOPIA DE OMBRO',
+            'CIRURGIA DE MANGUITO ROTADOR',
+            
+            // Oftalmologia
+            'CIRURGIA DE CATARATA',
+            'FACECTOMIA',
+            'FACECTOMIA COM IMPLANTE DE LENTE',
+            'TRABECULECTOMIA',
+            'VITRECTOMIA',
+            'RETINOPEXIA',
+            
+            // Otorrinolaringologia
+            'AMIGDALECTOMIA',
+            'ADENOIDECTOMIA',
+            'TIMPANOPLASTIA',
+            'SEPTOPLASTIA',
+            'RINOPLASTIA',
+            'SINUSECTOMIA',
+            
+            // Urologia
+            'PROSTATECTOMIA',
+            'NEFRECTOMIA',
+            'LITÍASE RENAL',
+            'POSTECTOMIA',
+            'VASECTOMIA',
+            'CISTECTOMIA',
+            
+            // Cirurgia Plástica
+            'ABDOMINOPLASTIA',
+            'LIPOASPIRAÇÃO',
+            'BLEFAROPLASTIA',
+            'RITIDOPLASTIA',
+            'OTOPLASTIA',
+            
+            // Coloproctologia
+            'HEMORROIDECTOMIA',
+            'FISTULECTOMIA PERIANAL',
+            'ESFINCTEROPLASTIA ANAL',
+            
+            // Bucomaxilofacial
+            'EXODONTIA DE TERCEIRO MOLAR',
+            'EXODONTIA MÚLTIPLA',
+            'EXODONTIA SIMPLES',
+            'FRATURA DE MANDÍBULA',
+            'FRATURA DE MAXILA',
+            'FRATURA DE ZIGOMÁTICO',
+            'FRATURA DE ÓRBITA',
+            'FRATURA DE OSSOS NASAIS',
+            'CIRURGIA ORTOGNÁTICA',
+            'ARTROPLASTIA DE ATM',
+            'RECONSTRUÇÃO DE MANDÍBULA',
+            'RECONSTRUÇÃO DE MAXILA',
+            'ENXERTO ÓSSEO ALVEOLAR',
+            'IMPLANTE DENTÁRIO',
+            'IMPLANTE DENTÁRIO MÚLTIPLO',
+            'LEVANTAMENTO DE SEIO MAXILAR',
+            'CISTO ODONTOGÊNICO',
+            'TUMOR ODONTOGÊNICO',
+            'OSTEONECROSE DOS MAXILARES',
+            'TRAUMATISMO DENTÁRIO',
+            'CIRURGIA DE FENDA LABIOPALATINA',
+            'SIALOENDOSCOPIA',
+            'CIRURGIA DE GLÂNDULAS SALIVARES',
+            'DRENAGEM DE ABCESSO BUCOMAXILOFACIAL'
         ];
 
         const connectedRef = ref(db, '.info/connected');
@@ -811,40 +927,78 @@
             }
         };
 
+        // ========== AUTOCOMPLETE APRIMORADO ==========
         const surgeryInput = document.getElementById('surgeryType');
         const suggestionsBox = document.getElementById('suggestionsBox');
 
-        surgeryInput.addEventListener('input', function() {
-            const value = this.value.toUpperCase();
-            if (value.length < 2) {
+        surgeryInput.addEventListener('input', function(e) {
+            const value = this.value;
+            
+            // Pega a última linha digitada
+            const lines = value.split('\n');
+            const lastLine = lines[lines.length - 1].trim().toUpperCase();
+            
+            if (lastLine.length < 2) {
                 suggestionsBox.classList.remove('show');
                 return;
             }
-            const matches = surgeryTypes.filter(type => type.includes(value));
+
+            // Filtra procedimentos que contêm o texto digitado
+            const matches = surgeryTypes.filter(type => type.includes(lastLine));
+            
             if (matches.length > 0) {
-                suggestionsBox.innerHTML = matches.slice(0, 10).map(match => 
-                    `<div class="suggestion-item" onclick="addProcedure('${match}')">➕ ${match}</div>`
-                ).join('');
+                suggestionsBox.innerHTML = matches.slice(0, 10).map(match => {
+                    // Destaca a parte que corresponde à busca
+                    const highlighted = match.replace(
+                        new RegExp(`(${lastLine})`, 'gi'),
+                        '<strong style="color: #bf953f;">$1</strong>'
+                    );
+                    return `<div class="suggestion-item" onclick="addProcedure('${match.replace(/'/g, "\\'")}')">
+                        <span class="add-icon">➕</span> ${highlighted}
+                    </div>`;
+                }).join('');
                 suggestionsBox.classList.add('show');
             } else {
                 suggestionsBox.classList.remove('show');
             }
         });
 
+        // Adiciona procedimento ao textarea
         window.addProcedure = function(procedure) {
             const textarea = document.getElementById('surgeryType');
-            const currentText = textarea.value.trim();
-            if (currentText && !currentText.toUpperCase().includes(procedure)) {
-                textarea.value = currentText + '\n' + procedure;
-            } else if (!currentText) {
-                textarea.value = procedure;
-            }
+            const value = textarea.value;
+            const lines = value.split('\n');
+            
+            // Remove a última linha (que é o texto de busca)
+            lines.pop();
+            
+            // Adiciona o procedimento selecionado
+            lines.push(procedure);
+            
+            // Atualiza o textarea
+            textarea.value = lines.join('\n') + '\n';
+            
+            // Fecha as sugestões
             suggestionsBox.classList.remove('show');
+            
+            // Foca no textarea para continuar digitando
             textarea.focus();
+            
+            // Posiciona o cursor no final
+            const len = textarea.value.length;
+            textarea.setSelectionRange(len, len);
         };
 
+        // Fecha sugestões ao clicar fora
         document.addEventListener('click', function(e) {
             if (!surgeryInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.remove('show');
+            }
+        });
+
+        // Navegação por teclado nas sugestões
+        surgeryInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
                 suggestionsBox.classList.remove('show');
             }
         });
@@ -1178,9 +1332,7 @@
                 styles: { fontSize: 7, cellPadding: 2 },
                 headStyles: { fillColor: [191, 149, 63], textColor: 255, fontStyle: 'bold' },
                 alternateRowStyles: { fillColor: [248, 250, 252] },
-                columnStyles: {
-                    3: { cellWidth: 40 },
-                },
+                columnStyles: { 3: { cellWidth: 40 } },
             });
 
             const pageCount = doc.internal.getNumberOfPages();
