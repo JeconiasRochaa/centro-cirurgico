@@ -38,7 +38,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.08;
+            opacity: 0.06;
             z-index: 0;
             pointer-events: none;
         }
@@ -82,22 +82,31 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
 
         .logo-circle {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             background: #ffffff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 3px solid var(--gold);
-            box-shadow: 0 0 30px rgba(200, 169, 74, 0.3);
-            font-size: 40px;
+            box-shadow: 0 0 35px rgba(200, 169, 74, 0.35);
+            font-size: 42px;
+            overflow: hidden;
             animation: logoFloat 3s ease-in-out infinite;
+            transition: all 0.3s;
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 15px;
         }
 
         .logo-circle:nth-child(2) {
@@ -106,40 +115,40 @@
 
         @keyframes logoFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
         }
 
         .hospital-name {
-            font-size: 36px;
+            font-size: 38px;
             font-weight: 700;
             color: var(--text-light);
             letter-spacing: 3px;
             text-transform: uppercase;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            margin-bottom: 8px;
+            text-shadow: 0 4px 25px rgba(0,0,0,0.4);
+            margin-bottom: 10px;
         }
 
         .hospital-subtitle {
-            font-size: 16px;
+            font-size: 17px;
             color: var(--gold);
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             font-weight: 500;
             text-transform: uppercase;
         }
 
         .divider {
-            width: 200px;
+            width: 250px;
             height: 2px;
-            background: var(--gold);
-            margin: 20px auto;
-            opacity: 0.5;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 25px auto;
         }
 
         .system-title {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--text-muted);
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             font-weight: 400;
+            text-transform: uppercase;
         }
 
         /* Cards */
@@ -151,45 +160,50 @@
         }
 
         .option-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(200, 169, 74, 0.3);
-            border-radius: 24px;
-            padding: 50px 40px;
-            width: 320px;
+            border: 2px solid rgba(200, 169, 74, 0.25);
+            border-radius: 28px;
+            padding: 55px 45px;
+            width: 340px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             position: relative;
             overflow: hidden;
+            text-decoration: none;
+            display: block;
         }
 
         .option-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(200, 169, 74, 0.1), transparent);
-            transition: left 0.6s;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(200, 169, 74, 0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
         }
 
         .option-card:hover::before {
-            left: 100%;
+            opacity: 1;
         }
 
         .option-card:hover {
             border-color: var(--gold);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(200, 169, 74, 0.2);
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(200, 169, 74, 0.25);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .card-icon {
-            font-size: 80px;
+            font-size: 90px;
             margin-bottom: 25px;
             display: block;
+            position: relative;
+            z-index: 1;
             animation: iconPulse 2s ease-in-out infinite;
         }
 
@@ -199,41 +213,47 @@
 
         @keyframes iconPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
         }
 
         .card-title {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 700;
             color: var(--text-light);
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
         }
 
         .card-desc {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.7;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .card-badge {
             display: inline-block;
             background: var(--gold);
             color: var(--bg-primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 12px;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-top: 20px;
+            margin-top: 22px;
+            position: relative;
+            z-index: 1;
         }
 
         /* Footer */
         .footer {
             position: fixed;
-            bottom: 20px;
+            bottom: 25px;
             text-align: center;
             color: var(--text-muted);
             font-size: 12px;
@@ -243,17 +263,18 @@
 
         .footer span {
             color: var(--gold);
+            font-weight: 600;
         }
 
         /* Responsivo */
         @media (max-width: 768px) {
             .hospital-name {
-                font-size: 24px;
+                font-size: 26px;
                 letter-spacing: 1px;
             }
 
             .hospital-subtitle {
-                font-size: 12px;
+                font-size: 13px;
                 letter-spacing: 3px;
             }
 
@@ -266,41 +287,49 @@
             .option-card {
                 width: 100%;
                 max-width: 350px;
-                padding: 35px 30px;
+                padding: 40px 30px;
             }
 
             .card-icon {
-                font-size: 60px;
+                font-size: 70px;
             }
 
             .card-title {
-                font-size: 22px;
+                font-size: 24px;
             }
 
             .logo-circle {
-                width: 65px;
-                height: 65px;
-                font-size: 30px;
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
             }
         }
 
         @media (max-width: 400px) {
             .logos-row {
-                gap: 10px;
+                gap: 12px;
             }
 
             .logo-circle {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
+                width: 65px;
+                height: 65px;
+                font-size: 26px;
             }
 
             .hospital-name {
-                font-size: 18px;
+                font-size: 20px;
             }
 
             .option-card {
-                padding: 25px 20px;
+                padding: 30px 20px;
+            }
+
+            .card-icon {
+                font-size: 55px;
+            }
+
+            .card-title {
+                font-size: 20px;
             }
         }
     </style>
@@ -322,19 +351,25 @@
         <!-- Header -->
         <div class="header-section">
             <div class="logos-row">
-                <div class="logo-circle">🏥</div>
-                <div class="logo-circle">🏛️</div>
+                <!-- Logo do Hospital -->
+                <div class="logo-circle" id="hospitalLogo">
+                    <span style="font-size: 42px;">🏥</span>
+                </div>
+                <!-- Logo do Governo -->
+                <div class="logo-circle" id="govLogo">
+                    <span style="font-size: 42px;">🏛️</span>
+                </div>
             </div>
             <h1 class="hospital-name">Hospital Regional de Palmeira dos Índios</h1>
             <p class="hospital-subtitle">HRPI • Centro Cirúrgico</p>
             <div class="divider"></div>
-            <p class="system-title">SISTEMA DE GESTÃO CIRÚRGICA</p>
+            <p class="system-title">Sistema de Gestão Cirúrgica</p>
         </div>
 
         <!-- Cards -->
         <div class="cards-container">
             <!-- Painel TV -->
-            <div class="option-card" onclick="window.open('painel_tv.html', '_blank')">
+            <a class="option-card" href="painel_tv.html" target="_blank">
                 <span class="card-icon">📺</span>
                 <h2 class="card-title">Painel TV</h2>
                 <p class="card-desc">
@@ -342,10 +377,10 @@
                     Acompanhe todas as cirurgias do dia.
                 </p>
                 <span class="card-badge">Visualização</span>
-            </div>
+            </a>
 
             <!-- Registro -->
-            <div class="option-card" onclick="window.open('registro_cirurgias.html', '_blank')">
+            <a class="option-card" href="registro_cirurgias.html" target="_blank">
                 <span class="card-icon">💻</span>
                 <h2 class="card-title">Registro</h2>
                 <p class="card-desc">
@@ -353,16 +388,50 @@
                     Agende, inicie, finalize e gere relatórios.
                 </p>
                 <span class="card-badge">Administração</span>
-            </div>
+            </a>
         </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        © 2024 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios • Todos os direitos reservados
+        © 2026 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios • Todos os direitos reservados
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuJsJ-Wt2L6NB0WFlalLLFGcgLWJ49w8",
+            authDomain: "centro-cirurgico-eaf76.firebaseapp.com",
+            databaseURL: "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com",
+            projectId: "centro-cirurgico-eaf76",
+            storageBucket: "centro-cirurgico-eaf76.firebasestorage.app",
+            messagingSenderId: "620414910337",
+            appId: "1:620414910337:web:4592fa24f0d8f41d673280"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Carregar logo do hospital
+        const logoRef = ref(db, 'settings/logo');
+        onValue(logoRef, (snapshot) => {
+            const logoData = snapshot.val();
+            if (logoData) {
+                document.getElementById('hospitalLogo').innerHTML = `<img src="${logoData}" alt="Logo HRPI">`;
+            }
+        });
+
+        // Carregar logo do governo
+        const govLogoRef = ref(db, 'settings/govLogo');
+        onValue(govLogoRef, (snapshot) => {
+            const logoData = snapshot.val();
+            if (logoData) {
+                document.getElementById('govLogo').innerHTML = `<img src="${logoData}" alt="Logo Governo">`;
+            }
+        });
+
         // Animação suave ao carregar
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.option-card');
@@ -373,17 +442,17 @@
                     card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
-                }, 200 + (index * 200));
+                }, 300 + (index * 200));
             });
         });
 
-        // Efeito de clique
+        // Efeito de clique nos cards
         document.querySelectorAll('.option-card').forEach(card => {
             card.addEventListener('mousedown', function() {
                 this.style.transform = 'scale(0.95)';
             });
             card.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(-8px)';
+                this.style.transform = 'translateY(-10px)';
             });
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
