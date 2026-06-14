@@ -6,27 +6,24 @@
     <title>HRPI - Gestão de Cirurgias</title>
     <style>
         :root {
-            --bg-body: #f1f5f9;
+            --bg-body: #f5f7fa;
             --bg-card: #ffffff;
             --bg-input: #f8fafc;
             --text-primary: #1e293b;
             --text-secondary: #475569;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --gold: #bf953f;
-            --gold-hover: #a67c00;
+            --gold: #c8a94a;
+            --gold-hover: #a68a2e;
             --blue: #3b82f6;
             --green: #10b981;
             --orange: #f59e0b;
             --red: #ef4444;
             --purple: #8b5cf6;
+            --bg-dark: #06224a;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -35,23 +32,20 @@
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1440px; margin: 0 auto; padding: 20px; }
 
         .header {
-            background: var(--bg-card);
+            background: var(--bg-dark);
             border-radius: 16px;
             padding: 22px 30px;
             margin-bottom: 22px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(6, 34, 74, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+            color: #ffffff;
         }
 
         .brand {
@@ -62,11 +56,18 @@
             min-width: 0;
         }
 
+        .logos-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
         .logo-upload {
-            width: 75px;
-            height: 75px;
-            min-width: 75px;
-            background: var(--bg-input);
+            width: 70px;
+            height: 70px;
+            min-width: 70px;
+            background: #ffffff;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -80,7 +81,7 @@
 
         .logo-upload:hover {
             border-color: var(--gold-hover);
-            box-shadow: 0 0 15px rgba(191, 149, 63, 0.2);
+            box-shadow: 0 0 20px rgba(200, 169, 74, 0.4);
         }
 
         .logo-upload img {
@@ -98,9 +99,20 @@
             cursor: pointer;
         }
 
+        .logo-upload .logo-hint {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #ffffff;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
         .brand h1 {
             font-size: 20px;
-            color: var(--text-primary);
+            color: #ffffff;
         }
 
         .brand span {
@@ -108,6 +120,21 @@
             color: var(--gold);
             letter-spacing: 1px;
             font-weight: 500;
+        }
+
+        .user-info {
+            text-align: right;
+            color: #ffffff;
+        }
+
+        .user-info .date {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .user-info .role {
+            font-size: 12px;
+            color: var(--gold);
         }
 
         .stats-grid {
@@ -121,31 +148,19 @@
             background: var(--bg-card);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             border-left: 4px solid var(--gold);
             transition: transform 0.2s;
         }
 
-        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card:hover { transform: translateY(-3px); }
         .stat-card.orange { border-left-color: var(--orange); }
         .stat-card.blue { border-left-color: var(--blue); }
         .stat-card.green { border-left-color: var(--green); }
         .stat-card.purple { border-left-color: var(--purple); }
 
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-            font-weight: 500;
-        }
+        .stat-value { font-size: 32px; font-weight: 700; color: var(--text-primary); }
+        .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; font-weight: 500; }
 
         .main-grid {
             display: grid;
@@ -157,7 +172,7 @@
             background: var(--bg-card);
             border-radius: 16px;
             padding: 25px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         .card-header {
@@ -171,17 +186,10 @@
             gap: 10px;
         }
 
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .card-title { font-size: 18px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
 
         .btn-report {
-            background: white;
+            background: var(--bg-dark);
             border: 2px solid var(--gold);
             color: var(--gold);
             padding: 8px 16px;
@@ -192,12 +200,12 @@
             transition: all 0.3s;
         }
 
-        .btn-report:hover { background: #fef9e7; }
-
-        .form-group {
-            margin-bottom: 16px;
-            position: relative;
+        .btn-report:hover {
+            background: var(--gold);
+            color: var(--bg-dark);
         }
+
+        .form-group { margin-bottom: 16px; position: relative; }
 
         label {
             display: block;
@@ -220,16 +228,13 @@
             font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
+        textarea { resize: vertical; min-height: 80px; }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--gold);
             background: white;
-            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
+            box-shadow: 0 0 0 3px rgba(200, 169, 74, 0.15);
         }
 
         .suggestions-box {
@@ -244,7 +249,7 @@
             overflow-y: auto;
             z-index: 100;
             display: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .suggestions-box.show { display: block; }
@@ -258,20 +263,14 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .suggestion-item:last-child {
-            border-bottom: none;
-        }
+        .suggestion-item:last-child { border-bottom: none; }
 
         .suggestion-item:hover {
             background: #fef9e7;
             color: var(--gold);
         }
 
-        .suggestion-item .add-icon {
-            color: var(--gold);
-            margin-right: 8px;
-            font-weight: bold;
-        }
+        .suggestion-item .add-icon { color: var(--gold); margin-right: 8px; font-weight: bold; }
 
         .btn {
             width: 100%;
@@ -285,21 +284,11 @@
             letter-spacing: 0.5px;
         }
 
-        .btn-primary {
-            background: var(--gold);
-            color: white;
-            margin-bottom: 8px;
-        }
+        .btn-primary { background: var(--gold); color: white; margin-bottom: 8px; }
+        .btn-primary:hover { background: var(--gold-hover); transform: translateY(-1px); }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
 
-        .btn-primary:hover { background: var(--gold-hover); }
-        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
-
-        .btn-danger {
-            background: white;
-            border: 2px solid var(--red);
-            color: var(--red);
-        }
-
+        .btn-danger { background: white; border: 2px solid var(--red); color: var(--red); }
         .btn-danger:hover { background: #fef2f2; }
 
         .btn-warning {
@@ -310,12 +299,7 @@
             display: none;
         }
 
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-        }
+        .tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
 
         .tab {
             padding: 8px 20px;
@@ -329,16 +313,9 @@
             font-size: 13px;
         }
 
-        .tab.active {
-            background: var(--gold);
-            border-color: var(--gold);
-            color: white;
-        }
+        .tab.active { background: var(--gold); border-color: var(--gold); color: white; }
 
-        .surgery-list {
-            max-height: 520px;
-            overflow-y: auto;
-        }
+        .surgery-list { max-height: 520px; overflow-y: auto; }
 
         .surgery-item {
             background: var(--bg-input);
@@ -349,29 +326,13 @@
             transition: all 0.3s;
         }
 
-        .surgery-item:hover {
-            background: #f1f5f9;
-            transform: translateX(3px);
-        }
-
+        .surgery-item:hover { background: #f1f5f9; transform: translateX(3px); }
         .surgery-item.pending { border-left-color: var(--orange); }
         .surgery-item.ongoing { border-left-color: var(--blue); background: rgba(59, 130, 246, 0.05); }
         .surgery-item.completed { border-left-color: var(--green); }
 
-        .surgery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
-        .surgery-type {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 15px;
-        }
+        .surgery-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
+        .surgery-type { font-weight: 600; color: var(--text-primary); font-size: 15px; }
 
         .surgery-date-badge {
             font-size: 11px;
@@ -385,18 +346,9 @@
         .surgery-date-badge.today { background: #dbeafe; color: #1e40af; }
         .surgery-date-badge.upcoming { background: #fef3c7; color: #92400e; }
 
-        .surgery-details {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
+        .surgery-details { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
 
-        .action-btns {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
+        .action-btns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 
         .btn-sm {
             padding: 5px 12px;
@@ -430,10 +382,7 @@
             font-weight: 500;
         }
 
-        .conflict-warning.show {
-            display: block;
-            animation: shake 0.5s;
-        }
+        .conflict-warning.show { display: block; animation: shake 0.5s; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -445,33 +394,33 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: var(--green);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
+            background: var(--bg-dark);
+            color: var(--gold);
+            padding: 10px 18px;
+            border-radius: 10px;
             font-size: 12px;
             z-index: 1000;
             font-weight: 600;
+            border: 1px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .connection-status.offline { background: var(--red); }
+        .connection-status.offline { color: var(--red); border-color: var(--red); }
 
-        .report-modal {
+        .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.6);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
 
-        .report-modal.active { display: flex; }
+        .modal-overlay.active { display: flex; }
 
-        .report-content {
+        .modal-content {
             background: white;
             border-radius: 16px;
             padding: 30px;
@@ -482,13 +431,9 @@
             overflow-y: auto;
         }
 
-        .report-content h2 {
-            margin-bottom: 25px;
-            color: var(--text-primary);
-            font-size: 20px;
-        }
+        .modal-content h2 { margin-bottom: 25px; color: var(--text-primary); font-size: 20px; }
 
-        .report-option {
+        .modal-option {
             display: block;
             width: 100%;
             padding: 16px 20px;
@@ -504,12 +449,8 @@
             text-align: left;
         }
 
-        .report-option:hover {
-            border-color: var(--gold);
-            background: #fef9e7;
-        }
-
-        .report-option .icon { margin-right: 10px; font-size: 20px; }
+        .modal-option:hover { border-color: var(--gold); background: #fef9e7; }
+        .modal-option .icon { margin-right: 10px; font-size: 20px; }
 
         .btn-close-modal {
             width: 100%;
@@ -531,10 +472,6 @@
         .surgery-list::-webkit-scrollbar-track { background: var(--bg-body); }
         .surgery-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-        .suggestions-box::-webkit-scrollbar { width: 6px; }
-        .suggestions-box::-webkit-scrollbar-track { background: white; }
-        .suggestions-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
         @media (max-width: 1024px) {
             .main-grid { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
@@ -552,18 +489,26 @@
     <div class="container">
         <div class="header">
             <div class="brand">
-                <div class="logo-upload" id="logoUpload" title="Clique para adicionar a logo do hospital">
-                    <span style="font-size: 32px;">🏥</span>
-                    <input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput">
+                <div class="logos-container">
+                    <div class="logo-upload" id="logoUpload" title="Logo do Hospital">
+                        <span style="font-size: 28px;">🏥</span>
+                        <input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput">
+                        <div class="logo-hint">Hospital</div>
+                    </div>
+                    <div class="logo-upload" id="govLogoUpload" title="Logo do Governo">
+                        <span style="font-size: 28px;">🏛️</span>
+                        <input type="file" accept="image/*" onchange="uploadGovLogo(event)" id="govLogoInput">
+                        <div class="logo-hint">Governo</div>
+                    </div>
                 </div>
                 <div>
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
                     <span>HRPI • Gestão de Cirurgias • Centro Cirúrgico</span>
                 </div>
             </div>
-            <div>
-                <div style="font-weight: 600; font-size: 15px;" id="currentDate"></div>
-                <div style="font-size: 12px; color: #64748b;">Painel Administrativo</div>
+            <div class="user-info">
+                <div class="date" id="currentDate"></div>
+                <div class="role">Painel Administrativo</div>
             </div>
         </div>
 
@@ -572,7 +517,7 @@
             <div class="stat-card orange"><div class="stat-value" id="waitingCount">00</div><div class="stat-label">Aguardando</div></div>
             <div class="stat-card blue"><div class="stat-value" id="inProgressCount">00</div><div class="stat-label">Em Andamento</div></div>
             <div class="stat-card green"><div class="stat-value" id="completedCount">00</div><div class="stat-label">Finalizadas</div></div>
-            <div class="stat-card purple"><div class="stat-value" id="totalHours">00:00</div><div class="stat-label">Horas Cirúrgicas</div></div>
+            <div class="stat-card purple"><div class="stat-value" id="totalAll">00</div><div class="stat-label">Total Registros</div></div>
         </div>
 
         <div class="main-grid">
@@ -584,31 +529,29 @@
                 <form id="surgeryForm">
                     <input type="hidden" id="editId">
                     <div class="form-group">
-                        <label>Data da Cirurgia</label>
+                        <label>📅 Data da Cirurgia</label>
                         <input type="date" id="surgeryDate" required onchange="checkConflict()">
                     </div>
                     <div class="form-group">
-                        <label>Horário</label>
-                        <input type="time" id="surgeryTime" required onchange="checkConflict()">
+                        <label>⏰ Horário de Início da Cirurgia</label>
+                        <input type="time" id="surgeryTime" required onchange="checkConflict()" placeholder="Horário que a cirurgia vai começar">
+                        <small style="color: #64748b; font-size: 10px;">Informe o horário previsto para o INÍCIO da cirurgia</small>
                     </div>
                     <div class="form-group">
-                        <label>Nome do Paciente</label>
+                        <label>👤 Nome do Paciente</label>
                         <input type="text" id="patient" placeholder="Nome completo do paciente" required>
                     </div>
                     <div class="form-group">
-                        <label>Procedimento(s) - Digite para buscar sugestões</label>
-                        <textarea id="surgeryType" placeholder="Digite o nome do procedimento e selecione nas sugestões...&#10;Você pode adicionar múltiplos procedimentos!" required rows="4"></textarea>
+                        <label>🔪 Procedimento(s) - Digite para buscar</label>
+                        <textarea id="surgeryType" placeholder="Digite as iniciais do procedimento e selecione nas sugestões..." required rows="4"></textarea>
                         <div class="suggestions-box" id="suggestionsBox"></div>
-                        <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">
-                            💡 Dica: Digite as iniciais para ver sugestões. Clique para adicionar. Múltiplos procedimentos são separados por linha.
-                        </small>
                     </div>
                     <div class="form-group">
-                        <label>Médico Responsável</label>
+                        <label>👨‍⚕️ Médico Responsável</label>
                         <input type="text" id="doctor" placeholder="Nome completo do médico" required>
                     </div>
                     <div class="form-group">
-                        <label>Especialidade do Médico</label>
+                        <label>🔬 Especialidade do Médico</label>
                         <select id="specialty">
                             <option value="">Selecione a especialidade</option>
                             <option value="Cirurgia Geral">Cirurgia Geral</option>
@@ -630,15 +573,15 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Anestesista</label>
+                        <label>💉 Anestesista</label>
                         <input type="text" id="anesthetist" placeholder="Nome do anestesista" required>
                     </div>
                     <div class="form-group">
-                        <label>Circulante de Sala</label>
+                        <label>🔄 Circulante de Sala</label>
                         <input type="text" id="circulante" placeholder="Nome do circulante">
                     </div>
                     <div class="form-group">
-                        <label>Sala Cirúrgica</label>
+                        <label>🏥 Sala Cirúrgica</label>
                         <select id="room" required onchange="checkConflict()">
                             <option value="">Selecione a sala</option>
                             <option value="SALA 01">SALA 01</option>
@@ -648,7 +591,7 @@
                         </select>
                     </div>
                     <div class="conflict-warning" id="conflictWarning">
-                        ⚠️ Conflito detectado! Já existe uma cirurgia agendada para esta sala neste dia e horário.
+                        ⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.
                     </div>
                     <button type="submit" class="btn btn-primary" id="submitBtn">✅ Registrar Cirurgia</button>
                     <button type="button" class="btn btn-warning" id="cancelEditBtn" onclick="cancelEdit()">❌ Cancelar Edição</button>
@@ -671,40 +614,37 @@
         </div>
     </div>
 
-    <div class="report-modal" id="reportModal">
-        <div class="report-content">
+    <!-- Modal Relatórios -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-content">
             <h2>📊 Gerar Relatório PDF</h2>
-            <button class="report-option" onclick="generateReport('daily')"><span class="icon">📅</span> Relatório Diário (Hoje)</button>
-            <button class="report-option" onclick="generateReport('weekly')"><span class="icon">📆</span> Relatório Semanal (7 dias)</button>
-            <button class="report-option" onclick="generateReport('monthly')"><span class="icon">📊</span> Relatório Mensal (30 dias)</button>
-            <button class="report-option" onclick="generateReport('custom')"><span class="icon">📋</span> Relatório Personalizado (Escolher período)</button>
-            <button class="report-option" onclick="generateReport('specialty')"><span class="icon">🔬</span> Relatório por Especialidade</button>
+            <button class="modal-option" onclick="generateReport('daily')"><span class="icon">📅</span> Relatório Diário (Hoje)</button>
+            <button class="modal-option" onclick="generateReport('weekly')"><span class="icon">📆</span> Relatório Semanal (7 dias)</button>
+            <button class="modal-option" onclick="generateReport('monthly')"><span class="icon">📊</span> Relatório Mensal (30 dias)</button>
+            <button class="modal-option" onclick="generateReport('custom')"><span class="icon">📋</span> Relatório Personalizado (Escolher período)</button>
+            <button class="modal-option" onclick="generateReport('specialty')"><span class="icon">🔬</span> Relatório por Especialidade</button>
+            <button class="modal-option" onclick="generateReport('all')"><span class="icon">📁</span> Relatório Geral (Todas as cirurgias)</button>
             <button class="btn-close-modal" onclick="closeReportModal()">❌ Cancelar</button>
         </div>
     </div>
 
-    <div class="report-modal" id="customDateModal">
-        <div class="report-content">
+    <!-- Modal Período -->
+    <div class="modal-overlay" id="customDateModal">
+        <div class="modal-content">
             <h2>📋 Selecione o Período</h2>
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data Inicial</label>
-                <input type="date" id="customStartDate" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px;">
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data Final</label>
-                <input type="date" id="customEndDate" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px;">
-            </div>
-            <button class="report-option" onclick="generateCustomReport()" style="text-align: center;">✅ Gerar Relatório Personalizado</button>
+            <div style="margin-bottom:15px;"><label style="font-weight:600;">Data Inicial</label><input type="date" id="customStartDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;"></div>
+            <div style="margin-bottom:20px;"><label style="font-weight:600;">Data Final</label><input type="date" id="customEndDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;"></div>
+            <button class="modal-option" onclick="generateCustomReport()" style="text-align:center;">✅ Gerar Relatório</button>
             <button class="btn-close-modal" onclick="closeCustomDateModal()">❌ Cancelar</button>
         </div>
     </div>
 
-    <div class="report-modal" id="specialtyModal">
-        <div class="report-content">
-            <h2>🔬 Selecione a Especialidade</h2>
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Especialidade</label>
-                <select id="specialtyFilter" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px;">
+    <!-- Modal Especialidade -->
+    <div class="modal-overlay" id="specialtyModal">
+        <div class="modal-content">
+            <h2>🔬 Filtrar por Especialidade</h2>
+            <div style="margin-bottom:20px;"><label style="font-weight:600;">Especialidade</label>
+                <select id="specialtyFilter" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;">
                     <option value="">Todas as especialidades</option>
                     <option value="Cirurgia Geral">Cirurgia Geral</option>
                     <option value="Neurocirurgia">Neurocirurgia</option>
@@ -719,7 +659,7 @@
                     <option value="Coloproctologia">Coloproctologia</option>
                 </select>
             </div>
-            <button class="report-option" onclick="generateSpecialtyReport()" style="text-align: center;">✅ Gerar Relatório por Especialidade</button>
+            <button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center;">✅ Gerar Relatório</button>
             <button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button>
         </div>
     </div>
@@ -754,147 +694,37 @@
         let isEditing = false;
         let allSurgeries = [];
 
-        // ========== BANCO DE PROCEDIMENTOS EXPANDIDO ==========
         const surgeryTypes = [
-            // Cirurgia Geral
-            'COLECISTECTOMIA',
-            'COLECISTECTOMIA VIDEOLAPAROSCÓPICA',
-            'APENDICECTOMIA',
-            'APENDICECTOMIA VIDEOLAPAROSCÓPICA',
-            'HERNIOPLASTIA INGUINAL',
-            'HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA',
-            'HERNIOPLASTIA UMBILICAL',
-            'HERNIOPLASTIA EPIGÁSTRICA',
-            'HERNIOPLASTIA INCISIONAL',
-            'LAPAROTOMIA EXPLORADORA',
-            'COLECTOMIA',
-            'COLECTOMIA VIDEOLAPAROSCÓPICA',
-            'GASTRECTOMIA',
-            'GASTRECTOMIA VIDEOLAPAROSCÓPICA',
-            'BYPASS GÁSTRICO',
-            'CIRURGIA BARIÁTRICA',
-            'ESPLENECTOMIA',
-            'HEMORROIDECTOMIA',
-            'FISTULECTOMIA ANAL',
-            
-            // Ginecologia e Obstetrícia
-            'CESARIANA',
-            'HISTERECTOMIA TOTAL',
-            'HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA',
-            'HISTERECTOMIA PARCIAL',
-            'HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
-            'MASTECTOMIA',
-            'MASTECTOMIA COM RECONSTRUÇÃO',
-            'RECONSTRUÇÃO MAMÁRIA',
-            'MASTOPEXIA',
-            'OOFRECTOMIA',
-            'SALPINGECTOMIA',
-            'LAQUEADURA TUBÁRIA',
-            
-            // Neurocirurgia
-            'CRANIOTOMIA',
-            'CRANIOTOMIA PARA TUMOR CEREBRAL',
-            'ANEURISMA CEREBRAL',
-            'HÉRNIA DE DISCO CERVICAL',
-            'HÉRNIA DE DISCO LOMBAR',
-            'CIRURGIA DE COLUNA',
-            'ARTRODESE DE COLUNA',
-            'DESCOMPRESSÃO MEDULAR',
-            
-            // Cirurgia Cardíaca e Vascular
-            'REVASCULARIZAÇÃO MIOCÁRDICA',
-            'TROCA VALVAR AÓRTICA',
-            'TROCA VALVAR MITRAL',
-            'CATETERISMO CARDÍACO',
-            'SAFENECTOMIA',
-            'ESCLEROTERAPIA DE VARIZES',
-            'COLOCAÇÃO DE MARCA-PASSO',
-            
-            // Ortopedia
-            'ARTROPLASTIA DE QUADRIL',
-            'ARTROPLASTIA DE JOELHO',
-            'OSTEOSSÍNTESE DE FÊMUR',
-            'OSTEOSSÍNTESE DE TÍBIA',
-            'OSTEOSSÍNTESE DE ÚMERO',
-            'OSTEOSSÍNTESE DE RÁDIO',
-            'OSTEOSSÍNTESE DE TORNOZELO',
-            'RECONSTRUÇÃO DE LCA',
-            'MENISCECTOMIA',
-            'ARTROSCOPIA DE JOELHO',
-            'ARTROSCOPIA DE OMBRO',
-            'CIRURGIA DE MANGUITO ROTADOR',
-            
-            // Oftalmologia
-            'CIRURGIA DE CATARATA',
-            'FACECTOMIA',
-            'FACECTOMIA COM IMPLANTE DE LENTE',
-            'TRABECULECTOMIA',
-            'VITRECTOMIA',
-            'RETINOPEXIA',
-            
-            // Otorrinolaringologia
-            'AMIGDALECTOMIA',
-            'ADENOIDECTOMIA',
-            'TIMPANOPLASTIA',
-            'SEPTOPLASTIA',
-            'RINOPLASTIA',
-            'SINUSECTOMIA',
-            
-            // Urologia
-            'PROSTATECTOMIA',
-            'NEFRECTOMIA',
-            'LITÍASE RENAL',
-            'POSTECTOMIA',
-            'VASECTOMIA',
-            'CISTECTOMIA',
-            
-            // Cirurgia Plástica
-            'ABDOMINOPLASTIA',
-            'LIPOASPIRAÇÃO',
-            'BLEFAROPLASTIA',
-            'RITIDOPLASTIA',
-            'OTOPLASTIA',
-            
-            // Coloproctologia
-            'HEMORROIDECTOMIA',
-            'FISTULECTOMIA PERIANAL',
-            'ESFINCTEROPLASTIA ANAL',
-            
-            // Bucomaxilofacial
-            'EXODONTIA DE TERCEIRO MOLAR',
-            'EXODONTIA MÚLTIPLA',
-            'EXODONTIA SIMPLES',
-            'FRATURA DE MANDÍBULA',
-            'FRATURA DE MAXILA',
-            'FRATURA DE ZIGOMÁTICO',
-            'FRATURA DE ÓRBITA',
-            'FRATURA DE OSSOS NASAIS',
-            'CIRURGIA ORTOGNÁTICA',
-            'ARTROPLASTIA DE ATM',
-            'RECONSTRUÇÃO DE MANDÍBULA',
-            'RECONSTRUÇÃO DE MAXILA',
-            'ENXERTO ÓSSEO ALVEOLAR',
-            'IMPLANTE DENTÁRIO',
-            'IMPLANTE DENTÁRIO MÚLTIPLO',
-            'LEVANTAMENTO DE SEIO MAXILAR',
-            'CISTO ODONTOGÊNICO',
-            'TUMOR ODONTOGÊNICO',
-            'OSTEONECROSE DOS MAXILARES',
-            'TRAUMATISMO DENTÁRIO',
-            'CIRURGIA DE FENDA LABIOPALATINA',
-            'SIALOENDOSCOPIA',
-            'CIRURGIA DE GLÂNDULAS SALIVARES',
-            'DRENAGEM DE ABCESSO BUCOMAXILOFACIAL'
+            'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','APENDICECTOMIA','APENDICECTOMIA VIDEOLAPAROSCÓPICA',
+            'HERNIOPLASTIA INGUINAL','HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA','HERNIOPLASTIA UMBILICAL','HERNIOPLASTIA EPIGÁSTRICA',
+            'HERNIOPLASTIA INCISIONAL','LAPAROTOMIA EXPLORADORA','COLECTOMIA','COLECTOMIA VIDEOLAPAROSCÓPICA','GASTRECTOMIA',
+            'GASTRECTOMIA VIDEOLAPAROSCÓPICA','BYPASS GÁSTRICO','CIRURGIA BARIÁTRICA','ESPLENECTOMIA','HEMORROIDECTOMIA',
+            'FISTULECTOMIA ANAL','CESARIANA','HISTERECTOMIA TOTAL','HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA','HISTERECTOMIA PARCIAL',
+            'HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA','MASTECTOMIA','MASTECTOMIA COM RECONSTRUÇÃO','RECONSTRUÇÃO MAMÁRIA','MASTOPEXIA',
+            'OOFRECTOMIA','SALPINGECTOMIA','LAQUEADURA TUBÁRIA','CRANIOTOMIA','CRANIOTOMIA PARA TUMOR CEREBRAL','ANEURISMA CEREBRAL',
+            'HÉRNIA DE DISCO CERVICAL','HÉRNIA DE DISCO LOMBAR','CIRURGIA DE COLUNA','ARTRODESE DE COLUNA','DESCOMPRESSÃO MEDULAR',
+            'REVASCULARIZAÇÃO MIOCÁRDICA','TROCA VALVAR AÓRTICA','TROCA VALVAR MITRAL','CATETERISMO CARDÍACO','SAFENECTOMIA',
+            'ESCLEROTERAPIA DE VARIZES','COLOCAÇÃO DE MARCA-PASSO','ARTROPLASTIA DE QUADRIL','ARTROPLASTIA DE JOELHO',
+            'OSTEOSSÍNTESE DE FÊMUR','OSTEOSSÍNTESE DE TÍBIA','OSTEOSSÍNTESE DE ÚMERO','OSTEOSSÍNTESE DE RÁDIO','OSTEOSSÍNTESE DE TORNOZELO',
+            'RECONSTRUÇÃO DE LCA','MENISCECTOMIA','ARTROSCOPIA DE JOELHO','ARTROSCOPIA DE OMBRO','CIRURGIA DE MANGUITO ROTADOR',
+            'CIRURGIA DE CATARATA','FACECTOMIA','FACECTOMIA COM IMPLANTE DE LENTE','TRABECULECTOMIA','VITRECTOMIA','RETINOPEXIA',
+            'AMIGDALECTOMIA','ADENOIDECTOMIA','TIMPANOPLASTIA','SEPTOPLASTIA','RINOPLASTIA','SINUSECTOMIA','PROSTATECTOMIA','NEFRECTOMIA',
+            'LITÍASE RENAL','POSTECTOMIA','VASECTOMIA','CISTECTOMIA','ABDOMINOPLASTIA','LIPOASPIRAÇÃO','BLEFAROPLASTIA','RITIDOPLASTIA',
+            'OTOPLASTIA','EXODONTIA DE TERCEIRO MOLAR','EXODONTIA MÚLTIPLA','EXODONTIA SIMPLES','FRATURA DE MANDÍBULA','FRATURA DE MAXILA',
+            'FRATURA DE ZIGOMÁTICO','FRATURA DE ÓRBITA','FRATURA DE OSSOS NASAIS','CIRURGIA ORTOGNÁTICA','ARTROPLASTIA DE ATM',
+            'RECONSTRUÇÃO DE MANDÍBULA','RECONSTRUÇÃO DE MAXILA','ENXERTO ÓSSEO ALVEOLAR','IMPLANTE DENTÁRIO','IMPLANTE DENTÁRIO MÚLTIPLO',
+            'LEVANTAMENTO DE SEIO MAXILAR','CISTO ODONTOGÊNICO','TUMOR ODONTOGÊNICO','OSTEONECROSE DOS MAXILARES','TRAUMATISMO DENTÁRIO',
+            'CIRURGIA DE FENDA LABIOPALATINA','SIALOENDOSCOPIA','CIRURGIA DE GLÂNDULAS SALIVARES','DRENAGEM DE ABCESSO BUCOMAXILOFACIAL'
         ];
 
         const connectedRef = ref(db, '.info/connected');
         onValue(connectedRef, (snap) => {
             const status = document.getElementById('connectionStatus');
             if (snap.val() === true) {
-                status.textContent = '🟢 Conectado';
+                status.innerHTML = '🟢 Conectado';
                 status.className = 'connection-status';
             } else {
-                status.textContent = '🔴 Reconectando...';
+                status.innerHTML = '🔴 Reconectando...';
                 status.className = 'connection-status offline';
             }
         });
@@ -908,9 +738,15 @@
 
         const logoRef = ref(db, 'settings/logo');
         onValue(logoRef, (snapshot) => {
-            const logoData = snapshot.val();
-            if (logoData) {
-                document.getElementById('logoUpload').innerHTML = `<img src="${logoData}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput">`;
+            if (snapshot.val()) {
+                document.getElementById('logoUpload').innerHTML = `<img src="${snapshot.val()}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput"><div class="logo-hint">Hospital</div>`;
+            }
+        });
+
+        const govLogoRef = ref(db, 'settings/govLogo');
+        onValue(govLogoRef, (snapshot) => {
+            if (snapshot.val()) {
+                document.getElementById('govLogoUpload').innerHTML = `<img src="${snapshot.val()}" alt="Logo Governo"><input type="file" accept="image/*" onchange="uploadGovLogo(event)" id="govLogoInput"><div class="logo-hint">Governo</div>`;
             }
         });
 
@@ -920,42 +756,38 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     set(ref(db, 'settings/logo'), e.target.result).then(() => {
-                        document.getElementById('logoUpload').innerHTML = `<img src="${e.target.result}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput">`;
+                        document.getElementById('logoUpload').innerHTML = `<img src="${e.target.result}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)" id="logoInput"><div class="logo-hint">Hospital</div>`;
                     });
                 };
                 reader.readAsDataURL(file);
             }
         };
 
-        // ========== AUTOCOMPLETE APRIMORADO ==========
+        window.uploadGovLogo = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    set(ref(db, 'settings/govLogo'), e.target.result).then(() => {
+                        document.getElementById('govLogoUpload').innerHTML = `<img src="${e.target.result}" alt="Logo Governo"><input type="file" accept="image/*" onchange="uploadGovLogo(event)" id="govLogoInput"><div class="logo-hint">Governo</div>`;
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
         const surgeryInput = document.getElementById('surgeryType');
         const suggestionsBox = document.getElementById('suggestionsBox');
 
-        surgeryInput.addEventListener('input', function(e) {
-            const value = this.value;
-            
-            // Pega a última linha digitada
-            const lines = value.split('\n');
+        surgeryInput.addEventListener('input', function() {
+            const lines = this.value.split('\n');
             const lastLine = lines[lines.length - 1].trim().toUpperCase();
-            
-            if (lastLine.length < 2) {
-                suggestionsBox.classList.remove('show');
-                return;
-            }
-
-            // Filtra procedimentos que contêm o texto digitado
+            if (lastLine.length < 2) { suggestionsBox.classList.remove('show'); return; }
             const matches = surgeryTypes.filter(type => type.includes(lastLine));
-            
             if (matches.length > 0) {
                 suggestionsBox.innerHTML = matches.slice(0, 10).map(match => {
-                    // Destaca a parte que corresponde à busca
-                    const highlighted = match.replace(
-                        new RegExp(`(${lastLine})`, 'gi'),
-                        '<strong style="color: #bf953f;">$1</strong>'
-                    );
-                    return `<div class="suggestion-item" onclick="addProcedure('${match.replace(/'/g, "\\'")}')">
-                        <span class="add-icon">➕</span> ${highlighted}
-                    </div>`;
+                    const highlighted = match.replace(new RegExp(`(${lastLine})`, 'gi'), '<strong style="color:#c8a94a;">$1</strong>');
+                    return `<div class="suggestion-item" onclick="addProcedure('${match.replace(/'/g, "\\'")}')"><span class="add-icon">➕</span> ${highlighted}</div>`;
                 }).join('');
                 suggestionsBox.classList.add('show');
             } else {
@@ -963,42 +795,19 @@
             }
         });
 
-        // Adiciona procedimento ao textarea
         window.addProcedure = function(procedure) {
             const textarea = document.getElementById('surgeryType');
-            const value = textarea.value;
-            const lines = value.split('\n');
-            
-            // Remove a última linha (que é o texto de busca)
+            const lines = textarea.value.split('\n');
             lines.pop();
-            
-            // Adiciona o procedimento selecionado
             lines.push(procedure);
-            
-            // Atualiza o textarea
             textarea.value = lines.join('\n') + '\n';
-            
-            // Fecha as sugestões
             suggestionsBox.classList.remove('show');
-            
-            // Foca no textarea para continuar digitando
             textarea.focus();
-            
-            // Posiciona o cursor no final
-            const len = textarea.value.length;
-            textarea.setSelectionRange(len, len);
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
         };
 
-        // Fecha sugestões ao clicar fora
         document.addEventListener('click', function(e) {
             if (!surgeryInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
-                suggestionsBox.classList.remove('show');
-            }
-        });
-
-        // Navegação por teclado nas sugestões
-        surgeryInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
                 suggestionsBox.classList.remove('show');
             }
         });
@@ -1034,11 +843,7 @@
 
         document.getElementById('surgeryForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            if (hasConflict) {
-                alert('⚠️ Conflito de horário e sala!');
-                return;
-            }
+            if (hasConflict) { alert('⚠️ Conflito de horário e sala!'); return; }
 
             const editId = document.getElementById('editId').value;
             const surgery = {
@@ -1052,20 +857,12 @@
                 anesthetist: document.getElementById('anesthetist').value.toUpperCase(),
                 circulante: document.getElementById('circulante').value.toUpperCase(),
                 room: document.getElementById('room').value,
-                status: 'pendente',
-                startTime: null,
-                endTime: null,
-                duration: null
+                status: 'pendente'
             };
 
             if (editId && isEditing) {
                 const existing = allSurgeries.find(s => s.id === editId);
-                if (existing) {
-                    surgery.status = existing.status;
-                    surgery.startTime = existing.startTime;
-                    surgery.endTime = existing.endTime;
-                    surgery.duration = existing.duration;
-                }
+                if (existing) surgery.status = existing.status;
             }
             
             set(ref(db, 'surgeries/' + surgery.id), surgery).then(() => {
@@ -1074,28 +871,8 @@
             });
         });
 
-        window.startSurgery = function(id) {
-            update(ref(db, 'surgeries/' + id), {
-                status: 'em_andamento',
-                startTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-            });
-        };
-
-        window.finishSurgery = function(id) {
-            const surgery = allSurgeries.find(s => s.id === id);
-            if (!surgery || !surgery.startTime) return;
-            
-            const [startH, startM] = surgery.startTime.split(':').map(Number);
-            const startDate = new Date(surgery.date);
-            startDate.setHours(startH, startM, 0);
-            const duration = Math.floor((new Date() - startDate) / 60000);
-            
-            update(ref(db, 'surgeries/' + id), {
-                status: 'concluida',
-                endTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-                duration: duration
-            });
-        };
+        window.startSurgery = function(id) { update(ref(db, 'surgeries/' + id), { status: 'em_andamento' }); };
+        window.finishSurgery = function(id) { update(ref(db, 'surgeries/' + id), { status: 'concluida' }); };
 
         window.editSurgery = function(id) {
             const surgery = allSurgeries.find(s => s.id === id);
@@ -1103,7 +880,6 @@
                 alert('⚠️ Só é possível editar cirurgias que estão aguardando!');
                 return;
             }
-            
             isEditing = true;
             document.getElementById('editId').value = surgery.id;
             document.getElementById('surgeryDate').value = surgery.date;
@@ -1115,7 +891,6 @@
             document.getElementById('anesthetist').value = surgery.anesthetist || '';
             document.getElementById('circulante').value = surgery.circulante || '';
             document.getElementById('room').value = surgery.room;
-            
             document.getElementById('formActionTitle').textContent = 'Editar Cirurgia';
             document.getElementById('submitBtn').textContent = '💾 Salvar Alterações';
             document.getElementById('cancelEditBtn').style.display = 'block';
@@ -1130,9 +905,7 @@
             clearForm();
         };
 
-        window.deleteSurgery = function(id) {
-            remove(ref(db, 'surgeries/' + id));
-        };
+        window.deleteSurgery = function(id) { remove(ref(db, 'surgeries/' + id)); };
 
         window.switchTab = function(tab) {
             currentTab = tab;
@@ -1142,24 +915,15 @@
             updateList();
         };
 
-        function updateAll() {
-            updateStats();
-            updateList();
-        }
+        function updateAll() { updateStats(); updateList(); }
 
         function updateStats() {
             const todaySurgeries = allSurgeries.filter(s => s.date === TODAY);
-            
             document.getElementById('totalToday').textContent = String(todaySurgeries.length).padStart(2, '0');
             document.getElementById('waitingCount').textContent = String(todaySurgeries.filter(s => s.status === 'pendente').length).padStart(2, '0');
             document.getElementById('inProgressCount').textContent = String(todaySurgeries.filter(s => s.status === 'em_andamento').length).padStart(2, '0');
             document.getElementById('completedCount').textContent = String(todaySurgeries.filter(s => s.status === 'concluida').length).padStart(2, '0');
-            
-            const totalMinutes = todaySurgeries
-                .filter(s => s.status === 'concluida' && s.duration)
-                .reduce((acc, s) => acc + s.duration, 0);
-            document.getElementById('totalHours').textContent = 
-                `${String(Math.floor(totalMinutes / 60)).padStart(2, '0')}:${String(totalMinutes % 60).padStart(2, '0')}`;
+            document.getElementById('totalAll').textContent = String(allSurgeries.length).padStart(2, '0');
         }
 
         function updateList() {
@@ -1169,7 +933,7 @@
                 : allSurgeries.filter(s => s.date > TODAY).sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
             
             if (surgeries.length === 0) {
-                list.innerHTML = `<div style="text-align: center; padding: 40px; color: #94a3b8;">${currentTab === 'today' ? 'Nenhuma cirurgia para hoje' : 'Nenhuma cirurgia agendada para outros dias'}</div>`;
+                list.innerHTML = `<div style="text-align:center;padding:40px;color:#94a3b8;">${currentTab === 'today' ? 'Nenhuma cirurgia para hoje' : 'Nenhuma cirurgia agendada'}</div>`;
                 return;
             }
 
@@ -1177,31 +941,28 @@
                 let statusClass = 'pending';
                 if (surgery.status === 'em_andamento') statusClass = 'ongoing';
                 if (surgery.status === 'concluida') statusClass = 'completed';
-
                 const isToday = surgery.date === TODAY;
                 const displayDate = isToday ? 'HOJE' : new Date(surgery.date + 'T00:00:00').toLocaleDateString('pt-BR');
 
-                return `
-                    <div class="surgery-item ${statusClass}">
-                        <div class="surgery-header">
-                            <span class="surgery-type">🔪 ${surgery.type.replace(/\n/g, '<br>🔪 ')}</span>
-                            <span class="surgery-date-badge ${isToday ? 'today' : 'upcoming'}">📅 ${displayDate}</span>
-                        </div>
-                        <div class="surgery-details">
-                            👤 Paciente: ${surgery.patient}<br>
-                            🏥 ${surgery.room} | ⏰ ${surgery.time}<br>
-                            👨‍⚕️ Dr. ${surgery.doctor} ${surgery.specialty ? `(${surgery.specialty})` : ''}<br>
-                            💉 Anestesista: Dr. ${surgery.anesthetist || '-'}<br>
-                            🔄 Circ. ${surgery.circulante || '-'}
-                        </div>
-                        <div class="action-btns">
-                            ${isToday && surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-start" onclick="startSurgery('${surgery.id}')">▶ Iniciar</button>` : ''}
-                            ${surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-edit" onclick="editSurgery('${surgery.id}')">✏️ Editar</button>` : ''}
-                            ${isToday && surgery.status === 'em_andamento' ? `<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${surgery.id}')">⏹ Finalizar</button>` : ''}
-                            <button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${surgery.id}')">🗑️ Excluir</button>
-                        </div>
+                return `<div class="surgery-item ${statusClass}">
+                    <div class="surgery-header">
+                        <span class="surgery-type">🔪 ${surgery.type.replace(/\n/g, '<br>🔪 ')}</span>
+                        <span class="surgery-date-badge ${isToday ? 'today' : 'upcoming'}">📅 ${displayDate}</span>
                     </div>
-                `;
+                    <div class="surgery-details">
+                        👤 Paciente: ${surgery.patient}<br>
+                        🏥 ${surgery.room} | ⏰ Início: ${surgery.time}<br>
+                        👨‍⚕️ Dr. ${surgery.doctor} ${surgery.specialty ? `(${surgery.specialty})` : ''}<br>
+                        💉 Anestesista: Dr. ${surgery.anesthetist || '-'}<br>
+                        🔄 Circulante: ${surgery.circulante || '-'}
+                    </div>
+                    <div class="action-btns">
+                        ${isToday && surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-start" onclick="startSurgery('${surgery.id}')">▶ Iniciar</button>` : ''}
+                        ${surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-edit" onclick="editSurgery('${surgery.id}')">✏️ Editar</button>` : ''}
+                        ${isToday && surgery.status === 'em_andamento' ? `<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${surgery.id}')">⏹ Finalizar</button>` : ''}
+                        <button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${surgery.id}')">🗑️ Excluir</button>
+                    </div>
+                </div>`;
             }).join('');
         }
 
@@ -1235,17 +996,18 @@
             
             if (type === 'daily') {
                 filteredSurgeries = allSurgeries.filter(s => s.date === TODAY);
-                reportTitle = 'Relatório Diário';
+                reportTitle = 'Relatório Diário de Cirurgias';
             } else if (type === 'weekly') {
-                const weekAgo = new Date(today);
-                weekAgo.setDate(weekAgo.getDate() - 7);
+                const weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate() - 7);
                 filteredSurgeries = allSurgeries.filter(s => s.date >= weekAgo.toISOString().split('T')[0]);
-                reportTitle = 'Relatório Semanal';
+                reportTitle = 'Relatório Semanal de Cirurgias';
             } else if (type === 'monthly') {
-                const monthAgo = new Date(today);
-                monthAgo.setDate(monthAgo.getDate() - 30);
+                const monthAgo = new Date(today); monthAgo.setDate(monthAgo.getDate() - 30);
                 filteredSurgeries = allSurgeries.filter(s => s.date >= monthAgo.toISOString().split('T')[0]);
-                reportTitle = 'Relatório Mensal';
+                reportTitle = 'Relatório Mensal de Cirurgias';
+            } else if (type === 'all') {
+                filteredSurgeries = allSurgeries;
+                reportTitle = 'Relatório Geral de Cirurgias';
             }
 
             createPDF(reportTitle, filteredSurgeries);
@@ -1254,64 +1016,67 @@
         window.generateCustomReport = function() {
             const startDate = document.getElementById('customStartDate').value;
             const endDate = document.getElementById('customEndDate').value;
-            
             if (!startDate || !endDate) { alert('⚠️ Selecione as datas!'); return; }
             if (startDate > endDate) { alert('⚠️ Data inicial maior que final!'); return; }
-
             const filteredSurgeries = allSurgeries.filter(s => s.date >= startDate && s.date <= endDate);
             closeCustomDateModal();
-            createPDF('Relatório Personalizado', filteredSurgeries, startDate, endDate);
+            createPDF('Relatório Personalizado de Cirurgias', filteredSurgeries, startDate, endDate);
         };
 
         window.generateSpecialtyReport = function() {
             const specialty = document.getElementById('specialtyFilter').value;
-            let filteredSurgeries = allSurgeries;
-            
-            if (specialty) {
-                filteredSurgeries = allSurgeries.filter(s => s.specialty === specialty);
-            }
-            
+            let filteredSurgeries = specialty ? allSurgeries.filter(s => s.specialty === specialty) : allSurgeries;
             closeSpecialtyModal();
-            createPDF(`Relatório por Especialidade${specialty ? ' - ' + specialty : ''}`, filteredSurgeries);
+            createPDF(`Relatório de Cirurgias${specialty ? ' - ' + specialty : ' - Geral'}`, filteredSurgeries);
         };
 
         function createPDF(title, surgeries, startDate, endDate) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('landscape');
             
+            // Logo Hospital (primeiro)
             const logoImg = document.getElementById('logoUpload').querySelector('img');
             if (logoImg && logoImg.src.startsWith('data:image')) {
                 doc.addImage(logoImg.src, 'PNG', 14, 10, 22, 22);
             }
 
-            doc.setFontSize(16);
-            doc.setTextColor(30, 41, 59);
-            doc.text('HOSPITAL REGIONAL DE PALMEIRA DOS INDIOS - HRPI', 148, 18, { align: 'center' });
+            // Logo Governo (depois)
+            const govLogoImg = document.getElementById('govLogoUpload').querySelector('img');
+            if (govLogoImg && govLogoImg.src.startsWith('data:image')) {
+                doc.addImage(govLogoImg.src, 'PNG', 40, 10, 22, 22);
+            }
+
+            doc.setFontSize(14);
+            doc.setTextColor(6, 34, 74);
+            doc.text('HOSPITAL REGIONAL DE PALMEIRA DOS INDIOS - HRPI', 148, 16, { align: 'center' });
             
-            doc.setFontSize(13);
-            doc.setTextColor(191, 149, 63);
-            doc.text(title, 148, 27, { align: 'center' });
+            doc.setFontSize(11);
+            doc.setTextColor(200, 169, 74);
+            doc.text(title, 148, 24, { align: 'center' });
             
-            doc.setFontSize(9);
+            doc.setDrawColor(200, 169, 74);
+            doc.setLineWidth(0.5);
+            doc.line(14, 28, 283, 28);
+            
+            doc.setFontSize(8);
             doc.setTextColor(100, 116, 139);
-            
             let periodText = startDate && endDate 
                 ? `Período: ${new Date(startDate + 'T00:00:00').toLocaleDateString('pt-BR')} a ${new Date(endDate + 'T00:00:00').toLocaleDateString('pt-BR')}`
                 : `Gerado em: ${new Date().toLocaleString('pt-BR')}`;
-            doc.text(periodText, 148, 34, { align: 'center' });
+            doc.text(periodText, 14, 34);
 
             const completed = surgeries.filter(s => s.status === 'concluida').length;
             const inProgress = surgeries.filter(s => s.status === 'em_andamento').length;
             const waiting = surgeries.filter(s => s.status === 'pendente').length;
-            const totalMinutes = surgeries.filter(s => s.status === 'concluida' && s.duration).reduce((acc, s) => acc + s.duration, 0);
             
-            doc.setFontSize(10);
-            doc.setTextColor(30, 41, 59);
-            doc.text(`Total: ${surgeries.length} | Finalizadas: ${completed} | Em Andamento: ${inProgress} | Aguardando: ${waiting} | Horas: ${Math.floor(totalMinutes/60)}h ${totalMinutes%60}min`, 14, 42);
+            doc.setFontSize(9);
+            doc.setTextColor(6, 34, 74);
+            doc.text(`Total: ${surgeries.length} | Finalizadas: ${completed} | Em Andamento: ${inProgress} | Aguardando: ${waiting}`, 14, 40);
 
             const tableData = surgeries
                 .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
-                .map(s => [
+                .map((s, i) => [
+                    i + 1,
                     new Date(s.date + 'T00:00:00').toLocaleDateString('pt-BR'),
                     s.time,
                     s.patient,
@@ -1321,29 +1086,48 @@
                     `Dr. ${s.anesthetist || '-'}`,
                     s.room,
                     s.circulante || '-',
-                    s.status === 'pendente' ? 'Aguardando' : s.status === 'em_andamento' ? 'Em andamento' : 'Finalizada',
-                    s.duration ? `${Math.floor(s.duration/60)}h ${s.duration%60}min` : '-'
+                    s.status === 'pendente' ? 'Aguardando' : s.status === 'em_andamento' ? 'Em andamento' : 'Finalizada'
                 ]);
 
             doc.autoTable({
-                startY: 48,
-                head: [['Data', 'Hora', 'Paciente', 'Procedimentos', 'Médico', 'Especialidade', 'Anestesista', 'Sala', 'Circulante', 'Status', 'Duração']],
+                startY: 44,
+                head: [['Nº', 'Data', 'Horário', 'Paciente', 'Procedimentos', 'Médico', 'Especialidade', 'Anestesista', 'Sala', 'Circulante', 'Status']],
                 body: tableData,
-                styles: { fontSize: 7, cellPadding: 2 },
-                headStyles: { fillColor: [191, 149, 63], textColor: 255, fontStyle: 'bold' },
-                alternateRowStyles: { fillColor: [248, 250, 252] },
-                columnStyles: { 3: { cellWidth: 40 } },
+                styles: { fontSize: 7, cellPadding: 3, lineColor: [200, 200, 200], lineWidth: 0.1 },
+                headStyles: { fillColor: [6, 34, 74], textColor: 255, fontStyle: 'bold', fontSize: 7 },
+                alternateRowStyles: { fillColor: [245, 247, 250] },
+                columnStyles: {
+                    0: { cellWidth: 8, halign: 'center' },
+                    1: { cellWidth: 20 },
+                    2: { cellWidth: 16, halign: 'center' },
+                    3: { cellWidth: 35 },
+                    4: { cellWidth: 45 },
+                    5: { cellWidth: 30 },
+                    6: { cellWidth: 25 },
+                    7: { cellWidth: 28 },
+                    8: { cellWidth: 16, halign: 'center' },
+                    9: { cellWidth: 22 },
+                    10: { cellWidth: 20, halign: 'center' },
+                },
+                didParseCell: function(data) {
+                    if (data.column.index === 10 && data.cell.raw === 'Em andamento') {
+                        data.cell.styles.textColor = [59, 130, 246];
+                    } else if (data.column.index === 10 && data.cell.raw === 'Finalizada') {
+                        data.cell.styles.textColor = [16, 185, 129];
+                    }
+                }
             });
 
             const pageCount = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pageCount; i++) {
                 doc.setPage(i);
-                doc.setFontSize(8);
+                doc.setFontSize(7);
                 doc.setTextColor(150, 150, 150);
-                doc.text(`HRPI - Centro Cirúrgico - Página ${i} de ${pageCount}`, 148, doc.internal.pageSize.height - 10, { align: 'center' });
+                doc.text(`HRPI - Centro Cirúrgico - Página ${i} de ${pageCount}`, 148, doc.internal.pageSize.height - 8, { align: 'center' });
+                doc.text(`Documento gerado em ${new Date().toLocaleString('pt-BR')}`, 14, doc.internal.pageSize.height - 8);
             }
 
-            doc.save(`relatorio_${title.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+            doc.save(`relatorio_cirurgias_${new Date().toISOString().split('T')[0]}.pdf`);
         }
 
         document.getElementById('reportModal').addEventListener('click', function(e) { if (e.target === this) closeReportModal(); });
