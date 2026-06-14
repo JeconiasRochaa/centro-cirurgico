@@ -2,45 +2,393 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>HRPI - Sistema Cirúrgico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRPI - Sistema de Gestão Cirúrgica</title>
     <style>
+        :root {
+            --bg-primary: #06224a;
+            --bg-secondary: #051a38;
+            --gold: #c8a94a;
+            --text-light: #ffffff;
+            --text-muted: #b0c4de;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ECG Background */
+        .ecg-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .ecg-bg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ecg-path {
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 2;
+            stroke-dasharray: 2000;
+            animation: ecgMove 4s linear infinite;
+        }
+
+        .ecg-path:nth-child(2) { animation-delay: 1s; }
+        .ecg-path:nth-child(3) { animation-delay: 2s; }
+        .ecg-path:nth-child(4) { animation-delay: 3s; }
+
+        @keyframes ecgMove {
+            from { stroke-dashoffset: 2000; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Container Principal */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        /* Logo e Título */
+        .header-section {
+            margin-bottom: 60px;
+        }
+
+        .logos-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: #0f172a;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-circle {
+            width: 90px;
+            height: 90px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 30px rgba(200, 169, 74, 0.3);
+            font-size: 40px;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .logo-circle:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hospital-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+        }
+
+        .hospital-subtitle {
+            font-size: 16px;
+            color: var(--gold);
+            letter-spacing: 5px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            width: 200px;
+            height: 2px;
+            background: var(--gold);
+            margin: 20px auto;
+            opacity: 0.5;
+        }
+
+        .system-title {
+            font-size: 20px;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            font-weight: 400;
+        }
+
+        /* Cards */
+        .cards-container {
+            display: flex;
             gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
+
         .option-card {
-            background: #1e293b;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(200, 169, 74, 0.3);
+            border-radius: 24px;
+            padding: 50px 40px;
+            width: 320px;
             cursor: pointer;
-            transition: 0.3s;
-            border: 2px solid #334155;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(200, 169, 74, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .option-card:hover::before {
+            left: 100%;
+        }
+
         .option-card:hover {
-            border-color: #bf953f;
-            transform: translateY(-5px);
+            border-color: var(--gold);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(200, 169, 74, 0.2);
+            background: rgba(255, 255, 255, 0.1);
         }
-        .option-icon { font-size: 60px; margin-bottom: 20px; }
-        .option-title { color: #f1f5f9; font-size: 24px; margin-bottom: 10px; }
-        .option-desc { color: #94a3b8; font-size: 14px; }
+
+        .card-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            display: block;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        .option-card:nth-child(2) .card-icon {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            letter-spacing: 1px;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--bg-primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            letter-spacing: 2px;
+            z-index: 1;
+        }
+
+        .footer span {
+            color: var(--gold);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .hospital-name {
+                font-size: 24px;
+                letter-spacing: 1px;
+            }
+
+            .hospital-subtitle {
+                font-size: 12px;
+                letter-spacing: 3px;
+            }
+
+            .cards-container {
+                flex-direction: column;
+                gap: 25px;
+                padding: 0 20px;
+            }
+
+            .option-card {
+                width: 100%;
+                max-width: 350px;
+                padding: 35px 30px;
+            }
+
+            .card-icon {
+                font-size: 60px;
+            }
+
+            .card-title {
+                font-size: 22px;
+            }
+
+            .logo-circle {
+                width: 65px;
+                height: 65px;
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .logos-row {
+                gap: 10px;
+            }
+
+            .logo-circle {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .hospital-name {
+                font-size: 18px;
+            }
+
+            .option-card {
+                padding: 25px 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="option-card" onclick="window.open('painel_tv.html', '_blank')">
-        <div class="option-icon">📺</div>
-        <div class="option-title">Painel TV</div>
-        <div class="option-desc">Exibição para monitores</div>
+    <!-- ECG Background -->
+    <div class="ecg-bg">
+        <svg viewBox="0 0 2000 2000" preserveAspectRatio="none">
+            <path class="ecg-path" d="M0,200 L300,200 L350,200 L370,120 L390,280 L410,200 L430,120 L450,280 L470,200 L700,200"/>
+            <path class="ecg-path" d="M0,600 L300,600 L350,600 L370,520 L390,680 L410,600 L430,520 L450,680 L470,600 L700,600"/>
+            <path class="ecg-path" d="M0,1000 L300,1000 L350,1000 L370,920 L390,1080 L410,1000 L430,920 L450,1080 L470,1000 L700,1000"/>
+            <path class="ecg-path" d="M0,1400 L300,1400 L350,1400 L370,1320 L390,1480 L410,1400 L430,1320 L450,1480 L470,1400 L700,1400"/>
+            <path class="ecg-path" d="M0,1800 L300,1800 L350,1800 L370,1720 L390,1880 L410,1800 L430,1720 L450,1880 L470,1800 L700,1800"/>
+        </svg>
     </div>
-    <div class="option-card" onclick="window.open('registro_cirurgias.html', '_blank')">
-        <div class="option-icon">💻</div>
-        <div class="option-title">Registro</div>
-        <div class="option-desc">Gerenciamento de cirurgias</div>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="logos-row">
+                <div class="logo-circle">🏥</div>
+                <div class="logo-circle">🏛️</div>
+            </div>
+            <h1 class="hospital-name">Hospital Regional de Palmeira dos Índios</h1>
+            <p class="hospital-subtitle">HRPI • Centro Cirúrgico</p>
+            <div class="divider"></div>
+            <p class="system-title">SISTEMA DE GESTÃO CIRÚRGICA</p>
+        </div>
+
+        <!-- Cards -->
+        <div class="cards-container">
+            <!-- Painel TV -->
+            <div class="option-card" onclick="window.open('painel_tv.html', '_blank')">
+                <span class="card-icon">📺</span>
+                <h2 class="card-title">Painel TV</h2>
+                <p class="card-desc">
+                    Exibição em tempo real para monitores e televisores.
+                    Acompanhe todas as cirurgias do dia.
+                </p>
+                <span class="card-badge">Visualização</span>
+            </div>
+
+            <!-- Registro -->
+            <div class="option-card" onclick="window.open('registro_cirurgias.html', '_blank')">
+                <span class="card-icon">💻</span>
+                <h2 class="card-title">Registro</h2>
+                <p class="card-desc">
+                    Gerenciamento completo das cirurgias.
+                    Agende, inicie, finalize e gere relatórios.
+                </p>
+                <span class="card-badge">Administração</span>
+            </div>
+        </div>
     </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2024 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios • Todos os direitos reservados
+    </div>
+
+    <script>
+        // Animação suave ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.option-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 + (index * 200));
+            });
+        });
+
+        // Efeito de clique
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            card.addEventListener('mouseup', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
 </body>
 </html>
