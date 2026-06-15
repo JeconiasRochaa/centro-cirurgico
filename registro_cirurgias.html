@@ -110,32 +110,12 @@
             font-weight: 500;
         }
 
-        .brand h1 {
-            font-size: 20px;
-            color: #ffffff;
-        }
+        .brand h1 { font-size: 20px; color: #ffffff; }
+        .brand span { font-size: 12px; color: var(--gold); letter-spacing: 1px; font-weight: 500; }
 
-        .brand span {
-            font-size: 12px;
-            color: var(--gold);
-            letter-spacing: 1px;
-            font-weight: 500;
-        }
-
-        .user-info {
-            text-align: right;
-            color: #ffffff;
-        }
-
-        .user-info .date {
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .user-info .role {
-            font-size: 12px;
-            color: var(--gold);
-        }
+        .user-info { text-align: right; color: #ffffff; }
+        .user-info .date { font-weight: 600; font-size: 15px; }
+        .user-info .role { font-size: 12px; color: var(--gold); }
 
         .stats-grid {
             display: grid;
@@ -157,7 +137,7 @@
         .stat-card.orange { border-left-color: var(--orange); }
         .stat-card.blue { border-left-color: var(--blue); }
         .stat-card.green { border-left-color: var(--green); }
-        .stat-card.purple { border-left-color: var(--purple); }
+        .stat-card.red { border-left-color: var(--red); }
 
         .stat-value { font-size: 32px; font-weight: 700; color: var(--text-primary); }
         .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; font-weight: 500; }
@@ -200,10 +180,7 @@
             transition: all 0.3s;
         }
 
-        .btn-report:hover {
-            background: var(--gold);
-            color: var(--bg-dark);
-        }
+        .btn-report:hover { background: var(--gold); color: var(--bg-dark); }
 
         .form-group { margin-bottom: 16px; position: relative; }
 
@@ -228,7 +205,7 @@
             font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        textarea { resize: vertical; min-height: 80px; }
+        textarea { resize: vertical; min-height: 60px; }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
@@ -264,12 +241,7 @@
         }
 
         .suggestion-item:last-child { border-bottom: none; }
-
-        .suggestion-item:hover {
-            background: #fef9e7;
-            color: var(--gold);
-        }
-
+        .suggestion-item:hover { background: #fef9e7; color: var(--gold); }
         .suggestion-item .add-icon { color: var(--gold); margin-right: 8px; font-weight: bold; }
 
         .btn {
@@ -298,6 +270,13 @@
             margin-bottom: 8px;
             display: none;
         }
+
+        .btn-cancel {
+            background: white;
+            border: 2px solid var(--red);
+            color: var(--red);
+        }
+        .btn-cancel:hover { background: #fef2f2; }
 
         .tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
 
@@ -330,6 +309,7 @@
         .surgery-item.pending { border-left-color: var(--orange); }
         .surgery-item.ongoing { border-left-color: var(--blue); background: rgba(59, 130, 246, 0.05); }
         .surgery-item.completed { border-left-color: var(--green); }
+        .surgery-item.cancelled { border-left-color: var(--red); opacity: 0.7; }
 
         .surgery-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
         .surgery-type { font-weight: 600; color: var(--text-primary); font-size: 15px; }
@@ -348,6 +328,16 @@
 
         .surgery-details { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
 
+        .cancel-reason {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #991b1b;
+        }
+
         .action-btns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 
         .btn-sm {
@@ -365,10 +355,12 @@
         .btn-sm-start:hover { background: #eff6ff; }
         .btn-sm-finish { border-color: var(--green); color: var(--green); }
         .btn-sm-finish:hover { background: #f0fdf4; }
+        .btn-sm-cancel { border-color: var(--red); color: var(--red); }
+        .btn-sm-cancel:hover { background: #fef2f2; }
         .btn-sm-edit { border-color: var(--orange); color: var(--orange); }
         .btn-sm-edit:hover { background: #fffbeb; }
-        .btn-sm-delete { border-color: var(--red); color: var(--red); }
-        .btn-sm-delete:hover { background: #fef2f2; }
+        .btn-sm-delete { border-color: #64748b; color: #64748b; }
+        .btn-sm-delete:hover { background: #f1f5f9; }
 
         .conflict-warning {
             background: #fef3c7;
@@ -424,25 +416,25 @@
             background: white;
             border-radius: 16px;
             padding: 30px;
-            max-width: 550px;
+            max-width: 500px;
             width: 90%;
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             max-height: 80vh;
             overflow-y: auto;
         }
 
-        .modal-content h2 { margin-bottom: 25px; color: var(--text-primary); font-size: 20px; }
+        .modal-content h2 { margin-bottom: 20px; color: var(--text-primary); font-size: 18px; }
 
         .modal-option {
             display: block;
             width: 100%;
-            padding: 16px 20px;
-            margin-bottom: 10px;
+            padding: 14px 18px;
+            margin-bottom: 8px;
             background: var(--bg-input);
             border: 2px solid var(--border);
             border-radius: 10px;
             color: var(--text-primary);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -450,7 +442,7 @@
         }
 
         .modal-option:hover { border-color: var(--gold); background: #fef9e7; }
-        .modal-option .icon { margin-right: 10px; font-size: 20px; }
+        .modal-option .icon { margin-right: 8px; }
 
         .btn-close-modal {
             width: 100%;
@@ -459,14 +451,30 @@
             border: 2px solid var(--red);
             color: var(--red);
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-close-modal:hover { background: #fef2f2; }
+
+        .btn-submit-cancel {
+            width: 100%;
+            padding: 12px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             margin-top: 15px;
             transition: all 0.3s;
         }
 
-        .btn-close-modal:hover { background: #fef2f2; }
+        .btn-submit-cancel:hover { background: #dc2626; }
 
         .surgery-list::-webkit-scrollbar { width: 6px; }
         .surgery-list::-webkit-scrollbar-track { background: var(--bg-body); }
@@ -517,7 +525,7 @@
             <div class="stat-card orange"><div class="stat-value" id="waitingCount">00</div><div class="stat-label">Aguardando</div></div>
             <div class="stat-card blue"><div class="stat-value" id="inProgressCount">00</div><div class="stat-label">Em Andamento</div></div>
             <div class="stat-card green"><div class="stat-value" id="completedCount">00</div><div class="stat-label">Finalizadas</div></div>
-            <div class="stat-card purple"><div class="stat-value" id="totalAll">00</div><div class="stat-label">Total Registros</div></div>
+            <div class="stat-card red"><div class="stat-value" id="cancelledCount">00</div><div class="stat-label">Canceladas</div></div>
         </div>
 
         <div class="main-grid">
@@ -534,8 +542,8 @@
                     </div>
                     <div class="form-group">
                         <label>⏰ Horário de Início da Cirurgia</label>
-                        <input type="time" id="surgeryTime" required onchange="checkConflict()" placeholder="Horário que a cirurgia vai começar">
-                        <small style="color: #64748b; font-size: 10px;">Informe o horário previsto para o INÍCIO da cirurgia</small>
+                        <input type="time" id="surgeryTime" required onchange="checkConflict()">
+                        <small style="color: #64748b; font-size: 10px;">Horário previsto para o INÍCIO da cirurgia</small>
                     </div>
                     <div class="form-group">
                         <label>👤 Nome do Paciente</label>
@@ -543,7 +551,7 @@
                     </div>
                     <div class="form-group">
                         <label>🔪 Procedimento(s) - Digite para buscar</label>
-                        <textarea id="surgeryType" placeholder="Digite as iniciais do procedimento e selecione nas sugestões..." required rows="4"></textarea>
+                        <textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea>
                         <div class="suggestions-box" id="suggestionsBox"></div>
                     </div>
                     <div class="form-group">
@@ -614,6 +622,17 @@
         </div>
     </div>
 
+    <!-- Modal Cancelamento -->
+    <div class="modal-overlay" id="cancelModal">
+        <div class="modal-content">
+            <h2>❌ Cancelar Cirurgia</h2>
+            <p style="margin-bottom: 15px; color: #64748b; font-size: 14px;">Informe o motivo do cancelamento:</p>
+            <textarea id="cancelReason" placeholder="Descreva o motivo do cancelamento..." style="width: 100%; min-height: 80px; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Segoe UI', Arial, sans-serif;"></textarea>
+            <button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar Cancelamento</button>
+            <button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button>
+        </div>
+    </div>
+
     <!-- Modal Relatórios -->
     <div class="modal-overlay" id="reportModal">
         <div class="modal-content">
@@ -621,9 +640,9 @@
             <button class="modal-option" onclick="generateReport('daily')"><span class="icon">📅</span> Relatório Diário (Hoje)</button>
             <button class="modal-option" onclick="generateReport('weekly')"><span class="icon">📆</span> Relatório Semanal (7 dias)</button>
             <button class="modal-option" onclick="generateReport('monthly')"><span class="icon">📊</span> Relatório Mensal (30 dias)</button>
-            <button class="modal-option" onclick="generateReport('custom')"><span class="icon">📋</span> Relatório Personalizado (Escolher período)</button>
+            <button class="modal-option" onclick="generateReport('custom')"><span class="icon">📋</span> Relatório Personalizado</button>
             <button class="modal-option" onclick="generateReport('specialty')"><span class="icon">🔬</span> Relatório por Especialidade</button>
-            <button class="modal-option" onclick="generateReport('all')"><span class="icon">📁</span> Relatório Geral (Todas as cirurgias)</button>
+            <button class="modal-option" onclick="generateReport('all')"><span class="icon">📁</span> Relatório Geral</button>
             <button class="btn-close-modal" onclick="closeReportModal()">❌ Cancelar</button>
         </div>
     </div>
@@ -683,16 +702,25 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        const TODAY = new Date().toISOString().split('T')[0];
-        document.getElementById('surgeryDate').value = TODAY;
-        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('pt-BR', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
+        function getToday() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
+        let TODAY = getToday();
         let currentTab = 'today';
         let hasConflict = false;
         let isEditing = false;
         let allSurgeries = [];
+        let cancelSurgeryId = null;
+
+        document.getElementById('surgeryDate').value = TODAY;
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('pt-BR', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
 
         const surgeryTypes = [
             'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','APENDICECTOMIA','APENDICECTOMIA VIDEOLAPAROSCÓPICA',
@@ -776,6 +804,7 @@
             }
         };
 
+        // Autocomplete
         const surgeryInput = document.getElementById('surgeryType');
         const suggestionsBox = document.getElementById('suggestionsBox');
 
@@ -827,7 +856,7 @@
 
             const conflict = allSurgeries.some(s => 
                 s.date === date && s.time === time && s.room === room &&
-                s.status !== 'concluida' && s.id !== editId
+                s.status !== 'concluida' && s.status !== 'cancelada' && s.id !== editId
             );
 
             if (conflict) {
@@ -857,12 +886,16 @@
                 anesthetist: document.getElementById('anesthetist').value.toUpperCase(),
                 circulante: document.getElementById('circulante').value.toUpperCase(),
                 room: document.getElementById('room').value,
-                status: 'pendente'
+                status: 'pendente',
+                cancelReason: null
             };
 
             if (editId && isEditing) {
                 const existing = allSurgeries.find(s => s.id === editId);
-                if (existing) surgery.status = existing.status;
+                if (existing) {
+                    surgery.status = existing.status;
+                    surgery.cancelReason = existing.cancelReason || null;
+                }
             }
             
             set(ref(db, 'surgeries/' + surgery.id), surgery).then(() => {
@@ -871,15 +904,49 @@
             });
         });
 
-        window.startSurgery = function(id) { update(ref(db, 'surgeries/' + id), { status: 'em_andamento' }); };
-        window.finishSurgery = function(id) { update(ref(db, 'surgeries/' + id), { status: 'concluida' }); };
+        window.startSurgery = function(id) {
+            update(ref(db, 'surgeries/' + id), { status: 'em_andamento' });
+        };
+
+        window.finishSurgery = function(id) {
+            update(ref(db, 'surgeries/' + id), { status: 'concluida' });
+        };
+
+        // NOVA FUNÇÃO: Abrir modal de cancelamento
+        window.openCancelModal = function(id) {
+            cancelSurgeryId = id;
+            document.getElementById('cancelReason').value = '';
+            document.getElementById('cancelModal').classList.add('active');
+        };
+
+        window.closeCancelModal = function() {
+            cancelSurgeryId = null;
+            document.getElementById('cancelModal').classList.remove('active');
+        };
+
+        window.confirmCancel = function() {
+            const reason = document.getElementById('cancelReason').value.trim();
+            if (!reason) {
+                alert('⚠️ Informe o motivo do cancelamento!');
+                return;
+            }
+            if (cancelSurgeryId) {
+                update(ref(db, 'surgeries/' + cancelSurgeryId), {
+                    status: 'cancelada',
+                    cancelReason: reason
+                }).then(() => {
+                    closeCancelModal();
+                });
+            }
+        };
 
         window.editSurgery = function(id) {
             const surgery = allSurgeries.find(s => s.id === id);
-            if (!surgery || surgery.status !== 'pendente') {
-                alert('⚠️ Só é possível editar cirurgias que estão aguardando!');
+            if (!surgery || (surgery.status !== 'pendente' && surgery.status !== 'cancelada')) {
+                alert('⚠️ Só é possível editar cirurgias que estão aguardando ou canceladas!');
                 return;
             }
+            
             isEditing = true;
             document.getElementById('editId').value = surgery.id;
             document.getElementById('surgeryDate').value = surgery.date;
@@ -891,6 +958,7 @@
             document.getElementById('anesthetist').value = surgery.anesthetist || '';
             document.getElementById('circulante').value = surgery.circulante || '';
             document.getElementById('room').value = surgery.room;
+            
             document.getElementById('formActionTitle').textContent = 'Editar Cirurgia';
             document.getElementById('submitBtn').textContent = '💾 Salvar Alterações';
             document.getElementById('cancelEditBtn').style.display = 'block';
@@ -905,7 +973,11 @@
             clearForm();
         };
 
-        window.deleteSurgery = function(id) { remove(ref(db, 'surgeries/' + id)); };
+        window.deleteSurgery = function(id) {
+            if (confirm('Tem certeza que deseja excluir esta cirurgia permanentemente?')) {
+                remove(ref(db, 'surgeries/' + id));
+            }
+        };
 
         window.switchTab = function(tab) {
             currentTab = tab;
@@ -923,7 +995,7 @@
             document.getElementById('waitingCount').textContent = String(todaySurgeries.filter(s => s.status === 'pendente').length).padStart(2, '0');
             document.getElementById('inProgressCount').textContent = String(todaySurgeries.filter(s => s.status === 'em_andamento').length).padStart(2, '0');
             document.getElementById('completedCount').textContent = String(todaySurgeries.filter(s => s.status === 'concluida').length).padStart(2, '0');
-            document.getElementById('totalAll').textContent = String(allSurgeries.length).padStart(2, '0');
+            document.getElementById('cancelledCount').textContent = String(todaySurgeries.filter(s => s.status === 'cancelada').length).padStart(2, '0');
         }
 
         function updateList() {
@@ -941,8 +1013,13 @@
                 let statusClass = 'pending';
                 if (surgery.status === 'em_andamento') statusClass = 'ongoing';
                 if (surgery.status === 'concluida') statusClass = 'completed';
+                if (surgery.status === 'cancelada') statusClass = 'cancelled';
+                
                 const isToday = surgery.date === TODAY;
                 const displayDate = isToday ? 'HOJE' : new Date(surgery.date + 'T00:00:00').toLocaleDateString('pt-BR');
+
+                const cancelInfo = surgery.cancelReason ? 
+                    `<div class="cancel-reason">❌ Motivo do cancelamento: ${surgery.cancelReason}</div>` : '';
 
                 return `<div class="surgery-item ${statusClass}">
                     <div class="surgery-header">
@@ -956,10 +1033,12 @@
                         💉 Anestesista: Dr. ${surgery.anesthetist || '-'}<br>
                         🔄 Circulante: ${surgery.circulante || '-'}
                     </div>
+                    ${cancelInfo}
                     <div class="action-btns">
                         ${isToday && surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-start" onclick="startSurgery('${surgery.id}')">▶ Iniciar</button>` : ''}
                         ${surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-edit" onclick="editSurgery('${surgery.id}')">✏️ Editar</button>` : ''}
                         ${isToday && surgery.status === 'em_andamento' ? `<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${surgery.id}')">⏹ Finalizar</button>` : ''}
+                        ${surgery.status === 'pendente' ? `<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${surgery.id}')">❌ Cancelar</button>` : ''}
                         <button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${surgery.id}')">🗑️ Excluir</button>
                     </div>
                 </div>`;
@@ -1034,13 +1113,11 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('landscape');
             
-            // Logo Hospital (primeiro)
             const logoImg = document.getElementById('logoUpload').querySelector('img');
             if (logoImg && logoImg.src.startsWith('data:image')) {
                 doc.addImage(logoImg.src, 'PNG', 14, 10, 22, 22);
             }
 
-            // Logo Governo (depois)
             const govLogoImg = document.getElementById('govLogoUpload').querySelector('img');
             if (govLogoImg && govLogoImg.src.startsWith('data:image')) {
                 doc.addImage(govLogoImg.src, 'PNG', 40, 10, 22, 22);
@@ -1068,10 +1145,11 @@
             const completed = surgeries.filter(s => s.status === 'concluida').length;
             const inProgress = surgeries.filter(s => s.status === 'em_andamento').length;
             const waiting = surgeries.filter(s => s.status === 'pendente').length;
+            const cancelled = surgeries.filter(s => s.status === 'cancelada').length;
             
             doc.setFontSize(9);
             doc.setTextColor(6, 34, 74);
-            doc.text(`Total: ${surgeries.length} | Finalizadas: ${completed} | Em Andamento: ${inProgress} | Aguardando: ${waiting}`, 14, 40);
+            doc.text(`Total: ${surgeries.length} | Finalizadas: ${completed} | Em Andamento: ${inProgress} | Aguardando: ${waiting} | Canceladas: ${cancelled}`, 14, 40);
 
             const tableData = surgeries
                 .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
@@ -1086,34 +1164,38 @@
                     `Dr. ${s.anesthetist || '-'}`,
                     s.room,
                     s.circulante || '-',
-                    s.status === 'pendente' ? 'Aguardando' : s.status === 'em_andamento' ? 'Em andamento' : 'Finalizada'
+                    s.status === 'pendente' ? 'Aguardando' : s.status === 'em_andamento' ? 'Em andamento' : s.status === 'concluida' ? 'Finalizada' : 'Cancelada',
+                    s.cancelReason || '-'
                 ]);
 
             doc.autoTable({
                 startY: 44,
-                head: [['Nº', 'Data', 'Horário', 'Paciente', 'Procedimentos', 'Médico', 'Especialidade', 'Anestesista', 'Sala', 'Circulante', 'Status']],
+                head: [['Nº', 'Data', 'Horário', 'Paciente', 'Procedimentos', 'Médico', 'Especialidade', 'Anestesista', 'Sala', 'Circulante', 'Status', 'Motivo Cancel.']],
                 body: tableData,
-                styles: { fontSize: 7, cellPadding: 3, lineColor: [200, 200, 200], lineWidth: 0.1 },
-                headStyles: { fillColor: [6, 34, 74], textColor: 255, fontStyle: 'bold', fontSize: 7 },
+                styles: { fontSize: 6.5, cellPadding: 2, lineColor: [200, 200, 200], lineWidth: 0.1 },
+                headStyles: { fillColor: [6, 34, 74], textColor: 255, fontStyle: 'bold', fontSize: 6.5 },
                 alternateRowStyles: { fillColor: [245, 247, 250] },
                 columnStyles: {
-                    0: { cellWidth: 8, halign: 'center' },
-                    1: { cellWidth: 20 },
-                    2: { cellWidth: 16, halign: 'center' },
-                    3: { cellWidth: 35 },
-                    4: { cellWidth: 45 },
-                    5: { cellWidth: 30 },
-                    6: { cellWidth: 25 },
-                    7: { cellWidth: 28 },
-                    8: { cellWidth: 16, halign: 'center' },
-                    9: { cellWidth: 22 },
-                    10: { cellWidth: 20, halign: 'center' },
+                    0: { cellWidth: 7, halign: 'center' },
+                    1: { cellWidth: 17 },
+                    2: { cellWidth: 13, halign: 'center' },
+                    3: { cellWidth: 28 },
+                    4: { cellWidth: 35 },
+                    5: { cellWidth: 25 },
+                    6: { cellWidth: 20 },
+                    7: { cellWidth: 22 },
+                    8: { cellWidth: 13, halign: 'center' },
+                    9: { cellWidth: 18 },
+                    10: { cellWidth: 17, halign: 'center' },
+                    11: { cellWidth: 25 },
                 },
                 didParseCell: function(data) {
                     if (data.column.index === 10 && data.cell.raw === 'Em andamento') {
                         data.cell.styles.textColor = [59, 130, 246];
                     } else if (data.column.index === 10 && data.cell.raw === 'Finalizada') {
                         data.cell.styles.textColor = [16, 185, 129];
+                    } else if (data.column.index === 10 && data.cell.raw === 'Cancelada') {
+                        data.cell.styles.textColor = [239, 68, 68];
                     }
                 }
             });
@@ -1130,6 +1212,8 @@
             doc.save(`relatorio_cirurgias_${new Date().toISOString().split('T')[0]}.pdf`);
         }
 
+        // Fechar modais ao clicar fora
+        document.getElementById('cancelModal').addEventListener('click', function(e) { if (e.target === this) closeCancelModal(); });
         document.getElementById('reportModal').addEventListener('click', function(e) { if (e.target === this) closeReportModal(); });
         document.getElementById('customDateModal').addEventListener('click', function(e) { if (e.target === this) closeCustomDateModal(); });
         document.getElementById('specialtyModal').addEventListener('click', function(e) { if (e.target === this) closeSpecialtyModal(); });
