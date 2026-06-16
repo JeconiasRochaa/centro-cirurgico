@@ -3,385 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRPI - Sistema de Gestão Cirúrgica</title>
+    <title>HRPI - Painel Cirúrgico</title>
     <style>
         :root {
             --bg-primary: #06224a;
             --bg-secondary: #051a38;
+            --bg-tertiary: #041630;
+            --border-color: #0d3470;
             --gold: #c8a94a;
-            --text-light: #ffffff;
-            --text-muted: #b0c4de;
+            --text-primary: #ffffff;
+            --text-secondary: #b0c4de;
+            --text-muted: #7a8fa8;
+            --blue: #3b82f6;
+            --blue-light: #60a5fa;
+            --green: #10b981;
+            --green-light: #34d399;
+            --orange: #f59e0b;
+            --orange-light: #fbbf24;
+            --red: #ef4444;
+            --red-light: #fca5a5;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: var(--bg-primary);
-            color: var(--text-light);
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
+            color: var(--text-primary);
+            min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* ECG Background */
-        .ecg-bg {
+        .ecg-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.06;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.10;
             z-index: 0;
             pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 2% 0;
         }
 
-        .ecg-bg svg {
-            width: 100%;
-            height: 100%;
-        }
+        .ecg-line-wrapper { width: 100%; height: 55px; }
+        .ecg-line-wrapper svg { width: 100%; height: 100%; }
 
         .ecg-path {
-            fill: none;
-            stroke: var(--gold);
-            stroke-width: 2;
-            stroke-dasharray: 2000;
-            animation: ecgMove 4s linear infinite;
+            fill: none; stroke: var(--gold);
+            stroke-width: 2.5; stroke-dasharray: 2000;
+            animation: ecg 4s linear infinite;
         }
+        .ecg-path:nth-child(2) { animation-delay: 1s; stroke-width: 2; opacity: 0.6; }
+        .ecg-path:nth-child(3) { animation-delay: 2s; stroke-width: 1.5; opacity: 0.4; }
 
-        .ecg-path:nth-child(2) { animation-delay: 1s; }
-        .ecg-path:nth-child(3) { animation-delay: 2s; }
-        .ecg-path:nth-child(4) { animation-delay: 3s; }
-
-        @keyframes ecgMove {
+        @keyframes ecg {
             from { stroke-dashoffset: 2000; }
             to { stroke-dashoffset: 0; }
         }
 
-        /* Container Principal - ocupa todo o espaço disponível */
-        .main-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: clamp(1rem, 3vw, 3rem) clamp(1rem, 3vw, 2rem);
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Header Section */
-        .header-section {
-            text-align: center;
-            margin-bottom: clamp(1.5rem, 4vw, 3rem);
+        .container {
+            position: relative; z-index: 1;
+            min-height: 100vh; min-height: 100dvh;
+            display: flex; flex-direction: column;
             width: 100%;
         }
 
-        .logos-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: clamp(12px, 2.5vw, 25px);
-            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+        /* HEADER */
+        .header {
+            background: linear-gradient(180deg, rgba(5,26,56,0.98) 0%, rgba(4,22,48,0.99) 100%);
+            border-bottom: 4px solid var(--gold);
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 15px; flex-shrink: 0; flex-wrap: wrap;
         }
 
-        .logo-circle {
-            width: clamp(60px, 10vw, 100px);
-            height: clamp(60px, 10vw, 100px);
-            background: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid var(--gold);
-            box-shadow: 0 0 35px rgba(200, 169, 74, 0.35);
-            font-size: clamp(26px, 4.5vw, 42px);
-            overflow: hidden;
-            animation: logoFloat 3s ease-in-out infinite;
+        .hospital-brand { display: flex; align-items: center; gap: 15px; flex: 1; min-width: 200px; }
+        .logos-container { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+        .logo-box {
+            width: 60px; height: 60px; min-width: 60px;
+            background: #ffffff; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; border: 2px solid var(--gold);
+            box-shadow: 0 0 20px rgba(200, 169, 74, 0.3);
+        }
+        .logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+
+        .hospital-info { min-width: 0; }
+        .hospital-info h1 {
+            font-size: clamp(16px, 3vw, 30px); font-weight: 700;
+            letter-spacing: 1px; color: var(--text-primary);
+            text-transform: uppercase; line-height: 1.2;
+        }
+        .hospital-info .subtitle {
+            font-size: clamp(10px, 1.5vw, 16px); color: var(--gold);
+            letter-spacing: 2px; margin-top: 3px; font-weight: 500;
         }
 
-        .logo-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 15%;
+        .time-box { text-align: right; flex-shrink: 0; }
+        .time-display {
+            font-size: clamp(28px, 5vw, 55px); font-weight: 700;
+            color: var(--gold); letter-spacing: 2px;
+            font-family: 'Courier New', monospace; line-height: 1;
+            text-shadow: 0 0 15px rgba(200, 169, 74, 0.3);
+        }
+        .date-display {
+            font-size: clamp(11px, 1.5vw, 17px); color: var(--text-secondary);
+            letter-spacing: 1px; margin-top: 4px;
         }
 
-        .logo-circle:nth-child(2) { animation-delay: 0.5s; }
+        /* NOTIFICAÇÃO */
+        .notification-bar {
+            background: linear-gradient(90deg, #1a3a5f, #0f1f3a, #1a3a5f);
+            border-bottom: 2px solid #fbbf24; padding: 12px 20px;
+            display: none; align-items: center; justify-content: center;
+            gap: 12px; flex-shrink: 0; animation: slideDown 0.5s ease;
+        }
+        .notification-bar.show { display: flex; }
 
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .hospital-name {
-            font-size: clamp(1.2rem, 4vw, 2.4rem);
-            font-weight: 700;
-            letter-spacing: clamp(0.5px, 0.3vw, 3px);
-            text-transform: uppercase;
-            text-shadow: 0 4px 25px rgba(0,0,0,0.4);
-            margin-bottom: 0.5rem;
-            padding: 0 1rem;
-            line-height: 1.2;
+        .notification-icon {
+            font-size: clamp(18px, 2.5vw, 28px);
+            animation: bellRing 1s infinite;
+        }
+        @keyframes bellRing {
+            0%,100%{transform:rotate(0)}
+            10%{transform:rotate(15deg)}
+            20%{transform:rotate(-15deg)}
+            30%{transform:rotate(10deg)}
+            40%{transform:rotate(-10deg)}
+            50%{transform:rotate(0)}
+        }
+        .notification-text {
+            font-size: clamp(14px, 1.8vw, 20px); color: #fbbf24;
+            letter-spacing: 1px; font-weight: 700; text-align: center;
         }
 
-        .hospital-subtitle {
-            font-size: clamp(0.7rem, 1.8vw, 1.1rem);
-            color: var(--gold);
-            letter-spacing: clamp(2px, 0.6vw, 6px);
-            font-weight: 500;
-            text-transform: uppercase;
+        /* STATUS BAR */
+        .status-bar {
+            background: rgba(6, 34, 74, 0.97); border-bottom: 2px solid var(--border-color);
+            padding: 10px 20px; display: flex; justify-content: center;
+            gap: clamp(20px, 6vw, 80px); flex-shrink: 0; flex-wrap: wrap;
+        }
+        .status-item { text-align: center; }
+        .status-value {
+            font-size: clamp(24px, 4vw, 44px); font-weight: 700;
+            color: var(--gold); line-height: 1;
+            text-shadow: 0 0 10px rgba(200, 169, 74, 0.3);
+        }
+        .status-label {
+            font-size: clamp(8px, 1.2vw, 14px); color: var(--text-muted);
+            letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; font-weight: 500;
         }
 
-        .divider {
-            width: clamp(150px, 25vw, 250px);
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 1.2rem auto;
+        /* PANEL CONTENT */
+        .panel-content { flex: 1; padding: 15px 20px; overflow: auto; }
+        .table-wrapper {
+            border-radius: 8px; background: rgba(0,0,0,0.2);
+            overflow-x: auto; -webkit-overflow-scrolling: touch;
+        }
+        table { width: 100%; min-width: 750px; border-collapse: separate; border-spacing: 0 5px; }
+        thead { position: sticky; top: 0; z-index: 10; }
+
+        thead th {
+            background: var(--bg-tertiary); padding: 12px 4px;
+            text-align: center; color: var(--gold);
+            font-size: clamp(9px, 1.3vw, 14px); letter-spacing: 1px;
+            text-transform: uppercase; border-bottom: 2px solid var(--gold);
+            white-space: nowrap; font-weight: 700;
         }
 
-        .system-title {
-            font-size: clamp(0.7rem, 2vw, 1.1rem);
-            color: var(--text-muted);
-            letter-spacing: clamp(2px, 0.4vw, 4px);
-            text-transform: uppercase;
+        thead th:nth-child(1){width:5%} thead th:nth-child(2){width:7%}
+        thead th:nth-child(3){width:12%} thead th:nth-child(4){width:5%}
+        thead th:nth-child(5){width:17%} thead th:nth-child(6){width:12%}
+        thead th:nth-child(7){width:8%} thead th:nth-child(8){width:10%}
+        thead th:nth-child(9){width:7%} thead th:nth-child(10){width:10%}
+
+        tbody tr { background: rgba(255,255,255,0.04); transition: all 0.3s; }
+        tbody td {
+            padding: 10px 4px; font-size: clamp(11px, 1.4vw, 16px);
+            color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 500; vertical-align: middle; text-align: center;
+            white-space: normal; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3;
+        }
+        tbody td:nth-child(3), tbody td:nth-child(5), tbody td:nth-child(6) { text-align: left; padding-left: 8px; }
+
+        .row-ongoing {
+            background: rgba(59,130,246,0.2)!important;
+            border-left: 4px solid var(--blue)!important;
+            animation: rowAlert 2s infinite;
+        }
+        .row-cancelled { opacity: 0.5; border-left: 4px solid var(--red)!important; }
+        .row-cancelled td { text-decoration: line-through; text-decoration-color: rgba(239,68,68,0.5); text-decoration-thickness: 1px; }
+
+        @keyframes rowAlert {
+            0%,100%{background:rgba(59,130,246,0.2)}
+            50%{background:rgba(59,130,246,0.3)}
         }
 
-        /* Cards Container */
-        .cards-container {
-            display: flex;
-            gap: clamp(1.2rem, 4vw, 2.5rem);
-            justify-content: center;
-            flex-wrap: wrap;
-            width: 100%;
-            max-width: 900px;
-            padding: 0 1rem;
+        .status-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 4px; padding: 5px 10px; border-radius: 20px;
+            font-size: clamp(9px, 1.1vw, 13px); font-weight: 600;
+            letter-spacing: 0.5px; white-space: nowrap;
         }
+        .status-waiting { background: rgba(245,158,11,0.25); border: 2px solid var(--orange); color: var(--orange-light); }
+        .status-progress { background: rgba(59,130,246,0.25); border: 2px solid var(--blue); color: var(--blue-light); animation: statusPulse 1.5s infinite; }
+        .status-done { background: rgba(16,185,129,0.25); border: 2px solid var(--green); color: var(--green-light); }
+        .status-cancelled { background: rgba(239,68,68,0.25); border: 2px solid var(--red); color: var(--red-light); }
 
-        .option-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 2px solid rgba(200, 169, 74, 0.25);
-            border-radius: clamp(16px, 3vw, 28px);
-            padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
-            flex: 1 1 280px;
-            min-width: 260px;
-            max-width: 380px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        @keyframes statusPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+        .specialty-tag {
+            font-size: clamp(8px,1vw,11px); color: var(--gold);
+            background: rgba(200,169,74,0.2); padding: 2px 6px;
+            border-radius: 8px; display: inline-block; margin-top: 2px; white-space: nowrap;
         }
-
-        .option-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(200, 169, 74, 0.15) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s;
+        .cancel-badge {
+            font-size: clamp(8px,0.9vw,10px); color: var(--red-light);
+            background: rgba(239,68,68,0.2); padding: 1px 5px;
+            border-radius: 6px; display: inline-block; margin-top: 2px; cursor: help;
         }
+        .cell-content { display: block; line-height: 1.3; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: clamp(16px,2.5vw,28px); letter-spacing: 2px; }
 
-        .option-card:hover::before { opacity: 1; }
-
-        .option-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-8px);
-            box-shadow: 0 25px 60px rgba(200, 169, 74, 0.25);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .card-icon {
-            font-size: clamp(3rem, 8vw, 5.5rem);
-            margin-bottom: 1rem;
-            display: block;
-            position: relative;
-            z-index: 1;
-            animation: iconPulse 2s ease-in-out infinite;
-        }
-
-        .option-card:nth-child(2) .card-icon { animation-delay: 0.3s; }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        .card-title {
-            font-size: clamp(1.2rem, 3vw, 2rem);
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 0.6rem;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-desc {
-            font-size: clamp(0.75rem, 1.5vw, 1rem);
-            color: var(--text-muted);
-            line-height: 1.6;
-            letter-spacing: 0.5px;
-            position: relative;
-            z-index: 1;
-            max-width: 250px;
-            margin: 0 auto;
-        }
-
-        .card-badge {
-            display: inline-block;
-            background: var(--gold);
-            color: var(--bg-primary);
-            padding: 0.4em 1.2em;
-            border-radius: 2em;
-            font-size: clamp(0.6rem, 1.1vw, 0.8rem);
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: 1.2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Footer */
         .footer {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: clamp(0.6rem, 1.2vw, 0.8rem);
-            letter-spacing: 1px;
-            padding: 1rem;
-            z-index: 1;
-            position: relative;
-            width: 100%;
+            background: rgba(5,26,56,0.98); border-top: 2px solid var(--border-color);
+            padding: 10px 20px; display: flex; justify-content: space-between;
+            font-size: clamp(9px,1.1vw,13px); color: var(--text-muted);
+            letter-spacing: 1px; flex-shrink: 0; flex-wrap: wrap; gap: 8px;
         }
 
-        .footer span {
-            color: var(--gold);
-            font-weight: 600;
+        .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
+        .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        /* TABLET */
+        @media (min-width:768px) and (max-width:1024px) {
+            .header{padding:12px 18px;gap:12px}.logo-box{width:50px;height:50px;min-width:50px}
+            .hospital-info h1{font-size:20px}.time-display{font-size:36px}
+            .status-bar{padding:8px 18px;gap:30px}.status-value{font-size:30px}
+            .panel-content{padding:10px 18px}thead th{font-size:10px;padding:10px 4px}
+            tbody td{font-size:12px;padding:8px 4px}.status-badge{font-size:9px;padding:4px 8px}
         }
 
-        /* Ajustes para telas muito pequenas */
-        @media (max-width: 480px) {
-            .cards-container {
-                gap: 1rem;
-            }
-
-            .option-card {
-                padding: 1.5rem 1.2rem;
-                min-width: 240px;
-            }
-
-            .card-desc {
-                max-width: 200px;
-            }
+        /* MOBILE */
+        @media (max-width:767px) {
+            .header{padding:10px 12px;flex-direction:column;align-items:stretch}
+            .hospital-brand{justify-content:center}.logo-box{width:40px;height:40px;min-width:40px}
+            .hospital-info h1{font-size:16px}.time-box{text-align:center}.time-display{font-size:30px}
+            .status-bar{padding:8px 12px;gap:15px}.status-value{font-size:24px}
+            .panel-content{padding:8px 12px}thead th{font-size:8px;padding:8px 3px}
+            tbody td{font-size:10px;padding:6px 3px}.status-badge{font-size:8px;padding:3px 6px}
+            .footer{font-size:8px;flex-direction:column;text-align:center}
         }
 
-        /* Ajustes para orientação paisagem em mobile */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .header-section {
-                margin-bottom: 0.8rem;
-            }
-            .logos-row {
-                margin-bottom: 0.5rem;
-            }
-            .divider {
-                margin: 0.5rem auto;
-            }
-            .option-card {
-                padding: 1rem;
-            }
-            .card-icon {
-                font-size: 2.5rem;
-                margin-bottom: 0.5rem;
-            }
-            .card-title {
-                font-size: 1.2rem;
-                margin-bottom: 0.3rem;
-            }
-            .card-desc {
-                font-size: 0.7rem;
-                max-width: 180px;
-            }
-            .footer {
-                padding: 0.4rem;
-            }
+        /* TV 43" FULL HD */
+        @media (min-width:1600px) {
+            .header{padding:15px 35px;min-height:95px}.logo-box{width:80px;height:80px;min-width:80px;border-radius:14px}
+            .hospital-info h1{font-size:30px}.hospital-info .subtitle{font-size:16px}
+            .time-display{font-size:55px}.date-display{font-size:17px}
+            .status-bar{padding:14px 35px;gap:80px}.status-value{font-size:44px}.status-label{font-size:14px}
+            .panel-content{padding:18px 35px}thead th{font-size:14px;padding:16px 8px}
+            tbody td{font-size:16px;padding:14px 10px}.status-badge{font-size:13px;padding:7px 14px}
+            .footer{font-size:13px;padding:12px 35px}
         }
     </style>
 </head>
 <body>
-    <!-- ECG Background -->
-    <div class="ecg-bg">
-        <svg viewBox="0 0 2000 2000" preserveAspectRatio="none">
-            <path class="ecg-path" d="M0,200 L300,200 L350,200 L370,120 L390,280 L410,200 L430,120 L450,280 L470,200 L700,200"/>
-            <path class="ecg-path" d="M0,600 L300,600 L350,600 L370,520 L390,680 L410,600 L430,520 L450,680 L470,600 L700,600"/>
-            <path class="ecg-path" d="M0,1000 L300,1000 L350,1000 L370,920 L390,1080 L410,1000 L430,920 L450,1080 L470,1000 L700,1000"/>
-            <path class="ecg-path" d="M0,1400 L300,1400 L350,1400 L370,1320 L390,1480 L410,1400 L430,1320 L450,1480 L470,1400 L700,1400"/>
-            <path class="ecg-path" d="M0,1800 L300,1800 L350,1800 L370,1720 L390,1880 L410,1800 L430,1720 L450,1880 L470,1800 L700,1800"/>
-        </svg>
+    <div class="ecg-container">
+        <div class="ecg-line-wrapper"><svg viewBox="0 0 2000 100" preserveAspectRatio="none"><path class="ecg-path" d="M0,50 L150,50 L180,50 L200,10 L220,90 L240,50 L260,10 L280,90 L300,50 L500,50"/><path class="ecg-path" d="M500,50 L650,50 L680,50 L700,10 L720,90 L740,50 L760,10 L780,90 L800,50 L1000,50"/><path class="ecg-path" d="M1000,50 L1150,50 L1180,50 L1200,10 L1220,90 L1240,50 L1260,10 L1280,90 L1300,50 L1500,50"/></svg></div>
+        <div class="ecg-line-wrapper"><svg viewBox="0 0 2000 100" preserveAspectRatio="none"><path class="ecg-path" d="M0,50 L150,50 L180,50 L200,10 L220,90 L240,50 L260,10 L280,90 L300,50 L500,50"/><path class="ecg-path" d="M500,50 L650,50 L680,50 L700,10 L720,90 L740,50 L760,10 L780,90 L800,50 L1000,50"/></svg></div>
+        <div class="ecg-line-wrapper"><svg viewBox="0 0 2000 100" preserveAspectRatio="none"><path class="ecg-path" d="M0,50 L150,50 L180,50 L200,10 L220,90 L240,50 L260,10 L280,90 L300,50 L500,50"/><path class="ecg-path" d="M500,50 L650,50 L680,50 L700,10 L720,90 L740,50 L760,10 L780,90 L800,50 L1000,50"/><path class="ecg-path" d="M1000,50 L1150,50 L1180,50 L1200,10 L1220,90 L1240,50 L1260,10 L1280,90 L1300,50 L1500,50"/></svg></div>
+        <div class="ecg-line-wrapper"><svg viewBox="0 0 2000 100" preserveAspectRatio="none"><path class="ecg-path" d="M0,50 L150,50 L180,50 L200,10 L220,90 L240,50 L260,10 L280,90 L300,50 L500,50"/></svg></div>
+        <div class="ecg-line-wrapper"><svg viewBox="0 0 2000 100" preserveAspectRatio="none"><path class="ecg-path" d="M0,50 L150,50 L180,50 L200,10 L220,90 L240,50 L260,10 L280,90 L300,50 L500,50"/><path class="ecg-path" d="M500,50 L650,50 L680,50 L700,10 L720,90 L740,50 L760,10 L780,90 L800,50 L1000,50"/><path class="ecg-path" d="M1000,50 L1150,50 L1180,50 L1200,10 L1220,90 L1240,50 L1260,10 L1280,90 L1300,50 L1500,50"/></svg></div>
     </div>
 
-    <!-- Conteúdo Principal -->
-    <div class="main-container">
-        <!-- Header -->
-        <div class="header-section">
-            <div class="logos-row">
-                <div class="logo-circle" id="hospitalLogo">
-                    <span style="font-size: inherit;">🏥</span>
+    <div class="container">
+        <div class="header">
+            <div class="hospital-brand">
+                <div class="logos-container">
+                    <div class="logo-box" id="logoContainer"><span style="font-size:clamp(18px,3vw,34px)">🏥</span></div>
+                    <div class="logo-box" id="govLogoContainer"><span style="font-size:clamp(18px,3vw,34px)">🏛️</span></div>
                 </div>
-                <div class="logo-circle" id="govLogo">
-                    <span style="font-size: inherit;">🏛️</span>
+                <div class="hospital-info">
+                    <h1>Hospital Regional de Palmeira dos Índios</h1>
+                    <div class="subtitle">HRPI • Centro Cirúrgico</div>
                 </div>
             </div>
-            <h1 class="hospital-name">Hospital Regional de Palmeira dos Índios</h1>
-            <p class="hospital-subtitle">HRPI • Centro Cirúrgico</p>
-            <div class="divider"></div>
-            <p class="system-title">Sistema de Gestão Cirúrgica</p>
+            <div class="time-box">
+                <div class="time-display" id="liveTime">00:00:00</div>
+                <div class="date-display" id="liveDate"></div>
+            </div>
         </div>
 
-        <!-- Cards -->
-        <div class="cards-container">
-            <a class="option-card" href="painel_tv.html" target="_blank">
-                <span class="card-icon">📺</span>
-                <h2 class="card-title">Painel TV</h2>
-                <p class="card-desc">
-                    Exibição em tempo real para monitores e televisores.
-                    Acompanhe todas as cirurgias do dia.
-                </p>
-                <span class="card-badge">Visualização</span>
-            </a>
-
-            <a class="option-card" href="registro_cirurgias.html" target="_blank">
-                <span class="card-icon">💻</span>
-                <h2 class="card-title">Registro</h2>
-                <p class="card-desc">
-                    Gerenciamento completo das cirurgias.
-                    Agende, inicie, finalize e gere relatórios.
-                </p>
-                <span class="card-badge">Administração</span>
-            </a>
+        <div class="notification-bar" id="notificationBar">
+            <span class="notification-icon">🔔</span>
+            <span class="notification-text" id="notificationText"></span>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        © 2026 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios • Todos os direitos reservados
+        <div class="status-bar">
+            <div class="status-item"><div class="status-value" id="inProgress">00</div><div class="status-label">Em Andamento</div></div>
+            <div class="status-item"><div class="status-value" id="completed">00</div><div class="status-label">Finalizados</div></div>
+            <div class="status-item"><div class="status-value" id="waiting">00</div><div class="status-label">Aguardando</div></div>
+            <div class="status-item"><div class="status-value" id="cancelled">00</div><div class="status-label">Canceladas</div></div>
+        </div>
+
+        <div class="panel-content">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sala</th><th>Horário</th><th>Paciente</th><th>Idade</th>
+                            <th>Procedimento</th><th>Médico</th><th>Especialid.</th>
+                            <th>Anestesista</th><th>Circ.</th><th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="surgeriesTableBody">
+                        <tr><td colspan="10"><div class="empty-state">CONECTANDO AO SERVIDOR...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>© 2026 HRPI</span><span>Painel Cirúrgico v8.0</span>
+            <span id="updateTime">Atualizado: --:--:--</span>
+        </div>
     </div>
 
     <script type="module">
@@ -400,51 +354,76 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        
+        function getToday(){const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
+        let TODAY=getToday(),currentSurgeries=[],lastDayCheck=new Date().getDate(),notificationTimeout=null,lastNotifiedSurgeryId=null;
 
-        // Carregar logo do hospital
-        const logoRef = ref(db, 'settings/logo');
-        onValue(logoRef, (snapshot) => {
-            const logoData = snapshot.val();
-            if (logoData) {
-                document.getElementById('hospitalLogo').innerHTML = `<img src="${logoData}" alt="Logo HRPI" style="width:100%;height:100%;object-fit:contain;padding:15%;">`;
+        function playNotificationSound(){
+            try{
+                const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();
+                o.connect(g);g.connect(a.destination);o.frequency.setValueAtTime(800,a.currentTime);
+                o.frequency.setValueAtTime(1000,a.currentTime+.1);g.gain.setValueAtTime(.3,a.currentTime);
+                g.gain.exponentialRampToValueAtTime(.01,a.currentTime+.3);o.start(a.currentTime);o.stop(a.currentTime+.3);
+                setTimeout(()=>{const o2=a.createOscillator(),g2=a.createGain();o2.connect(g2);g2.connect(a.destination);
+                o2.frequency.setValueAtTime(1000,a.currentTime);o2.frequency.setValueAtTime(1200,a.currentTime+.1);
+                g2.gain.setValueAtTime(.3,a.currentTime);g2.gain.exponentialRampToValueAtTime(.01,a.currentTime+.3);
+                o2.start(a.currentTime);o2.stop(a.currentTime+.3)},200)
+            }catch(e){}
+        }
+
+        function checkNextSurgery(){
+            const p=currentSurgeries.filter(s=>s.date===TODAY&&s.status==='pendente').sort((a,b)=>a.time.localeCompare(b.time));
+            if(!p.length){hideNotification();return}
+            const n=p[0],w=new Date(),[h,m]=n.time.split(':').map(Number),st=new Date(TODAY);st.setHours(h,m,0,0);
+            const d=Math.floor((st.getTime()-w.getTime())/60000);
+            if(d>=9&&d<=11&&lastNotifiedSurgeryId!==n.id){
+                showNotification(`🔔 PRÓXIMA CIRURGIA EM 10 MINUTOS: ${n.type.replace(/\n/g,' ')} | Sala: ${n.room} | Paciente: ${n.patient}${n.age?`, ${n.age} anos`:''} | Horário: ${n.time}`);
+                playNotificationSound();lastNotifiedSurgeryId=n.id
             }
-        });
+            if(d<-5){lastNotifiedSurgeryId=null;hideNotification()}
+        }
 
-        // Carregar logo do governo
-        const govLogoRef = ref(db, 'settings/govLogo');
-        onValue(govLogoRef, (snapshot) => {
-            const logoData = snapshot.val();
-            if (logoData) {
-                document.getElementById('govLogo').innerHTML = `<img src="${logoData}" alt="Logo Governo" style="width:100%;height:100%;object-fit:contain;padding:15%;">`;
-            }
-        });
+        function showNotification(m){document.getElementById('notificationText').textContent=m;document.getElementById('notificationBar').classList.add('show');if(notificationTimeout)clearTimeout(notificationTimeout);notificationTimeout=setTimeout(()=>document.getElementById('notificationBar').classList.remove('show'),15000)}
+        function hideNotification(){document.getElementById('notificationBar').classList.remove('show')}
 
-        // Animação suave ao carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.option-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, 300 + (index * 200));
-            });
-        });
+        function checkNewDay(){const c=new Date().getDate(),n=getToday();if(n!==TODAY){TODAY=n;lastNotifiedSurgeryId=null;hideNotification();updatePanel();lastDayCheck=c}}
 
-        // Efeito de clique nos cards
-        document.querySelectorAll('.option-card').forEach(card => {
-            card.addEventListener('mousedown', function() {
-                this.style.transform = 'scale(0.95)';
-            });
-            card.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(-8px)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
+        function updateClock(){
+            const n=new Date();
+            document.getElementById('liveTime').textContent=n.toLocaleTimeString('pt-BR');
+            document.getElementById('liveDate').textContent=n.toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            if(n.getDate()!==lastDayCheck){lastDayCheck=n.getDate();checkNewDay()}
+        }
+
+        function updatePanel(){
+            const t=currentSurgeries.filter(s=>s.date===TODAY);
+            document.getElementById('inProgress').textContent=String(t.filter(s=>s.status==='em_andamento').length).padStart(2,'0');
+            document.getElementById('completed').textContent=String(t.filter(s=>s.status==='concluida').length).padStart(2,'0');
+            document.getElementById('waiting').textContent=String(t.filter(s=>s.status==='pendente').length).padStart(2,'0');
+            document.getElementById('cancelled').textContent=String(t.filter(s=>s.status==='cancelada').length).padStart(2,'0');
+            const b=document.getElementById('surgeriesTableBody');
+            if(!t.length){b.innerHTML='<tr><td colspan="10"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
+            else{b.innerHTML=t.sort((a,b)=>a.time.localeCompare(b.time)).map(s=>{
+                let sh='',rc='';
+                if(s.status==='pendente')sh=`<span class="status-badge status-waiting">⏳ Aguardando</span>`;
+                else if(s.status==='em_andamento'){sh=`<span class="status-badge status-progress">⚙️ Em Andamento</span>`;rc='row-ongoing'}
+                else if(s.status==='concluida')sh=`<span class="status-badge status-done">✅ Finalizado</span>`;
+                else{sh=`<span class="status-badge status-cancelled">❌ Cancelada</span>`;rc='row-cancelled'}
+                const mh=s.cancelReason?`<br><span class="cancel-badge" title="${s.cancelReason}">Motivo: ${s.cancelReason.substring(0,15)}${s.cancelReason.length>15?'...':''}</span>`:'';
+                const pr=(s.type||'-').replace(/\n/g,'<br>');
+                return `<tr class="${rc}"><td><strong>${s.room}</strong></td><td>${s.time}</td><td><span class="cell-content">${s.patient||'-'}</span></td><td>${s.age||'-'}</td><td><span class="cell-content">${pr}${mh}</span></td><td><span class="cell-content">Dr. ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td><td>${s.specialty||'-'}</td><td><span class="cell-content">Dr. ${s.anesthetist||'-'}</span></td><td>${s.circulante||'-'}</td><td>${sh}</td></tr>`
+            }).join('')}
+            document.getElementById('updateTime').textContent=`Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`
+        }
+
+        const sr=ref(db,'surgeries');onValue(sr,(sn)=>{currentSurgeries=sn.val()?Object.values(sn.val()):[];checkNewDay();updatePanel();checkNextSurgery()});
+        onValue(ref(db,'settings/logo'),(sn)=>{if(sn.val())document.getElementById('logoContainer').innerHTML=`<img src="${sn.val()}" alt="Logo HRPI">`});
+        onValue(ref(db,'settings/govLogo'),(sn)=>{if(sn.val())document.getElementById('govLogoContainer').innerHTML=`<img src="${sn.val()}" alt="Logo Governo">`});
+
+        updateClock();updatePanel();
+        setInterval(updateClock,1000);setInterval(checkNewDay,5000);
+        setInterval(checkNextSurgery,15000);setInterval(updatePanel,20000);
+        document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){checkNewDay();updatePanel();checkNextSurgery()}});
     </script>
 </body>
 </html>
