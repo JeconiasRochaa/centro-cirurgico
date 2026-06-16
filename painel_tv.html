@@ -179,6 +179,7 @@
             white-space: nowrap; font-weight: 700;
         }
 
+        /* Larguras otimizadas para 1920px - SOMA = 100% */
         thead th:nth-child(1){width:5.5%} thead th:nth-child(2){width:7%}
         thead th:nth-child(3){width:13%} thead th:nth-child(4){width:5%}
         thead th:nth-child(5){width:18.5%} thead th:nth-child(6){width:13%}
@@ -246,24 +247,7 @@
         .table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
         /* =========================
-           TVS 4K E TELÕES
-        ========================= */
-        @media (min-width: 2560px) {
-            .header { height: 120px; padding: 20px 50px; }
-            .logo-box { width: 90px; height: 90px; min-width: 90px; }
-            .hospital-info h1 { font-size: 42px; }
-            .hospital-info .subtitle { font-size: 20px; }
-            .time-display { font-size: 72px; }
-            .date-display { font-size: 22px; }
-            .status-value { font-size: 60px; }
-            .status-label { font-size: 18px; }
-            thead th { font-size: 18px; padding: 18px; }
-            tbody td { font-size: 18px; padding: 18px; }
-            .status-badge { font-size: 15px; padding: 10px 20px; }
-        }
-
-        /* =========================
-           NOTEBOOKS
+           TELAS MENORES QUE 1400px
         ========================= */
         @media (max-width: 1400px) {
             .header { height: auto; padding: 12px 20px; }
@@ -274,10 +258,9 @@
         }
 
         /* =========================
-           TABLETS
+           TABLETS (até 1024px)
         ========================= */
         @media (max-width: 1024px) {
-            body { overflow-y: auto; }
             .header { flex-wrap: wrap; height: auto; padding: 15px; gap: 15px; }
             .hospital-brand { width: 100%; }
             .time-box { width: 100%; text-align: center; }
@@ -286,11 +269,11 @@
             .status-item { min-width: 120px; }
             .panel-content { padding: 10px; }
             .table-wrapper { overflow-x: auto; }
-            table { min-width: 1200px; }
+            table { min-width: 900px; }
         }
 
         /* =========================
-           CELULARES
+           CELULARES (até 768px)
         ========================= */
         @media (max-width: 768px) {
             .header { flex-direction: column; align-items: center; text-align: center; }
@@ -307,11 +290,11 @@
             .status-label { font-size: 10px; }
             .panel-content { padding: 5px; }
             .footer { flex-direction: column; gap: 4px; height: auto; padding: 10px; text-align: center; }
-            table { min-width: 1300px; }
+            table { min-width: 750px; }
         }
 
         /* =========================
-           CELULARES PEQUENOS
+           CELULARES PEQUENOS (até 480px)
         ========================= */
         @media (max-width: 480px) {
             .logo-box { width: 45px; height: 45px; min-width: 45px; }
@@ -320,6 +303,23 @@
             .status-value { font-size: 22px; }
             .notification-text { font-size: 11px; }
             .status-bar { grid-template-columns: 1fr; }
+        }
+
+        /* =========================
+           TVS 4K E TELÕES (acima de 2560px)
+        ========================= */
+        @media (min-width: 2560px) {
+            .header { height: 120px; padding: 20px 50px; }
+            .logo-box { width: 90px; height: 90px; min-width: 90px; }
+            .hospital-info h1 { font-size: 42px; }
+            .hospital-info .subtitle { font-size: 20px; }
+            .time-display { font-size: 72px; }
+            .date-display { font-size: 22px; }
+            .status-value { font-size: 60px; }
+            .status-label { font-size: 18px; }
+            thead th { font-size: 18px; padding: 18px; }
+            tbody td { font-size: 18px; padding: 18px; }
+            .status-badge { font-size: 15px; padding: 10px 20px; }
         }
     </style>
 </head>
