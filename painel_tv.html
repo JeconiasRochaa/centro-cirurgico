@@ -27,18 +27,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
+            width: 100vw;
         }
 
         .ecg-container {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            opacity: 0.10;
+            opacity: 0.08;
             z-index: 0;
             pointer-events: none;
             display: flex;
@@ -47,16 +48,16 @@
             padding: 2% 0;
         }
 
-        .ecg-line-wrapper { width: 100%; height: 55px; }
+        .ecg-line-wrapper { width: 100%; height: 50px; }
         .ecg-line-wrapper svg { width: 100%; height: 100%; }
 
         .ecg-path {
             fill: none; stroke: var(--gold);
-            stroke-width: 2.5; stroke-dasharray: 2000;
+            stroke-width: 2; stroke-dasharray: 2000;
             animation: ecg 4s linear infinite;
         }
-        .ecg-path:nth-child(2) { animation-delay: 1s; stroke-width: 2; opacity: 0.6; }
-        .ecg-path:nth-child(3) { animation-delay: 2s; stroke-width: 1.5; opacity: 0.4; }
+        .ecg-path:nth-child(2) { animation-delay: 1.3s; stroke-width: 1.5; opacity: 0.5; }
+        .ecg-path:nth-child(3) { animation-delay: 2.6s; stroke-width: 1; opacity: 0.3; }
 
         @keyframes ecg {
             from { stroke-dashoffset: 2000; }
@@ -65,61 +66,62 @@
 
         .container {
             position: relative; z-index: 1;
-            min-height: 100vh; min-height: 100dvh;
+            height: 100vh; height: 100dvh;
             display: flex; flex-direction: column;
-            width: 100%;
+            width: 100vw; overflow: hidden;
         }
 
         /* HEADER */
         .header {
-            background: linear-gradient(180deg, rgba(5,26,56,0.98) 0%, rgba(4,22,48,0.99) 100%);
-            border-bottom: 4px solid var(--gold);
-            padding: 15px 20px;
+            background: linear-gradient(180deg, rgba(5,26,56,0.99) 0%, rgba(4,22,48,0.99) 100%);
+            border-bottom: 3px solid var(--gold);
+            padding: 14px 30px;
             display: flex; justify-content: space-between; align-items: center;
-            gap: 15px; flex-shrink: 0; flex-wrap: wrap;
+            gap: 20px; flex-shrink: 0; min-height: 85px;
         }
 
-        .hospital-brand { display: flex; align-items: center; gap: 15px; flex: 1; min-width: 200px; }
-        .logos-container { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .hospital-brand { display: flex; align-items: center; gap: 18px; flex: 1; min-width: 0; }
+        .logos-container { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
         .logo-box {
-            width: 60px; height: 60px; min-width: 60px;
-            background: #ffffff; border-radius: 10px;
+            width: 70px; height: 70px; min-width: 70px;
+            background: #ffffff; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; border: 2px solid var(--gold);
-            box-shadow: 0 0 20px rgba(200, 169, 74, 0.3);
+            box-shadow: 0 0 22px rgba(200, 169, 74, 0.28);
         }
-        .logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+        .logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
 
         .hospital-info { min-width: 0; }
         .hospital-info h1 {
-            font-size: clamp(16px, 3vw, 30px); font-weight: 700;
-            letter-spacing: 1px; color: var(--text-primary);
+            font-size: 28px; font-weight: 700;
+            letter-spacing: 2px; color: var(--text-primary);
             text-transform: uppercase; line-height: 1.2;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .hospital-info .subtitle {
-            font-size: clamp(10px, 1.5vw, 16px); color: var(--gold);
-            letter-spacing: 2px; margin-top: 3px; font-weight: 500;
+            font-size: 15px; color: var(--gold);
+            letter-spacing: 4px; margin-top: 4px; font-weight: 500;
         }
 
         .time-box { text-align: right; flex-shrink: 0; }
         .time-display {
-            font-size: clamp(28px, 5vw, 55px); font-weight: 700;
-            color: var(--gold); letter-spacing: 2px;
+            font-size: 52px; font-weight: 700;
+            color: var(--gold); letter-spacing: 3px;
             font-family: 'Courier New', monospace; line-height: 1;
-            text-shadow: 0 0 15px rgba(200, 169, 74, 0.3);
+            text-shadow: 0 0 20px rgba(200, 169, 74, 0.35);
         }
         .date-display {
-            font-size: clamp(11px, 1.5vw, 17px); color: var(--text-secondary);
-            letter-spacing: 1px; margin-top: 4px;
+            font-size: 16px; color: var(--text-secondary);
+            letter-spacing: 1.5px; margin-top: 5px;
         }
 
         /* NOTIFICAÇÃO */
         .notification-bar {
             background: linear-gradient(90deg, #1a3a5f, #0f1f3a, #1a3a5f);
-            border-bottom: 2px solid #fbbf24; padding: 12px 20px;
+            border-bottom: 2px solid #fbbf24; padding: 12px 25px;
             display: none; align-items: center; justify-content: center;
-            gap: 12px; flex-shrink: 0; animation: slideDown 0.5s ease;
+            gap: 14px; flex-shrink: 0; animation: slideDown 0.5s ease;
         }
         .notification-bar.show { display: flex; }
 
@@ -129,8 +131,7 @@
         }
 
         .notification-icon {
-            font-size: clamp(18px, 2.5vw, 28px);
-            animation: bellRing 1s infinite;
+            font-size: 26px; animation: bellRing 1s infinite;
         }
         @keyframes bellRing {
             0%,100%{transform:rotate(0)}
@@ -141,138 +142,143 @@
             50%{transform:rotate(0)}
         }
         .notification-text {
-            font-size: clamp(14px, 1.8vw, 20px); color: #fbbf24;
+            font-size: 18px; color: #fbbf24;
             letter-spacing: 1px; font-weight: 700; text-align: center;
         }
 
         /* STATUS BAR */
         .status-bar {
-            background: rgba(6, 34, 74, 0.97); border-bottom: 2px solid var(--border-color);
-            padding: 10px 20px; display: flex; justify-content: center;
-            gap: clamp(20px, 6vw, 80px); flex-shrink: 0; flex-wrap: wrap;
+            background: rgba(6, 34, 74, 0.98); border-bottom: 1px solid var(--border-color);
+            padding: 12px 30px; display: flex; justify-content: center;
+            gap: 80px; flex-shrink: 0;
         }
         .status-item { text-align: center; }
         .status-value {
-            font-size: clamp(24px, 4vw, 44px); font-weight: 700;
+            font-size: 40px; font-weight: 700;
             color: var(--gold); line-height: 1;
-            text-shadow: 0 0 10px rgba(200, 169, 74, 0.3);
+            text-shadow: 0 0 12px rgba(200, 169, 74, 0.3);
         }
         .status-label {
-            font-size: clamp(8px, 1.2vw, 14px); color: var(--text-muted);
-            letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; font-weight: 500;
+            font-size: 13px; color: var(--text-muted);
+            letter-spacing: 3px; text-transform: uppercase;
+            margin-top: 3px; font-weight: 500;
         }
 
         /* PANEL CONTENT */
-        .panel-content { flex: 1; padding: 15px 20px; overflow: auto; }
+        .panel-content { flex: 1; padding: 18px 30px; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
         .table-wrapper {
-            border-radius: 8px; background: rgba(0,0,0,0.2);
-            overflow-x: auto; -webkit-overflow-scrolling: touch;
+            flex: 1; border-radius: 10px; background: rgba(0,0,0,0.18);
+            overflow-y: auto; overflow-x: auto; -webkit-overflow-scrolling: touch;
         }
-        table { width: 100%; min-width: 750px; border-collapse: separate; border-spacing: 0 5px; }
+        table { width: 100%; min-width: 900px; border-collapse: separate; border-spacing: 0 6px; table-layout: fixed; }
         thead { position: sticky; top: 0; z-index: 10; }
 
         thead th {
-            background: var(--bg-tertiary); padding: 12px 4px;
+            background: var(--bg-tertiary); padding: 16px 6px;
             text-align: center; color: var(--gold);
-            font-size: clamp(9px, 1.3vw, 14px); letter-spacing: 1px;
+            font-size: 13px; letter-spacing: 1.5px;
             text-transform: uppercase; border-bottom: 2px solid var(--gold);
             white-space: nowrap; font-weight: 700;
         }
 
-        thead th:nth-child(1){width:5%} thead th:nth-child(2){width:7%}
-        thead th:nth-child(3){width:12%} thead th:nth-child(4){width:5%}
-        thead th:nth-child(5){width:17%} thead th:nth-child(6){width:12%}
+        thead th:nth-child(1){width:6%} thead th:nth-child(2){width:7%}
+        thead th:nth-child(3){width:13%} thead th:nth-child(4){width:5%}
+        thead th:nth-child(5){width:18%} thead th:nth-child(6){width:13%}
         thead th:nth-child(7){width:8%} thead th:nth-child(8){width:10%}
         thead th:nth-child(9){width:7%} thead th:nth-child(10){width:10%}
 
-        tbody tr { background: rgba(255,255,255,0.04); transition: all 0.3s; }
+        tbody tr { background: rgba(255,255,255,0.035); transition: all 0.3s; }
+        tbody tr:hover { background: rgba(255,255,255,0.07); }
         tbody td {
-            padding: 10px 4px; font-size: clamp(11px, 1.4vw, 16px);
-            color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 6px; font-size: 15px;
+            color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.04);
             font-weight: 500; vertical-align: middle; text-align: center;
-            white-space: normal; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3;
+            white-space: normal; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.35;
         }
-        tbody td:nth-child(3), tbody td:nth-child(5), tbody td:nth-child(6) { text-align: left; padding-left: 8px; }
+        tbody td:nth-child(3), tbody td:nth-child(5), tbody td:nth-child(6) { text-align: left; padding-left: 10px; }
 
         .row-ongoing {
-            background: rgba(59,130,246,0.2)!important;
-            border-left: 4px solid var(--blue)!important;
+            background: rgba(59,130,246,0.18)!important;
+            border-left: 3px solid var(--blue)!important;
             animation: rowAlert 2s infinite;
         }
-        .row-cancelled { opacity: 0.5; border-left: 4px solid var(--red)!important; }
-        .row-cancelled td { text-decoration: line-through; text-decoration-color: rgba(239,68,68,0.5); text-decoration-thickness: 1px; }
+        .row-cancelled { opacity: 0.5; border-left: 3px solid var(--red)!important; }
+        .row-cancelled td { text-decoration: line-through; text-decoration-color: rgba(239,68,68,0.4); text-decoration-thickness: 1px; }
 
         @keyframes rowAlert {
-            0%,100%{background:rgba(59,130,246,0.2)}
-            50%{background:rgba(59,130,246,0.3)}
+            0%,100%{background:rgba(59,130,246,0.18)}
+            50%{background:rgba(59,130,246,0.28)}
         }
 
         .status-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            gap: 4px; padding: 5px 10px; border-radius: 20px;
-            font-size: clamp(9px, 1.1vw, 13px); font-weight: 600;
-            letter-spacing: 0.5px; white-space: nowrap;
+            gap: 5px; padding: 6px 14px; border-radius: 22px;
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.8px; white-space: nowrap;
         }
-        .status-waiting { background: rgba(245,158,11,0.25); border: 2px solid var(--orange); color: var(--orange-light); }
-        .status-progress { background: rgba(59,130,246,0.25); border: 2px solid var(--blue); color: var(--blue-light); animation: statusPulse 1.5s infinite; }
-        .status-done { background: rgba(16,185,129,0.25); border: 2px solid var(--green); color: var(--green-light); }
-        .status-cancelled { background: rgba(239,68,68,0.25); border: 2px solid var(--red); color: var(--red-light); }
+        .status-waiting { background: rgba(245,158,11,0.22); border: 1.5px solid var(--orange); color: var(--orange-light); }
+        .status-progress { background: rgba(59,130,246,0.22); border: 1.5px solid var(--blue); color: var(--blue-light); animation: statusPulse 1.5s infinite; }
+        .status-done { background: rgba(16,185,129,0.22); border: 1.5px solid var(--green); color: var(--green-light); }
+        .status-cancelled { background: rgba(239,68,68,0.22); border: 1.5px solid var(--red); color: var(--red-light); }
 
         @keyframes statusPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
 
         .specialty-tag {
-            font-size: clamp(8px,1vw,11px); color: var(--gold);
-            background: rgba(200,169,74,0.2); padding: 2px 6px;
-            border-radius: 8px; display: inline-block; margin-top: 2px; white-space: nowrap;
+            font-size: 10px; color: var(--gold);
+            background: rgba(200,169,74,0.18); padding: 2px 8px;
+            border-radius: 10px; display: inline-block; margin-top: 3px; white-space: nowrap;
         }
         .cancel-badge {
-            font-size: clamp(8px,0.9vw,10px); color: var(--red-light);
-            background: rgba(239,68,68,0.2); padding: 1px 5px;
-            border-radius: 6px; display: inline-block; margin-top: 2px; cursor: help;
+            font-size: 9px; color: var(--red-light);
+            background: rgba(239,68,68,0.18); padding: 1px 6px;
+            border-radius: 7px; display: inline-block; margin-top: 3px; cursor: help;
         }
-        .cell-content { display: block; line-height: 1.3; }
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: clamp(16px,2.5vw,28px); letter-spacing: 2px; }
+        .cell-content { display: block; line-height: 1.35; }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 24px; letter-spacing: 2px; }
 
         .footer {
-            background: rgba(5,26,56,0.98); border-top: 2px solid var(--border-color);
-            padding: 10px 20px; display: flex; justify-content: space-between;
-            font-size: clamp(9px,1.1vw,13px); color: var(--text-muted);
+            background: rgba(5,26,56,0.98); border-top: 1px solid var(--border-color);
+            padding: 10px 30px; display: flex; justify-content: space-between;
+            font-size: 12px; color: var(--text-muted);
             letter-spacing: 1px; flex-shrink: 0; flex-wrap: wrap; gap: 8px;
         }
 
-        .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
-        .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 4px; }
-        .table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar { width: 10px; height: 10px; }
+        .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); border-radius: 5px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 5px; }
 
         /* TABLET */
         @media (min-width:768px) and (max-width:1024px) {
-            .header{padding:12px 18px;gap:12px}.logo-box{width:50px;height:50px;min-width:50px}
-            .hospital-info h1{font-size:20px}.time-display{font-size:36px}
-            .status-bar{padding:8px 18px;gap:30px}.status-value{font-size:30px}
-            .panel-content{padding:10px 18px}thead th{font-size:10px;padding:10px 4px}
-            tbody td{font-size:12px;padding:8px 4px}.status-badge{font-size:9px;padding:4px 8px}
+            .header{padding:10px 18px;min-height:70px}.logo-box{width:50px;height:50px;min-width:50px}
+            .hospital-info h1{font-size:20px}.hospital-info .subtitle{font-size:11px}
+            .time-display{font-size:36px}.date-display{font-size:12px}
+            .status-bar{padding:8px 18px;gap:40px}.status-value{font-size:30px}.status-label{font-size:10px}
+            .panel-content{padding:12px 18px}thead th{font-size:10px;padding:12px 4px}
+            tbody td{font-size:12px;padding:10px 4px}.status-badge{font-size:9px;padding:4px 10px}
+            .footer{font-size:10px}
         }
 
         /* MOBILE */
         @media (max-width:767px) {
-            .header{padding:10px 12px;flex-direction:column;align-items:stretch}
-            .hospital-brand{justify-content:center}.logo-box{width:40px;height:40px;min-width:40px}
-            .hospital-info h1{font-size:16px}.time-box{text-align:center}.time-display{font-size:30px}
-            .status-bar{padding:8px 12px;gap:15px}.status-value{font-size:24px}
-            .panel-content{padding:8px 12px}thead th{font-size:8px;padding:8px 3px}
-            tbody td{font-size:10px;padding:6px 3px}.status-badge{font-size:8px;padding:3px 6px}
-            .footer{font-size:8px;flex-direction:column;text-align:center}
+            .header{padding:10px 12px;flex-direction:column;align-items:stretch;min-height:auto;gap:10px}
+            .hospital-brand{justify-content:center}.logo-box{width:40px;height:40px;min-width:40px;border-radius:8px}
+            .hospital-info h1{font-size:16px;letter-spacing:1px}.hospital-info .subtitle{font-size:9px}
+            .time-box{text-align:center}.time-display{font-size:28px}.date-display{font-size:10px}
+            .status-bar{padding:8px 12px;gap:20px}.status-value{font-size:24px}.status-label{font-size:7px}
+            .panel-content{padding:8px 12px}thead th{font-size:7px;padding:8px 2px}
+            tbody td{font-size:9px;padding:6px 2px}.status-badge{font-size:7px;padding:3px 7px}
+            .footer{font-size:7px;flex-direction:column;text-align:center;padding:8px 12px}
         }
 
         /* TV 43" FULL HD */
         @media (min-width:1600px) {
-            .header{padding:15px 35px;min-height:95px}.logo-box{width:80px;height:80px;min-width:80px;border-radius:14px}
+            .header{padding:16px 35px;min-height:90px}.logo-box{width:75px;height:75px;min-width:75px}
             .hospital-info h1{font-size:30px}.hospital-info .subtitle{font-size:16px}
             .time-display{font-size:55px}.date-display{font-size:17px}
-            .status-bar{padding:14px 35px;gap:80px}.status-value{font-size:44px}.status-label{font-size:14px}
-            .panel-content{padding:18px 35px}thead th{font-size:14px;padding:16px 8px}
-            tbody td{font-size:16px;padding:14px 10px}.status-badge{font-size:13px;padding:7px 14px}
-            .footer{font-size:13px;padding:12px 35px}
+            .status-bar{padding:14px 35px;gap:80px}.status-value{font-size:42px}.status-label{font-size:14px}
+            .panel-content{padding:20px 35px}thead th{font-size:13px;padding:16px 6px}
+            tbody td{font-size:15px;padding:14px 6px}.status-badge{font-size:12px;padding:6px 14px}
+            .footer{font-size:12px;padding:12px 35px}
         }
     </style>
 </head>
@@ -289,8 +295,8 @@
         <div class="header">
             <div class="hospital-brand">
                 <div class="logos-container">
-                    <div class="logo-box" id="logoContainer"><span style="font-size:clamp(18px,3vw,34px)">🏥</span></div>
-                    <div class="logo-box" id="govLogoContainer"><span style="font-size:clamp(18px,3vw,34px)">🏛️</span></div>
+                    <div class="logo-box" id="logoContainer"><span style="font-size:30px">🏥</span></div>
+                    <div class="logo-box" id="govLogoContainer"><span style="font-size:30px">🏛️</span></div>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
