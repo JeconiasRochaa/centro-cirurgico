@@ -31,9 +31,9 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             width: 100vw;
-            height: 100vh;
         }
 
         .ecg-container {
@@ -67,8 +67,8 @@
 
         .container {
             position: relative; z-index: 1;
-            height: 100vh; display: flex; flex-direction: column;
-            width: 100vw; overflow: hidden;
+            min-height: 100vh; display: flex; flex-direction: column;
+            width: 100vw; overflow: visible;
         }
 
         /* HEADER */
@@ -179,7 +179,6 @@
             white-space: nowrap; font-weight: 700;
         }
 
-        /* Larguras otimizadas para 1920px */
         thead th:nth-child(1){width:5.5%} thead th:nth-child(2){width:7%}
         thead th:nth-child(3){width:13%} thead th:nth-child(4){width:5%}
         thead th:nth-child(5){width:18.5%} thead th:nth-child(6){width:13%}
@@ -246,24 +245,81 @@
         .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); border-radius: 4px; }
         .table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
-        /* Responsivo para telas menores */
-        @media (max-width: 1400px) {
-            .header { padding: 10px 20px; height: 70px; }
-            .logo-box { width: 52px; height: 52px; min-width: 52px; }
-            .hospital-info h1 { font-size: 22px; }
-            .time-display { font-size: 40px; }
-            .date-display { font-size: 13px; }
-            .status-bar { gap: 50px; height: 52px; }
-            .status-value { font-size: 32px; }
-            .panel-content { padding: 10px 20px; }
-            thead th { font-size: 11px; padding: 12px 4px; }
-            tbody td { font-size: 13px; padding: 11px 4px; }
-            .status-badge { font-size: 10px; padding: 5px 12px; }
+        /* =========================
+           TVS 4K E TELÕES
+        ========================= */
+        @media (min-width: 2560px) {
+            .header { height: 120px; padding: 20px 50px; }
+            .logo-box { width: 90px; height: 90px; min-width: 90px; }
+            .hospital-info h1 { font-size: 42px; }
+            .hospital-info .subtitle { font-size: 20px; }
+            .time-display { font-size: 72px; }
+            .date-display { font-size: 22px; }
+            .status-value { font-size: 60px; }
+            .status-label { font-size: 18px; }
+            thead th { font-size: 18px; padding: 18px; }
+            tbody td { font-size: 18px; padding: 18px; }
+            .status-badge { font-size: 15px; padding: 10px 20px; }
         }
 
+        /* =========================
+           NOTEBOOKS
+        ========================= */
+        @media (max-width: 1400px) {
+            .header { height: auto; padding: 12px 20px; }
+            .hospital-info h1 { font-size: 22px; }
+            .time-display { font-size: 38px; }
+            .status-value { font-size: 28px; }
+            .status-bar { gap: 35px; }
+        }
+
+        /* =========================
+           TABLETS
+        ========================= */
         @media (max-width: 1024px) {
+            body { overflow-y: auto; }
+            .header { flex-wrap: wrap; height: auto; padding: 15px; gap: 15px; }
+            .hospital-brand { width: 100%; }
+            .time-box { width: 100%; text-align: center; }
+            .time-display { font-size: 32px; }
+            .status-bar { flex-wrap: wrap; height: auto; gap: 20px; padding: 12px; }
+            .status-item { min-width: 120px; }
+            .panel-content { padding: 10px; }
             .table-wrapper { overflow-x: auto; }
-            table { min-width: 850px; }
+            table { min-width: 1200px; }
+        }
+
+        /* =========================
+           CELULARES
+        ========================= */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: center; text-align: center; }
+            .hospital-brand { flex-direction: column; align-items: center; }
+            .logos-container { justify-content: center; }
+            .hospital-info h1 { font-size: 18px; white-space: normal; }
+            .hospital-info .subtitle { font-size: 12px; letter-spacing: 2px; }
+            .time-display { font-size: 28px; }
+            .date-display { font-size: 12px; }
+            .notification-text { font-size: 13px; }
+            .status-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; height: auto; }
+            .status-item { padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+            .status-value { font-size: 26px; }
+            .status-label { font-size: 10px; }
+            .panel-content { padding: 5px; }
+            .footer { flex-direction: column; gap: 4px; height: auto; padding: 10px; text-align: center; }
+            table { min-width: 1300px; }
+        }
+
+        /* =========================
+           CELULARES PEQUENOS
+        ========================= */
+        @media (max-width: 480px) {
+            .logo-box { width: 45px; height: 45px; min-width: 45px; }
+            .hospital-info h1 { font-size: 15px; }
+            .time-display { font-size: 22px; }
+            .status-value { font-size: 22px; }
+            .notification-text { font-size: 11px; }
+            .status-bar { grid-template-columns: 1fr; }
         }
     </style>
 </head>
