@@ -26,32 +26,24 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            overflow-y: auto;
-            width: 100vw;
         }
 
         .ecg-container {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            opacity: 0.08;
-            z-index: 0;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 1.5% 0;
+            opacity: 0.08; z-index: 0; pointer-events: none;
+            display: flex; flex-direction: column;
+            justify-content: space-around; padding: 1.5% 0;
         }
-
         .ecg-line-wrapper { width: 100%; height: 45px; }
         .ecg-line-wrapper svg { width: 100%; height: 100%; }
-
         .ecg-path {
             fill: none; stroke: var(--gold);
             stroke-width: 2; stroke-dasharray: 2000;
@@ -59,7 +51,6 @@
         }
         .ecg-path:nth-child(2) { animation-delay: 1.3s; stroke-width: 1.5; opacity: 0.5; }
         .ecg-path:nth-child(3) { animation-delay: 2.6s; stroke-width: 1; opacity: 0.3; }
-
         @keyframes ecg {
             from { stroke-dashoffset: 2000; }
             to { stroke-dashoffset: 0; }
@@ -67,134 +58,138 @@
 
         .container {
             position: relative; z-index: 1;
-            min-height: 100vh; display: flex; flex-direction: column;
-            width: 100vw; overflow: visible;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
         }
 
         /* HEADER */
         .header {
             background: linear-gradient(180deg, rgba(5,26,56,0.99) 0%, rgba(4,22,48,0.99) 100%);
             border-bottom: 3px solid var(--gold);
-            padding: 12px 30px;
+            padding: 0 clamp(15px, 3vw, 30px);
             display: flex; justify-content: space-between; align-items: center;
-            gap: 20px; flex-shrink: 0; height: 80px;
+            gap: clamp(10px, 2vw, 20px); flex-shrink: 0;
+            height: clamp(60px, 8vh, 90px);
         }
-
-        .hospital-brand { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
-        .logos-container { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-
+        .hospital-brand { display: flex; align-items: center; gap: clamp(10px, 1.5vw, 16px); flex: 1; min-width: 0; }
+        .logos-container { display: flex; align-items: center; gap: clamp(6px, 1vw, 10px); flex-shrink: 0; }
         .logo-box {
-            width: 62px; height: 62px; min-width: 62px;
+            width: clamp(45px, 6vw, 70px); height: clamp(45px, 6vw, 70px);
+            min-width: clamp(45px, 6vw, 70px);
             background: #ffffff; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; border: 2px solid var(--gold);
             box-shadow: 0 0 18px rgba(200, 169, 74, 0.25);
         }
-        .logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 9px; }
-
+        .logo-box img { width: 100%; height: 100%; object-fit: contain; padding: 15%; }
         .hospital-info { min-width: 0; }
         .hospital-info h1 {
-            font-size: 26px; font-weight: 700;
-            letter-spacing: 1.8px; color: var(--text-primary);
+            font-size: clamp(16px, 2.5vw, 28px); font-weight: 700;
+            letter-spacing: 1.5px; color: var(--text-primary);
             text-transform: uppercase; line-height: 1.2;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .hospital-info .subtitle {
-            font-size: 14px; color: var(--gold);
-            letter-spacing: 3.5px; margin-top: 3px; font-weight: 500;
+            font-size: clamp(10px, 1.4vw, 15px); color: var(--gold);
+            letter-spacing: 3px; margin-top: 2px; font-weight: 500;
         }
-
         .time-box { text-align: right; flex-shrink: 0; }
         .time-display {
-            font-size: 48px; font-weight: 700;
-            color: var(--gold); letter-spacing: 2.5px;
+            font-size: clamp(28px, 5vw, 50px); font-weight: 700;
+            color: var(--gold); letter-spacing: 2px;
             font-family: 'Courier New', monospace; line-height: 1;
-            text-shadow: 0 0 18px rgba(200, 169, 74, 0.3);
+            text-shadow: 0 0 15px rgba(200, 169, 74, 0.3);
         }
         .date-display {
-            font-size: 15px; color: var(--text-secondary);
-            letter-spacing: 1.2px; margin-top: 4px;
+            font-size: clamp(10px, 1.4vw, 15px); color: var(--text-secondary);
+            letter-spacing: 1px; margin-top: 3px;
         }
 
         /* NOTIFICAÇÃO */
         .notification-bar {
             background: linear-gradient(90deg, #1a3a5f, #0f1f3a, #1a3a5f);
-            border-bottom: 2px solid #fbbf24; padding: 10px 25px;
+            border-bottom: 2px solid #fbbf24;
+            padding: 0 clamp(15px, 2vw, 25px);
             display: none; align-items: center; justify-content: center;
-            gap: 12px; flex-shrink: 0; animation: slideDown 0.5s ease; height: 44px;
+            gap: 10px; flex-shrink: 0; animation: slideDown 0.5s ease;
+            height: clamp(36px, 4.5vh, 48px);
         }
         .notification-bar.show { display: flex; }
-
         @keyframes slideDown {
             from { transform: translateY(-100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
-        .notification-icon { font-size: 24px; animation: bellRing 1s infinite; }
+        .notification-icon { font-size: clamp(18px, 2.5vw, 26px); animation: bellRing 1s infinite; }
         @keyframes bellRing {
-            0%,100%{transform:rotate(0)}
-            10%{transform:rotate(15deg)}
-            20%{transform:rotate(-15deg)}
-            30%{transform:rotate(10deg)}
-            40%{transform:rotate(-10deg)}
-            50%{transform:rotate(0)}
+            0%,100%{transform:rotate(0)} 10%{transform:rotate(15deg)}
+            20%{transform:rotate(-15deg)} 30%{transform:rotate(10deg)}
+            40%{transform:rotate(-10deg)} 50%{transform:rotate(0)}
         }
         .notification-text {
-            font-size: 17px; color: #fbbf24;
-            letter-spacing: 0.8px; font-weight: 700; text-align: center;
+            font-size: clamp(12px, 1.6vw, 18px); color: #fbbf24;
+            letter-spacing: 0.5px; font-weight: 700; text-align: center;
         }
 
         /* STATUS BAR */
         .status-bar {
             background: rgba(6, 34, 74, 0.98); border-bottom: 1px solid var(--border-color);
-            padding: 10px 30px; display: flex; justify-content: center;
-            gap: 70px; flex-shrink: 0; height: 60px; align-items: center;
+            padding: 0 clamp(15px, 3vw, 30px);
+            display: flex; justify-content: center;
+            gap: clamp(30px, 7vw, 80px); flex-shrink: 0;
+            height: clamp(50px, 6vh, 65px); align-items: center;
         }
         .status-item { text-align: center; }
         .status-value {
-            font-size: 38px; font-weight: 700;
+            font-size: clamp(24px, 4vw, 40px); font-weight: 700;
             color: var(--gold); line-height: 1;
             text-shadow: 0 0 10px rgba(200, 169, 74, 0.3);
         }
         .status-label {
-            font-size: 12px; color: var(--text-muted);
-            letter-spacing: 2.5px; text-transform: uppercase;
+            font-size: clamp(8px, 1.2vw, 13px); color: var(--text-muted);
+            letter-spacing: 2px; text-transform: uppercase;
             margin-top: 2px; font-weight: 500;
         }
 
         /* PANEL CONTENT */
-        .panel-content { flex: 1; padding: 14px 30px; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+        .panel-content {
+            flex: 1; padding: clamp(8px, 1.5vw, 15px) clamp(15px, 3vw, 30px);
+            overflow: hidden; display: flex; flex-direction: column; min-height: 0;
+        }
         .table-wrapper {
             flex: 1; border-radius: 8px; background: rgba(0,0,0,0.18);
-            overflow-y: auto; overflow-x: hidden;
+            overflow-y: auto; overflow-x: auto;
         }
-        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; table-layout: fixed; }
+        table {
+            width: 100%; min-width: clamp(600px, 90vw, 100%);
+            border-collapse: separate; border-spacing: 0 5px;
+            table-layout: fixed;
+        }
         thead { position: sticky; top: 0; z-index: 10; }
-
         thead th {
-            background: var(--bg-tertiary); padding: 14px 6px;
+            background: var(--bg-tertiary); padding: clamp(8px, 1.5vh, 14px) clamp(2px, 0.5vw, 6px);
             text-align: center; color: var(--gold);
-            font-size: 12.5px; letter-spacing: 1.5px;
+            font-size: clamp(9px, 1.2vw, 13px); letter-spacing: 1px;
             text-transform: uppercase; border-bottom: 2px solid var(--gold);
             white-space: nowrap; font-weight: 700;
         }
-
-        /* Larguras otimizadas para 1920px - SOMA = 100% */
-        thead th:nth-child(1){width:5.5%} thead th:nth-child(2){width:7%}
+        thead th:nth-child(1){width:6%} thead th:nth-child(2){width:7%}
         thead th:nth-child(3){width:13%} thead th:nth-child(4){width:5%}
-        thead th:nth-child(5){width:18.5%} thead th:nth-child(6){width:13%}
+        thead th:nth-child(5){width:18%} thead th:nth-child(6){width:13%}
         thead th:nth-child(7){width:8%} thead th:nth-child(8){width:10%}
         thead th:nth-child(9){width:7%} thead th:nth-child(10){width:10%}
 
         tbody tr { background: rgba(255,255,255,0.035); transition: all 0.3s; }
         tbody tr:hover { background: rgba(255,255,255,0.07); }
         tbody td {
-            padding: 13px 6px; font-size: 14.5px;
+            padding: clamp(8px, 1.5vh, 14px) clamp(2px, 0.5vw, 6px);
+            font-size: clamp(11px, 1.4vw, 15px);
             color: var(--text-primary); border-bottom: 1px solid rgba(255,255,255,0.04);
             font-weight: 500; vertical-align: middle; text-align: center;
             white-space: normal; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3;
         }
-        tbody td:nth-child(3), tbody td:nth-child(5), tbody td:nth-child(6) { text-align: left; padding-left: 10px; }
+        tbody td:nth-child(3), tbody td:nth-child(5), tbody td:nth-child(6) {
+            text-align: left; padding-left: clamp(4px, 1vw, 10px);
+        }
 
         .row-ongoing {
             background: rgba(59,130,246,0.18)!important;
@@ -203,7 +198,6 @@
         }
         .row-cancelled { opacity: 0.5; border-left: 3px solid var(--red)!important; }
         .row-cancelled td { text-decoration: line-through; text-decoration-color: rgba(239,68,68,0.4); text-decoration-thickness: 1px; }
-
         @keyframes rowAlert {
             0%,100%{background:rgba(59,130,246,0.18)}
             50%{background:rgba(59,130,246,0.28)}
@@ -211,116 +205,43 @@
 
         .status-badge {
             display: inline-flex; align-items: center; justify-content: center;
-            gap: 5px; padding: 6px 14px; border-radius: 22px;
-            font-size: 11.5px; font-weight: 600;
-            letter-spacing: 0.7px; white-space: nowrap;
+            gap: 4px; padding: clamp(4px, 0.6vh, 7px) clamp(8px, 1.2vw, 14px);
+            border-radius: 20px; font-size: clamp(9px, 1.1vw, 12px);
+            font-weight: 600; letter-spacing: 0.5px; white-space: nowrap;
         }
         .status-waiting { background: rgba(245,158,11,0.22); border: 1.5px solid var(--orange); color: var(--orange-light); }
         .status-progress { background: rgba(59,130,246,0.22); border: 1.5px solid var(--blue); color: var(--blue-light); animation: statusPulse 1.5s infinite; }
         .status-done { background: rgba(16,185,129,0.22); border: 1.5px solid var(--green); color: var(--green-light); }
         .status-cancelled { background: rgba(239,68,68,0.22); border: 1.5px solid var(--red); color: var(--red-light); }
-
         @keyframes statusPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
 
         .specialty-tag {
-            font-size: 10px; color: var(--gold);
-            background: rgba(200,169,74,0.18); padding: 2px 8px;
-            border-radius: 10px; display: inline-block; margin-top: 2px; white-space: nowrap;
+            font-size: clamp(8px, 1vw, 10px); color: var(--gold);
+            background: rgba(200,169,74,0.18); padding: 2px 6px;
+            border-radius: 8px; display: inline-block; margin-top: 2px; white-space: nowrap;
         }
         .cancel-badge {
-            font-size: 9px; color: var(--red-light);
-            background: rgba(239,68,68,0.18); padding: 1px 6px;
-            border-radius: 7px; display: inline-block; margin-top: 2px; cursor: help;
+            font-size: clamp(7px, 0.9vw, 9px); color: var(--red-light);
+            background: rgba(239,68,68,0.18); padding: 1px 5px;
+            border-radius: 6px; display: inline-block; margin-top: 2px; cursor: help;
         }
         .cell-content { display: block; line-height: 1.3; }
-        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 22px; letter-spacing: 2px; }
+        .empty-state {
+            text-align: center; padding: clamp(30px, 5vh, 60px) 20px;
+            color: var(--text-muted); font-size: clamp(16px, 2.5vw, 24px); letter-spacing: 2px;
+        }
 
         .footer {
             background: rgba(5,26,56,0.98); border-top: 1px solid var(--border-color);
-            padding: 8px 30px; display: flex; justify-content: space-between;
-            font-size: 11px; color: var(--text-muted);
-            letter-spacing: 1px; flex-shrink: 0; height: 32px; align-items: center;
+            padding: 0 clamp(15px, 3vw, 30px);
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: clamp(8px, 1vw, 11px); color: var(--text-muted);
+            letter-spacing: 1px; flex-shrink: 0;
+            height: clamp(28px, 3.5vh, 35px);
         }
-
-        .table-wrapper::-webkit-scrollbar { width: 8px; }
+        .table-wrapper::-webkit-scrollbar { width: clamp(6px, 0.8vw, 10px); }
         .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); border-radius: 4px; }
         .table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-
-        /* =========================
-           TELAS MENORES QUE 1400px
-        ========================= */
-        @media (max-width: 1400px) {
-            .header { height: auto; padding: 12px 20px; }
-            .hospital-info h1 { font-size: 22px; }
-            .time-display { font-size: 38px; }
-            .status-value { font-size: 28px; }
-            .status-bar { gap: 35px; }
-        }
-
-        /* =========================
-           TABLETS (até 1024px)
-        ========================= */
-        @media (max-width: 1024px) {
-            .header { flex-wrap: wrap; height: auto; padding: 15px; gap: 15px; }
-            .hospital-brand { width: 100%; }
-            .time-box { width: 100%; text-align: center; }
-            .time-display { font-size: 32px; }
-            .status-bar { flex-wrap: wrap; height: auto; gap: 20px; padding: 12px; }
-            .status-item { min-width: 120px; }
-            .panel-content { padding: 10px; }
-            .table-wrapper { overflow-x: auto; }
-            table { min-width: 900px; }
-        }
-
-        /* =========================
-           CELULARES (até 768px)
-        ========================= */
-        @media (max-width: 768px) {
-            .header { flex-direction: column; align-items: center; text-align: center; }
-            .hospital-brand { flex-direction: column; align-items: center; }
-            .logos-container { justify-content: center; }
-            .hospital-info h1 { font-size: 18px; white-space: normal; }
-            .hospital-info .subtitle { font-size: 12px; letter-spacing: 2px; }
-            .time-display { font-size: 28px; }
-            .date-display { font-size: 12px; }
-            .notification-text { font-size: 13px; }
-            .status-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; height: auto; }
-            .status-item { padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; }
-            .status-value { font-size: 26px; }
-            .status-label { font-size: 10px; }
-            .panel-content { padding: 5px; }
-            .footer { flex-direction: column; gap: 4px; height: auto; padding: 10px; text-align: center; }
-            table { min-width: 750px; }
-        }
-
-        /* =========================
-           CELULARES PEQUENOS (até 480px)
-        ========================= */
-        @media (max-width: 480px) {
-            .logo-box { width: 45px; height: 45px; min-width: 45px; }
-            .hospital-info h1 { font-size: 15px; }
-            .time-display { font-size: 22px; }
-            .status-value { font-size: 22px; }
-            .notification-text { font-size: 11px; }
-            .status-bar { grid-template-columns: 1fr; }
-        }
-
-        /* =========================
-           TVS 4K E TELÕES (acima de 2560px)
-        ========================= */
-        @media (min-width: 2560px) {
-            .header { height: 120px; padding: 20px 50px; }
-            .logo-box { width: 90px; height: 90px; min-width: 90px; }
-            .hospital-info h1 { font-size: 42px; }
-            .hospital-info .subtitle { font-size: 20px; }
-            .time-display { font-size: 72px; }
-            .date-display { font-size: 22px; }
-            .status-value { font-size: 60px; }
-            .status-label { font-size: 18px; }
-            thead th { font-size: 18px; padding: 18px; }
-            tbody td { font-size: 18px; padding: 18px; }
-            .status-badge { font-size: 15px; padding: 10px 20px; }
-        }
     </style>
 </head>
 <body>
@@ -336,8 +257,8 @@
         <div class="header">
             <div class="hospital-brand">
                 <div class="logos-container">
-                    <div class="logo-box" id="logoContainer"><span style="font-size:28px">🏥</span></div>
-                    <div class="logo-box" id="govLogoContainer"><span style="font-size:28px">🏛️</span></div>
+                    <div class="logo-box" id="logoContainer"><span style="font-size:clamp(20px,3vw,30px)">🏥</span></div>
+                    <div class="logo-box" id="govLogoContainer"><span style="font-size:clamp(20px,3vw,30px)">🏛️</span></div>
                 </div>
                 <div class="hospital-info">
                     <h1>Hospital Regional de Palmeira dos Índios</h1>
