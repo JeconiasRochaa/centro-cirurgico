@@ -27,8 +27,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             overflow: hidden;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg-primary);
@@ -51,10 +50,7 @@
         }
         .ecg-path:nth-child(2) { animation-delay: 1.3s; stroke-width: 1.5; opacity: 0.5; }
         .ecg-path:nth-child(3) { animation-delay: 2.6s; stroke-width: 1; opacity: 0.3; }
-        @keyframes ecg {
-            from { stroke-dashoffset: 2000; }
-            to { stroke-dashoffset: 0; }
-        }
+        @keyframes ecg { from { stroke-dashoffset: 2000; } to { stroke-dashoffset: 0; } }
 
         .container {
             position: relative; z-index: 1;
@@ -62,7 +58,6 @@
             display: flex; flex-direction: column;
         }
 
-        /* HEADER */
         .header {
             background: linear-gradient(180deg, rgba(5,26,56,0.99) 0%, rgba(4,22,48,0.99) 100%);
             border-bottom: 3px solid var(--gold);
@@ -105,7 +100,6 @@
             letter-spacing: 1px; margin-top: 3px;
         }
 
-        /* NOTIFICAÇÃO */
         .notification-bar {
             background: linear-gradient(90deg, #1a3a5f, #0f1f3a, #1a3a5f);
             border-bottom: 2px solid #fbbf24;
@@ -115,10 +109,7 @@
             height: clamp(36px, 4.5vh, 48px);
         }
         .notification-bar.show { display: flex; }
-        @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .notification-icon { font-size: clamp(18px, 2.5vw, 26px); animation: bellRing 1s infinite; }
         @keyframes bellRing {
             0%,100%{transform:rotate(0)} 10%{transform:rotate(15deg)}
@@ -130,7 +121,6 @@
             letter-spacing: 0.5px; font-weight: 700; text-align: center;
         }
 
-        /* STATUS BAR */
         .status-bar {
             background: rgba(6, 34, 74, 0.98); border-bottom: 1px solid var(--border-color);
             padding: 0 clamp(15px, 3vw, 30px);
@@ -150,7 +140,6 @@
             margin-top: 2px; font-weight: 500;
         }
 
-        /* PANEL CONTENT */
         .panel-content {
             flex: 1; padding: clamp(8px, 1.5vw, 15px) clamp(15px, 3vw, 30px);
             overflow: hidden; display: flex; flex-direction: column; min-height: 0;
@@ -168,15 +157,17 @@
         thead th {
             background: var(--bg-tertiary); padding: clamp(8px, 1.5vh, 14px) clamp(2px, 0.5vw, 6px);
             text-align: center; color: var(--gold);
-            font-size: clamp(14px, 1.6vw, 15px); letter-spacing: 1px;
+            font-size: clamp(13px, 1.5vw, 15px); letter-spacing: 1px;
             text-transform: uppercase; border-bottom: 2px solid var(--gold);
             white-space: nowrap; font-weight: 700;
         }
-        thead th:nth-child(1){width:6%} thead th:nth-child(2){width:7%}
-        thead th:nth-child(3){width:13%} thead th:nth-child(4){width:5%}
-        thead th:nth-child(5){width:18%} thead th:nth-child(6){width:13%}
-        thead th:nth-child(7){width:8%} thead th:nth-child(8){width:10%}
-        thead th:nth-child(9){width:7%} thead th:nth-child(10){width:10%}
+        /* Colunas atualizadas: Sala, Horário, Paciente, Idade, Origem, Procedimento, Médico, Especialid., Anestesista, Instrum., Status */
+        thead th:nth-child(1){width:5%} thead th:nth-child(2){width:6%}
+        thead th:nth-child(3){width:11%} thead th:nth-child(4){width:4%}
+        thead th:nth-child(5){width:8%} thead th:nth-child(6){width:16%}
+        thead th:nth-child(7){width:12%} thead th:nth-child(8){width:7%}
+        thead th:nth-child(9){width:9%} thead th:nth-child(10){width:8%}
+        thead th:nth-child(11){width:9%}
 
         tbody tr { background: rgba(255,255,255,0.035); transition: all 0.3s; }
         tbody tr:hover { background: rgba(255,255,255,0.07); }
@@ -187,7 +178,7 @@
             font-weight: 500; vertical-align: middle; text-align: center;
             white-space: normal; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3;
         }
-        tbody td:nth-child(3), tbody td:nth-child(5), tbody td:nth-child(6) {
+        tbody td:nth-child(3), tbody td:nth-child(6), tbody td:nth-child(7) {
             text-align: left; padding-left: clamp(4px, 1vw, 10px);
         }
 
@@ -289,19 +280,19 @@
                     <thead>
                         <tr>
                             <th>Sala</th><th>Horário</th><th>Paciente</th><th>Idade</th>
-                            <th>Procedimento</th><th>Médico</th><th>Especialid.</th>
-                            <th>Anestesista</th><th>Circ.</th><th>Status</th>
+                            <th>Origem</th><th>Procedimento</th><th>Médico</th>
+                            <th>Especialid.</th><th>Anestesista</th><th>Instrum.</th><th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="surgeriesTableBody">
-                        <tr><td colspan="10"><div class="empty-state">CONECTANDO AO SERVIDOR...</div></td></tr>
+                        <tr><td colspan="11"><div class="empty-state">CONECTANDO AO SERVIDOR...</div></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="footer">
-            <span>© 2026 HRPI</span><span>Painel Cirúrgico v8.0</span>
+            <span>© 2026 HRPI</span><span>Painel Cirúrgico v9.0</span>
             <span id="updateTime">Atualizado: --:--:--</span>
         </div>
     </div>
@@ -325,6 +316,15 @@
         
         function getToday(){const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
         let TODAY=getToday(),currentSurgeries=[],lastDayCheck=new Date().getDate(),notificationTimeout=null,lastNotifiedSurgeryId=null;
+
+        // Mapeamento de origem para exibição resumida
+        const origemMap = {
+            'Interno': '🏥 Interno',
+            'CR - Bucomaxilofacial': '🦷 CR Bucomaxilo',
+            'Solicitação Externa': '📋 Ext. Unidade',
+            'Transferência': '🚑 Transferência',
+            'Urgência/Emergência': '🚨 Urg/Emerg'
+        };
 
         function playNotificationSound(){
             try{
@@ -370,7 +370,7 @@
             document.getElementById('waiting').textContent=String(t.filter(s=>s.status==='pendente').length).padStart(2,'0');
             document.getElementById('cancelled').textContent=String(t.filter(s=>s.status==='cancelada').length).padStart(2,'0');
             const b=document.getElementById('surgeriesTableBody');
-            if(!t.length){b.innerHTML='<tr><td colspan="10"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
+            if(!t.length){b.innerHTML='<tr><td colspan="11"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
             else{b.innerHTML=t.sort((a,b)=>a.time.localeCompare(b.time)).map(s=>{
                 let sh='',rc='';
                 if(s.status==='pendente')sh=`<span class="status-badge status-waiting">⏳ Aguardando</span>`;
@@ -379,7 +379,20 @@
                 else{sh=`<span class="status-badge status-cancelled">❌ Cancelada</span>`;rc='row-cancelled'}
                 const mh=s.cancelReason?`<br><span class="cancel-badge" title="${s.cancelReason}">Motivo: ${s.cancelReason.substring(0,15)}${s.cancelReason.length>15?'...':''}</span>`:'';
                 const pr=(s.type||'-').replace(/\n/g,'<br>');
-                return `<tr class="${rc}"><td><strong>${s.room}</strong></td><td>${s.time}</td><td><span class="cell-content">${s.patient||'-'}</span></td><td>${s.age||'-'}</td><td><span class="cell-content">${pr}${mh}</span></td><td><span class="cell-content">Dr. ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td><td>${s.specialty||'-'}</td><td><span class="cell-content">Dr. ${s.anesthetist||'-'}</span></td><td>${s.circulante||'-'}</td><td>${sh}</td></tr>`
+                const origemCurta = origemMap[s.origem] || s.origem || '-';
+                return `<tr class="${rc}">
+                    <td><strong>${s.room||'-'}</strong></td>
+                    <td>${s.time||'-'}</td>
+                    <td><span class="cell-content">${s.patient||'-'}</span></td>
+                    <td>${s.age||'-'}</td>
+                    <td>${origemCurta}</td>
+                    <td><span class="cell-content">${pr}${mh}</span></td>
+                    <td><span class="cell-content">Dr. ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td>
+                    <td>${s.specialty||'-'}</td>
+                    <td><span class="cell-content">Dr. ${s.anesthetist||'-'}</span></td>
+                    <td>${s.circulante||'-'}</td>
+                    <td>${sh}</td>
+                </tr>`
             }).join('')}
             document.getElementById('updateTime').textContent=`Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`
         }
