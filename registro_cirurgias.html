@@ -192,7 +192,6 @@
             <form id="surgeryForm">
                 <input type="hidden" id="editId">
                 
-                <!-- Origem do Paciente - OBRIGATÓRIO -->
                 <div class="form-group">
                     <label>🏥 Origem do Paciente <span class="required">*</span></label>
                     <select id="origem" required>
@@ -205,31 +204,26 @@
                     </select>
                 </div>
 
-                <!-- Nome do Paciente - OBRIGATÓRIO -->
                 <div class="form-group">
                     <label>👤 Nome do Paciente <span class="required">*</span></label>
                     <input type="text" id="patient" placeholder="Nome completo do paciente" required>
                 </div>
 
-                <!-- Idade - OBRIGATÓRIO -->
                 <div class="form-group">
                     <label>🎂 Idade <span class="required">*</span></label>
                     <input type="number" id="age" placeholder="Idade do paciente" min="0" max="150" required>
                 </div>
 
-                <!-- Data da Cirurgia -->
                 <div class="form-group">
                     <label>📅 Data da Cirurgia</label>
                     <input type="date" id="surgeryDate" required onchange="checkConflict()">
                 </div>
 
-                <!-- Horário -->
                 <div class="form-group">
                     <label>⏰ Horário de Início</label>
                     <input type="time" id="surgeryTime" onchange="checkConflict()">
                 </div>
 
-                <!-- Especialidade do Médico -->
                 <div class="form-group">
                     <label>🔬 Especialidade</label>
                     <select id="specialty">
@@ -253,34 +247,29 @@
                     </select>
                 </div>
 
-                <!-- Procedimentos - OBRIGATÓRIO -->
                 <div class="form-group">
                     <label>🔪 Procedimento(s) <span class="required">*</span></label>
                     <textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea>
                     <div class="suggestions-box" id="suggestionsBox"></div>
                 </div>
 
-                <!-- Médicos Responsáveis -->
                 <div class="form-group">
                     <label>👨‍⚕️ Médico(s) Responsável(is)</label>
                     <input type="text" id="doctor" placeholder="Nome do médico (separe por vírgula para mais de um)">
                     <small style="color:#64748b;font-size:10px">Para adicionar mais de um médico, separe os nomes por vírgula</small>
                 </div>
 
-                <!-- Anestesista -->
                 <div class="form-group">
                     <label>💉 Anestesista</label>
                     <input type="text" id="anesthetist" placeholder="Nome do anestesista">
                 </div>
 
-                <!-- Instrumentistas -->
                 <div class="form-group">
                     <label>🔄 Instrumentista(s)</label>
                     <input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)">
                     <small style="color:#64748b;font-size:10px">Separe por vírgula para mais de um</small>
                 </div>
 
-                <!-- Sala Cirúrgica -->
                 <div class="form-group">
                     <label>🏥 Sala Cirúrgica</label>
                     <select id="room" onchange="checkConflict()">
@@ -337,585 +326,33 @@ document.getElementById('surgeryDate').value=TODAY;
 document.getElementById('currentDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
 const surgeryTypes = [
-    // ============ CIRURGIA GERAL ============
-    'COLECISTECTOMIA',
-    'COLECISTECTOMIA VIDEOLAPAROSCÓPICA',
-    'APENDICECTOMIA',
-    'APENDICECTOMIA VIDEOLAPAROSCÓPICA',
-    'HERNIOPLASTIA INGUINAL',
-    'HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA',
-    'HERNIOPLASTIA UMBILICAL',
-    'HERNIOPLASTIA EPIGÁSTRICA',
-    'HERNIOPLASTIA INCISIONAL',
-    'HERNIOPLASTIA FEMORAL',
-    'HERNIOPLASTIA BILATERAL',
-    'LAPAROTOMIA EXPLORADORA',
-    'COLECTOMIA DIREITA',
-    'COLECTOMIA ESQUERDA',
-    'COLECTOMIA TOTAL',
-    'COLECTOMIA VIDEOLAPAROSCÓPICA',
-    'SIGMOIDECTOMIA',
-    'RETOSSIGMOIDECTOMIA',
-    'GASTRECTOMIA PARCIAL',
-    'GASTRECTOMIA TOTAL',
-    'GASTRECTOMIA VIDEOLAPAROSCÓPICA',
-    'BYPASS GÁSTRICO',
-    'SLEEVE GÁSTRICO',
-    'CIRURGIA BARIÁTRICA',
-    'ESPLENECTOMIA',
-    'ESPLENECTOMIA VIDEOLAPAROSCÓPICA',
-    'HEMORROIDECTOMIA',
-    'FISTULECTOMIA ANAL',
-    'FISTULECTOMIA PERIANAL',
-    'ESFINCTEROPLASTIA ANAL',
-    'TRATAMENTO CIRÚRGICO DE FÍSTULA RETOVAGINAL',
-    'TIREOIDECTOMIA TOTAL',
-    'TIREOIDECTOMIA PARCIAL',
-    'PARATIREOIDECTOMIA',
-    'MASTECTOMIA',
-    'MASTECTOMIA COM RECONSTRUÇÃO',
-    'QUADRANTECTOMIA',
-    'SETORECTOMIA',
-    'DRENAGEM DE ABCESSO',
-    'DESBRIDAMENTO CIRÚRGICO',
-    'EXÉRESE DE LIPOMA',
-    'EXÉRESE DE CISTO SEBÁCEO',
-    'EXÉRESE DE LESÃO DE PELE',
-
-    // ============ GINECOLOGIA E OBSTETRÍCIA ============
-    'CESARIANA',
-    'HISTERECTOMIA TOTAL',
-    'HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA',
-    'HISTERECTOMIA PARCIAL',
-    'HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
-    'HISTERECTOMIA RADICAL',
-    'MIOMECTOMIA',
-    'MIOMECTOMIA VIDEOLAPAROSCÓPICA',
-    'OOFRECTOMIA',
-    'OOFRECTOMIA VIDEOLAPAROSCÓPICA',
-    'SALPINGECTOMIA',
-    'SALPINGECTOMIA VIDEOLAPAROSCÓPICA',
-    'ANEXECTOMIA',
-    'LAQUEADURA TUBÁRIA',
-    'CAUTERIZAÇÃO TUBÁRIA',
-    'CURETAGEM UTERINA',
-    'HISTEROSCOPIA CIRÚRGICA',
-    'COLPOPERINEOPLASTIA',
-    'COLPORRAFIA ANTERIOR',
-    'COLPORRAFIA POSTERIOR',
-    'PERINEOPLASTIA',
-    'TRATAMENTO DE ENDOMETRIOSE',
-    'RECONSTRUÇÃO MAMÁRIA',
-    'MASTOPEXIA',
-    'MAMOPLASTIA DE AUMENTO',
-    'MAMOPLASTIA REDUTORA',
-
-    // ============ NEUROCIRURGIA ============
-    'CRANIOTOMIA',
-    'CRANIOTOMIA PARA TUMOR CEREBRAL',
-    'CRANIOTOMIA DESCOMPRESSIVA',
-    'ANEURISMA CEREBRAL',
-    'CLIPAGEM DE ANEURISMA',
-    'DRENAGEM DE HEMATOMA SUBDURAL',
-    'DRENAGEM DE HEMATOMA EXTRADURAL',
-    'HÉRNIA DE DISCO CERVICAL',
-    'HÉRNIA DE DISCO LOMBAR',
-    'HÉRNIA DE DISCO TORÁCICA',
-    'CIRURGIA DE COLUNA',
-    'ARTRODESE DE COLUNA CERVICAL',
-    'ARTRODESE DE COLUNA LOMBAR',
-    'ARTRODESE DE COLUNA TORÁCICA',
-    'DESCOMPRESSÃO MEDULAR',
-    'LAMINECTOMIA',
-    'FORAMINOTOMIA',
-    'VERTEBROPLASTIA',
-    'CIFOPLASTIA',
-
-    // ============ CIRURGIA CARDÍACA E VASCULAR ============
-    'REVASCULARIZAÇÃO MIOCÁRDICA',
-    'TROCA VALVAR AÓRTICA',
-    'TROCA VALVAR MITRAL',
-    'CATETERISMO CARDÍACO',
-    'COLOCAÇÃO DE MARCA-PASSO',
-    'TROCA DE MARCA-PASSO',
-    'ANGIOPLASTIA',
-    'COLOCAÇÃO DE STENT',
-    'SAFENECTOMIA',
-    'SAFENECTOMIA BILATERAL',
-    'ESCLEROTERAPIA DE VARIZES',
-    'FLEBECTOMIA',
-    'LIGADURA DE VEIAS PERFURANTES',
-    'TROMBECTOMIA',
-
-    // ============ ORTOPEDIA E TRAUMATOLOGIA ============
-    'ARTROPLASTIA DE QUADRIL',
-    'ARTROPLASTIA DE QUADRIL REVISÃO',
-    'ARTROPLASTIA DE JOELHO',
-    'ARTROPLASTIA DE JOELHO REVISÃO',
-    'PRÓTESE DE QUADRIL',
-    'PRÓTESE DE JOELHO',
-    'PRÓTESE DE OMBRO',
-    'PRÓTESE DE TORNOZELO',
-    'OSTEOSSÍNTESE DE FÊMUR',
-    'OSTEOSSÍNTESE DE FÊMUR COM PLACA',
-    'OSTEOSSÍNTESE DE FÊMUR COM HASTE INTRAMEDULAR',
-    'OSTEOSSÍNTESE DE TÍBIA',
-    'OSTEOSSÍNTESE DE TÍBIA COM PLACA',
-    'OSTEOSSÍNTESE DE TÍBIA COM HASTE INTRAMEDULAR',
-    'OSTEOSSÍNTESE DE ÚMERO',
-    'OSTEOSSÍNTESE DE ÚMERO COM PLACA',
-    'OSTEOSSÍNTESE DE RÁDIO',
-    'OSTEOSSÍNTESE DE RÁDIO DISTAL',
-    'OSTEOSSÍNTESE DE TORNOZELO',
-    'OSTEOSSÍNTESE DE CLAVÍCULA',
-    'OSTEOSSÍNTESE DE PUNHO',
-    'OSTEOSSÍNTESE DE MÃO',
-    'OSTEOSSÍNTESE DE PÉ',
-    'OSTEOSSÍNTESE DE PATELA',
-    'OSTEOSSÍNTESE DE COTOVELO',
-    'RECONSTRUÇÃO DE LCA',
-    'RECONSTRUÇÃO DE LCP',
-    'RECONSTRUÇÃO DE MENISCO',
-    'MENISCECTOMIA',
-    'ARTROSCOPIA DE JOELHO',
-    'ARTROSCOPIA DE OMBRO',
-    'ARTROSCOPIA DE TORNOZELO',
-    'ARTROSCOPIA DE COTOVELO',
-    'ARTROSCOPIA DE PUNHO',
-    'CIRURGIA DE MANGUITO ROTADOR',
-    'TENODESE',
-    'TENORRAFIA',
-    'SUTURA DE TENDÃO',
-    'LIBERAÇÃO DE TÚNEL DO CARPO',
-    'CIRURGIA DE DUPUYTREN',
-    'AMPUTAÇÃO DE DEDO',
-    'AMPUTAÇÃO DE MEMBRO',
-    'RETIRADA DE MATERIAL DE SÍNTESE',
-    'RETIRADA DE FIOS DE KIRSCHNER',
-    'RETIRADA DE PLACA E PARAFUSO',
-    'ENXERTO ÓSSEO',
-
-    // ============ OFTALMOLOGIA ============
-    'CIRURGIA DE CATARATA',
-    'FACECTOMIA',
-    'FACECTOMIA COM IMPLANTE DE LENTE',
-    'TRABECULECTOMIA',
-    'VITRECTOMIA',
-    'VITRECTOMIA POSTERIOR',
-    'RETINOPEXIA',
-    'CIRURGIA DE DESCOLAMENTO DE RETINA',
-    'CIRURGIA DE PTERÍGIO',
-    'CIRURGIA DE ESTRABISMO',
-    'BLEFAROPLASTIA',
-    'CORREÇÃO DE PTOSE PALPEBRAL',
-    'TRANSPLANTE DE CÓRNEA',
-    'CROSSLINKING DE CÓRNEA',
-
-    // ============ OTORRINOLARINGOLOGIA ============
-    'AMIGDALECTOMIA',
-    'ADENOIDECTOMIA',
-    'ADENOAMIGDALECTOMIA',
-    'TIMPANOPLASTIA',
-    'TIMPANOPLASTIA COM MASTOIDECTOMIA',
-    'SEPTOPLASTIA',
-    'RINOPLASTIA',
-    'RINOSSEPTOPLASTIA',
-    'SINUSECTOMIA',
-    'SINUSECTOMIA ENDOSCÓPICA',
-    'LARINGOSCOPIA',
-    'LARINGOSCOPIA COM MICROCIRURGIA',
-    'TRAQUEOSTOMIA',
-    'FECHAMENTO DE TRAQUEOSTOMIA',
-    'CIRURGIA DE CORDAS VOCAIS',
-
-    // ============ UROLOGIA ============
-    'PROSTATECTOMIA',
-    'PROSTATECTOMIA VIDEOLAPAROSCÓPICA',
-    'RTU DE PRÓSTATA',
-    'NEFRECTOMIA',
-    'NEFRECTOMIA VIDEOLAPAROSCÓPICA',
-    'NEFRECTOMIA RADICAL',
-    'LITÍASE RENAL',
-    'LITOTRIPSIA',
-    'URETEROLITOTRIPSIA',
-    'POSTECTOMIA',
-    'CIRCUNCISÃO',
-    'VASECTOMIA',
-    'CISTECTOMIA',
-    'CISTECTOMIA RADICAL',
-    'HERNIORRAFIA INGUINAL',
-    'ORQUIDOPEXIA',
-    'HIDROCELECTOMIA',
-    'VARICOCELECTOMIA',
-    'FRENULOPLASTIA',
-
-    // ============ CIRURGIA PLÁSTICA ============
-    'ABDOMINOPLASTIA',
-    'LIPOASPIRAÇÃO',
-    'LIPOASPIRAÇÃO ABDOMEN',
-    'LIPOASPIRAÇÃO MEMBROS',
-    'LIPOASPIRAÇÃO DORSO',
-    'LIPOASPIRAÇÃO DE PAPADA',
-    'RITIDOPLASTIA',
-    'OTOPLASTIA',
-    'MENTOPLASTIA',
-    'MAMOPLASTIA DE AUMENTO',
-    'MAMOPLASTIA REDUTORA',
-    'MASTOPEXIA',
-    'GINECOMASTIA',
-    'RECONSTRUÇÃO DE ORELHA',
-    'ENXERTO DE PELE',
-    'RETALHO CUTÂNEO',
-    'CORREÇÃO DE CICATRIZ',
-
-    // ============ BUCOMAXILOFACIAL ============
-    // Exodontias (extrações dentárias)
-    'EXODONTIA SIMPLES',
-    'EXODONTIA DE TERCEIRO MOLAR SUPERIOR',
-    'EXODONTIA DE TERCEIRO MOLAR INFERIOR',
-    'EXODONTIA DE TERCEIRO MOLAR',
-    'EXODONTIA DE TERCEIRO MOLAR INCLUSO',
-    'EXODONTIA DE TERCEIRO MOLAR SEMI-INCLUSO',
-    'EXODONTIA DE TERCEIRO MOLAR ERUPCIONADO',
-    'EXODONTIA DE SISO SUPERIOR',
-    'EXODONTIA DE SISO INFERIOR',
-    'EXODONTIA DE SISO BILATERAL',
-    'EXODONTIA DE SISO (4 DENTES)',
-    'EXODONTIA MÚLTIPLA',
-    'EXODONTIA MÚLTIPLA COM REGULARIZAÇÃO',
-    'EXODONTIA DE DENTE INCLUSO',
-    'EXODONTIA DE DENTE SEMI-INCLUSO',
-    'EXODONTIA DE DENTE SUPRANUMERÁRIO',
-    'EXODONTIA DE RAÍZES RESIDUAIS',
-    'EXODONTIA DE PRÉ-MOLAR',
-    'EXODONTIA DE MOLAR',
-    'EXODONTIA DE INCISIVO',
-    'EXODONTIA DE CANINO',
-    'EXODONTIA DE CANINO INCLUSO',
-    'EXODONTIA DE DENTE DECÍDUO',
-    'EXODONTIA DE DENTE ANQUILOSADO',
-    'EXODONTIA TERAPÊUTICA',
-    'EXODONTIA PROFILÁTICA',
-    'EXODONTIA PARA TRATAMENTO ORTODÔNTICO',
-    'EXODONTIA DE DENTE COM FRATURA RADICULAR',
-
-    // Fraturas Faciais
-    'FRATURA DE MANDÍBULA',
-    'FRATURA DE MANDÍBULA COM PLACA',
-    'FRATURA DE MANDÍBULA COM PLACA E PARAFUSO',
-    'FRATURA DE MANDÍBULA BILATERAL',
-    'FRATURA DE MANDÍBULA COM BLOQUEIO MAXILOMANDIBULAR',
-    'FRATURA DE MAXILA',
-    'FRATURA DE MAXILA LEFORT I',
-    'FRATURA DE MAXILA LEFORT II',
-    'FRATURA DE MAXILA LEFORT III',
-    'FRATURA DE ZIGOMÁTICO',
-    'FRATURA DE ZIGOMÁTICO COM PLACA',
-    'FRATURA DE ARCO ZIGOMÁTICO',
-    'FRATURA DE ÓRBITA',
-    'FRATURA DE ASSOALHO DE ÓRBITA',
-    'FRATURA DE PAREDE DE ÓRBITA',
-    'FRATURA DE OSSOS NASAIS',
-    'FRATURA DE OSSOS NASAIS COM REDUÇÃO',
-    'FRATURA DE COMPLEXO ZIGOMÁTICO-ORBITÁRIO',
-    'FRATURA PANFACIAL',
-    'FRATURA DE CÔNDILO MANDIBULAR',
-    'FRATURA DE ÂNGULO MANDIBULAR',
-    'FRATURA DE SÍNFISE MANDIBULAR',
-    'FRATURA DE PARASSÍNFISE',
-    'FRATURA DE CORPO MANDIBULAR',
-    'FRATURA DE RAMO MANDIBULAR',
-    'FRATURA DE PROCESSO CORONÓIDE',
-    'FRATURA DE ALVÉOLO DENTÁRIO',
-    'FRATURA DE OSSO FRONTAL',
-    'FRATURA DE OSSO TEMPORAL',
-    'FRATURA DE OSSO PARIETAL',
-
-    // Cirurgia Ortognática
-    'CIRURGIA ORTOGNÁTICA',
-    'CIRURGIA ORTOGNÁTICA BIMAXILAR',
-    'CIRURGIA ORTOGNÁTICA DE MAXILA',
-    'CIRURGIA ORTOGNÁTICA DE MANDÍBULA',
-    'OSTEOTOMIA DE MAXILA',
-    'OSTEOTOMIA DE MANDÍBULA',
-    'OSTEOTOMIA BIMAXILAR',
-    'OSTEOTOMIA SEGMENTADA',
-    'AVANÇO MAXILAR',
-    'AVANÇO MANDIBULAR',
-    'RECUO MAXILAR',
-    'RECUO MANDIBULAR',
-    'MENTOPLASTIA',
-    'GENIOPLASTIA',
-    'GENIOPLASTIA DE AUMENTO',
-    'GENIOPLASTIA DE REDUÇÃO',
-
-    // ATM (Articulação Temporomandibular)
-    'ARTROPLASTIA DE ATM',
-    'ARTROCENTESE DE ATM',
-    'ARTROSCOPIA DE ATM',
-    'CIRURGIA DE ATM',
-    'DISCECTOMIA DE ATM',
-    'RECONSTRUÇÃO DE ATM',
-    'RECONSTRUÇÃO DE ATM COM PRÓTESE',
-    'LUXAÇÃO DE ATM COM REDUÇÃO',
-    'ANQUILOSE DE ATM',
-    'TRATAMENTO CIRÚRGICO DE ANQUILOSE DE ATM',
-
-    // Reconstruções
-    'RECONSTRUÇÃO DE MANDÍBULA',
-    'RECONSTRUÇÃO DE MANDÍBULA COM ENXERTO',
-    'RECONSTRUÇÃO DE MANDÍBULA COM PLACA',
-    'RECONSTRUÇÃO DE MANDÍBULA COM PRÓTESE',
-    'RECONSTRUÇÃO DE MAXILA',
-    'RECONSTRUÇÃO DE MAXILA COM ENXERTO',
-    'RECONSTRUÇÃO DE ÓRBITA',
-    'RECONSTRUÇÃO DE OSSOS FACIAIS',
-    'RECONSTRUÇÃO DE REBORDO ALVEOLAR',
-
-    // Enxertos Ósseos
-    'ENXERTO ÓSSEO ALVEOLAR',
-    'ENXERTO ÓSSEO AUTÓGENO',
-    'ENXERTO ÓSSEO DE MENTO',
-    'ENXERTO ÓSSEO DE RAMO MANDIBULAR',
-    'ENXERTO ÓSSEO DE CRISTA ILÍACA',
-    'ENXERTO ÓSSEO DE CALOTA CRANIANA',
-    'ENXERTO ÓSSEO DE TÍBIA',
-    'ENXERTO ÓSSEO HOMÓGENO',
-    'ENXERTO ÓSSEO XENÓGENO',
-    'ENXERTO ÓSSEO SINTÉTICO',
-    'ENXERTO ÓSSEO EM BLOCO',
-    'ENXERTO ÓSSEO PARTICULADO',
-
-    // Implantes Dentários
-    'IMPLANTE DENTÁRIO UNITÁRIO',
-    'IMPLANTE DENTÁRIO MÚLTIPLO',
-    'IMPLANTE DENTÁRIO COM ENXERTO',
-    'IMPLANTE DENTÁRIO IMEDIATO',
-    'IMPLANTE DENTÁRIO TARDIO',
-    'IMPLANTE ZIGOMÁTICO',
-    'IMPLANTE CURTO',
-    'IMPLANTE INCLINADO',
-    'LEVANTAMENTO DE SEIO MAXILAR',
-    'LEVANTAMENTO DE SEIO MAXILAR BILATERAL',
-    'LEVANTAMENTO DE SEIO MAXILAR COM IMPLANTE',
-    'LEVANTAMENTO DE SEIO MAXILAR TRAUMÁTICO',
-    'LEVANTAMENTO DE SEIO MAXILAR COM JANELA LATERAL',
-    'LEVANTAMENTO DE SEIO MAXILAR COM OSTEÓTOMO',
-
-    // Patologias (Cistos e Tumores)
-    'CISTO ODONTOGÊNICO',
-    'CISTO RADICULAR',
-    'CISTO DENTÍGERO',
-    'CISTO DE ERUPÇÃO',
-    'CISTO GENGIVAL',
-    'CISTO PERIODONTAL',
-    'CISTO ÓSSEO',
-    'CISTO DE RETENÇÃO',
-    'CISTO MUCOCELE',
-    'CISTO RANULA',
-    'CISTO NASOLABIAL',
-    'CISTO NASOPALATINO',
-    'CISTO GLOBULOMAXILAR',
-    'TUMOR ODONTOGÊNICO',
-    'TUMOR ODONTOGÊNICO BENIGNO',
-    'TUMOR ODONTOGÊNICO MALIGNO',
-    'AMELOBLASTOMA',
-    'ODONTOMA',
-    'MIXOMA ODONTOGÊNICO',
-    'TUMOR ÓSSEO BENIGNO',
-    'TUMOR ÓSSEO MALIGNO',
-    'OSTEOMA',
-    'OSTEOSSARCOMA',
-    'CONDROSSARCOMA',
-    'FIBROMA OSSIFICANTE',
-    'DISPLASIA FIBROSA',
-    'GRANULOMA CENTRAL DE CÉLULAS GIGANTES',
-    'QUERATOCISTO ODONTOGÊNICO',
-    'OSTEONECROSE DOS MAXILARES',
-    'OSTEONECROSE ASSOCIADA A MEDICAMENTOS',
-    'OSTEONECROSE ASSOCIADA A BISFOSFONATOS',
-    'OSTEOMIELITE',
-    'OSTEOMIELITE CRÔNICA',
-    'OSTEOMIELITE AGUDA',
-    'OSTEORRADIONECROSE',
-
-    // Traumatismo Dentoalveolar
-    'TRAUMATISMO DENTÁRIO',
-    'TRAUMATISMO DENTOALVEOLAR',
-    'AVULSÃO DENTÁRIA',
-    'REIMPLANTE DENTÁRIO',
-    'FRATURA CORONÁRIA',
-    'FRATURA RADICULAR',
-    'FRATURA CORONORRADICULAR',
-    'SUBLUXAÇÃO DENTÁRIA',
-    'LUXAÇÃO LATERAL',
-    'LUXAÇÃO EXTRUSIVA',
-    'LUXAÇÃO INTRUSIVA',
-    'CONCUSSÃO DENTÁRIA',
-    'CONTENÇÃO DENTÁRIA',
-    'FÉRULA DE CONTENÇÃO',
-    'TRATAMENTO DE FRATURA DENTÁRIA',
-    'FRATURA DE PROCESSO ALVEOLAR',
-    'FRATURA DE ALVÉOLO COM PERDA DENTÁRIA',
-
-    // Fendas e Malformações
-    'CIRURGIA DE FENDA LABIOPALATINA',
-    'CIRURGIA DE FENDA LABIAL',
-    'CIRURGIA DE FENDA PALATINA',
-    'QUEILOPLASTIA',
-    'PALATOPLASTIA',
-    'FARINGOPLASTIA',
-    'ENXERTO ÓSSEO EM FENDA ALVEOLAR',
-    'CORREÇÃO DE FÍSTULA BUCO-SINUSAL',
-    'CORREÇÃO DE FÍSTULA ORO-ANTRAL',
-    'CORREÇÃO DE FÍSTULA BUCO-NASAL',
-    'CORREÇÃO DE COMUNICAÇÃO BUCO-SINUSAL',
-    'FECHAMENTO DE COMUNICAÇÃO ORO-ANTRAL',
-
-    // Glândulas Salivares
-    'SIALOENDOSCOPIA',
-    'SIALOENDOSCOPIA DIAGNÓSTICA',
-    'SIALOENDOSCOPIA TERAPÊUTICA',
-    'CIRURGIA DE GLÂNDULAS SALIVARES',
-    'CIRURGIA DE GLÂNDULA PARÓTIDA',
-    'CIRURGIA DE GLÂNDULA SUBMANDIBULAR',
-    'CIRURGIA DE GLÂNDULA SUBLINGUAL',
-    'PAROTIDECTOMIA',
-    'PAROTIDECTOMIA SUPERFICIAL',
-    'PAROTIDECTOMIA TOTAL',
-    'SUBMANDIBULECTOMIA',
-    'EXÉRESE DE GLÂNDULA SALIVAR MENOR',
-    'EXÉRESE DE CÁLCULO SALIVAR',
-    'SIALOLITOTRIPSIA',
-    'SIALOLITECTOMIA',
-    'DRENAGEM DE ABCESSO DE GLÂNDULA SALIVAR',
-    'BIÓPSIA DE GLÂNDULA SALIVAR',
-    'TRATAMENTO DE FÍSTULA SALIVAR',
-    'TRATAMENTO DE MUCOCELE',
-    'TRATAMENTO DE RÂNULA',
-    'MARSUPIALIZAÇÃO DE RÂNULA',
-    'EXÉRESE DE RÂNULA',
-
-    // Infecções e Drenagens
-    'DRENAGEM DE ABCESSO BUCOMAXILOFACIAL',
-    'DRENAGEM DE ABCESSO ODONTOGÊNICO',
-    'DRENAGEM DE ABCESSO PERIAPICAL',
-    'DRENAGEM DE ABCESSO PERIODONTAL',
-    'DRENAGEM DE ABCESSO DE ESPAÇO FACIAL',
-    'DRENAGEM DE ABCESSO SUBMANDIBULAR',
-    'DRENAGEM DE ABCESSO SUBLINGUAL',
-    'DRENAGEM DE ABCESSO SUBMENTUAL',
-    'DRENAGEM DE ABCESSO PTERIGOMANDIBULAR',
-    'DRENAGEM DE ABCESSO TEMPORAL',
-    'DRENAGEM DE ABCESSO INFRAORBITÁRIO',
-    'DRENAGEM DE ABCESSO BUCAL',
-    'DRENAGEM DE ABCESSO CERVICAL',
-    'DRENAGEM DE CELULITE FACIAL',
-    'DRENAGEM DE FLEGMÃO',
-    'DESBRIDAMENTO DE FERIDA',
-    'DESBRIDAMENTO CIRÚRGICO FACIAL',
-    'TRATAMENTO DE OSTEOMIELITE',
-    'TRATAMENTO DE INFECÇÃO ODONTOGÊNICA',
-    'SEQUESTRECTOMIA',
-
-    // Biópsias
-    'BIÓPSIA DE CAVIDADE ORAL',
-    'BIÓPSIA DE LÍNGUA',
-    'BIÓPSIA DE MUCOSA ORAL',
-    'BIÓPSIA DE LÁBIO',
-    'BIÓPSIA DE PALATO',
-    'BIÓPSIA DE GENGIVA',
-    'BIÓPSIA DE REBORDO ALVEOLAR',
-    'BIÓPSIA DE MANDÍBULA',
-    'BIÓPSIA DE MAXILA',
-    'BIÓPSIA DE OSSO MAXILAR',
-    'BIÓPSIA INCISIONAL',
-    'BIÓPSIA EXCISIONAL',
-    'BIÓPSIA POR PUNÇÃO',
-    'BIÓPSIA DE GLÂNDULA SALIVAR',
-    'BIÓPSIA DE LINFONODO CERVICAL',
-
-    // Lesões de Tecidos Moles
-    'EXÉRESE DE LESÃO BUCOMAXILOFACIAL',
-    'EXÉRESE DE LESÃO DE CAVIDADE ORAL',
-    'EXÉRESE DE LESÃO DE LÍNGUA',
-    'EXÉRESE DE LESÃO DE MUCOSA',
-    'EXÉRESE DE LESÃO DE LÁBIO',
-    'EXÉRESE DE LESÃO DE PALATO',
-    'EXÉRESE DE LESÃO DE GENGIVA',
-    'EXÉRESE DE MUCOCELE',
-    'EXÉRESE DE RÂNULA',
-    'EXÉRESE DE FIBROMA',
-    'EXÉRESE DE PAPILOMA',
-    'EXÉRESE DE HEMANGIOMA',
-    'EXÉRESE DE LIPOMA',
-    'EXÉRESE DE CISTO',
-    'EXÉRESE DE TUMOR BENIGNO',
-    'EXÉRESE DE TUMOR MALIGNO',
-    'EXÉRESE DE HIPERPLASIA',
-    'EXÉRESE DE GRANULOMA',
-    'EXÉRESE DE ÉPULIS',
-    'EXÉRESE DE FRÊNULO',
-    'FRENECTOMIA LABIAL',
-    'FRENECTOMIA LINGUAL',
-    'FRENULOPLASTIA',
-    'LIBERAÇÃO DE FRÊNULO LINGUAL',
-    'LIBERAÇÃO DE FRÊNULO LABIAL',
-
-    // Cirurgias Periodontais
-    'GENGIVECTOMIA',
-    'GENGIVOPLASTIA',
-    'AUMENTO DE COROA CLÍNICA',
-    'CUNHA DISTAL',
-    'RETALHO PERIODONTAL',
-    'CIRURGIA PERIODONTAL',
-    'CIRURGIA DE ACESSO',
-    'RASPAGEM EM CAMPO ABERTO',
-    'CIRURGIA DE COBERTURA RADICULAR',
-    'ENXERTO GENGIVAL',
-    'ENXERTO DE TECIDO CONJUNTIVO',
-    'ENXERTO GENGIVAL LIVRE',
-
-    // Cirurgias Pré-Protéticas
-    'REGULARIZAÇÃO DE REBORDO ALVEOLAR',
-    'REGULARIZAÇÃO DE REBORDO ÓSSEO',
-    'OSTEOPLASTIA',
-    'OSTECTOMIA',
-    'VESTIBULOPLASTIA',
-    'SULCUPLASTIA',
-    'APROFUNDAMENTO DE VESTÍBULO',
-    'REMOCAO DE TÓRUS PALATINO',
-    'REMOCAO DE TÓRUS MANDIBULAR',
-    'EXÉRESE DE EXOSTOSE',
-    'EXÉRESE DE TÓRUS',
-    'CIRURGIA PRÉ-PROTÉTICA',
-    'PREPARO DE BOCA PARA PRÓTESE',
-
-    // Outros Procedimentos
-    'TRATAMENTO DE ALVEOLITE',
-    'CURETAGEM ALVEOLAR',
-    'IRRIGAÇÃO DE ALVÉOLO',
-    'SUTURA DE FERIDA',
-    'SUTURA DE FERIDA FACIAL',
-    'SUTURA DE FERIDA ORAL',
-    'SUTURA DE LÁBIO',
-    'SUTURA DE LÍNGUA',
-    'SUTURA DE MUCOSA ORAL',
-    'HEMOSTASIA CIRÚRGICA',
-    'CONTROLE DE HEMORRAGIA ORAL',
-    'TAMPONAMENTO NASAL',
-    'TAMPONAMENTO DE CAVIDADE ORAL',
-    'REMOCAO DE CORPO ESTRANHO',
-    'REMOCAO DE CORPO ESTRANHO FACIAL',
-    'REMOCAO DE CORPO ESTRANHO ORAL',
-    'TRATAMENTO DE COMPLICAÇÕES CIRÚRGICAS',
-    'REVISÃO DE CIRURGIA',
-    'CIRURGIA DE REVISÃO',
-    'RETIRADA DE MATERIAL DE SÍNTESE FACIAL',
-    'RETIRADA DE PLACA E PARAFUSO FACIAL',
-    'RETIRADA DE FIOS DE AÇO',
-    'RETIRADA DE CERCLAGEM',
-    'RETIRADA DE BLOQUEIO MAXILOMANDIBULAR'
+    'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','APENDICECTOMIA','APENDICECTOMIA VIDEOLAPAROSCÓPICA',
+    'HERNIOPLASTIA INGUINAL','HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA','HERNIOPLASTIA UMBILICAL','HERNIOPLASTIA EPIGÁSTRICA','HERNIOPLASTIA INCISIONAL',
+    'LAPAROTOMIA EXPLORADORA','COLECTOMIA DIREITA','COLECTOMIA ESQUERDA','COLECTOMIA TOTAL','COLECTOMIA VIDEOLAPAROSCÓPICA',
+    'GASTRECTOMIA PARCIAL','GASTRECTOMIA TOTAL','GASTRECTOMIA VIDEOLAPAROSCÓPICA','BYPASS GÁSTRICO','SLEEVE GÁSTRICO','CIRURGIA BARIÁTRICA',
+    'ESPLENECTOMIA','HEMORROIDECTOMIA','FISTULECTOMIA ANAL','FISTULECTOMIA PERIANAL','ESFINCTEROPLASTIA ANAL',
+    'CESARIANA','HISTERECTOMIA TOTAL','HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA','HISTERECTOMIA PARCIAL','HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
+    'MASTECTOMIA','MASTECTOMIA COM RECONSTRUÇÃO','RECONSTRUÇÃO MAMÁRIA','MASTOPEXIA','OOFRECTOMIA','SALPINGECTOMIA','LAQUEADURA TUBÁRIA',
+    'CRANIOTOMIA','CRANIOTOMIA PARA TUMOR CEREBRAL','ANEURISMA CEREBRAL','HÉRNIA DE DISCO CERVICAL','HÉRNIA DE DISCO LOMBAR',
+    'CIRURGIA DE COLUNA','ARTRODESE DE COLUNA CERVICAL','ARTRODESE DE COLUNA LOMBAR','DESCOMPRESSÃO MEDULAR',
+    'REVASCULARIZAÇÃO MIOCÁRDICA','TROCA VALVAR AÓRTICA','TROCA VALVAR MITRAL','CATETERISMO CARDÍACO','COLOCAÇÃO DE MARCA-PASSO',
+    'SAFENECTOMIA','ESCLEROTERAPIA DE VARIZES',
+    'ARTROPLASTIA DE QUADRIL','ARTROPLASTIA DE QUADRIL REVISÃO','ARTROPLASTIA DE JOELHO','ARTROPLASTIA DE JOELHO REVISÃO',
+    'OSTEOSSÍNTESE DE FÊMUR','OSTEOSSÍNTESE DE FÊMUR COM PLACA','OSTEOSSÍNTESE DE FÊMUR COM HASTE','OSTEOSSÍNTESE DE TÍBIA','OSTEOSSÍNTESE DE TÍBIA COM PLACA',
+    'OSTEOSSÍNTESE DE ÚMERO','OSTEOSSÍNTESE DE RÁDIO','OSTEOSSÍNTESE DE RÁDIO DISTAL','OSTEOSSÍNTESE DE TORNOZELO','OSTEOSSÍNTESE DE CLAVÍCULA',
+    'RECONSTRUÇÃO DE LCA','MENISCECTOMIA','ARTROSCOPIA DE JOELHO','ARTROSCOPIA DE OMBRO','ARTROSCOPIA DE TORNOZELO',
+    'CIRURGIA DE MANGUITO ROTADOR','TENODESE','TENORRAFIA','PRÓTESE DE OMBRO','PRÓTESE DE QUADRIL','PRÓTESE DE JOELHO',
+    'CIRURGIA DE CATARATA','FACECTOMIA','FACECTOMIA COM IMPLANTE DE LENTE','TRABECULECTOMIA','VITRECTOMIA','RETINOPEXIA',
+    'AMIGDALECTOMIA','ADENOIDECTOMIA','TIMPANOPLASTIA','SEPTOPLASTIA','RINOPLASTIA','SINUSECTOMIA','LARINGOSCOPIA',
+    'PROSTATECTOMIA','NEFRECTOMIA','NEFRECTOMIA VIDEOLAPAROSCÓPICA','LITÍASE RENAL','POSTECTOMIA','VASECTOMIA','CISTECTOMIA',
+    'ABDOMINOPLASTIA','LIPOASPIRAÇÃO','LIPOASPIRAÇÃO ABDOMEN','LIPOASPIRAÇÃO MEMBROS','BLEFAROPLASTIA','RITIDOPLASTIA','OTOPLASTIA',
+    'EXODONTIA DE TERCEIRO MOLAR SUPERIOR','EXODONTIA DE TERCEIRO MOLAR INFERIOR','EXODONTIA DE TERCEIRO MOLAR','EXODONTIA MÚLTIPLA','EXODONTIA SIMPLES',
+    'FRATURA DE MANDÍBULA','FRATURA DE MANDÍBULA COM PLACA','FRATURA DE MAXILA','FRATURA DE ZIGOMÁTICO','FRATURA DE ÓRBITA','FRATURA DE OSSOS NASAIS',
+    'CIRURGIA ORTOGNÁTICA','CIRURGIA ORTOGNÁTICA BIMAXILAR','ARTROPLASTIA DE ATM','RECONSTRUÇÃO DE MANDÍBULA','RECONSTRUÇÃO DE MAXILA',
+    'ENXERTO ÓSSEO ALVEOLAR','ENXERTO ÓSSEO AUTÓGENO','IMPLANTE DENTÁRIO UNITÁRIO','IMPLANTE DENTÁRIO MÚLTIPLO','LEVANTAMENTO DE SEIO MAXILAR',
+    'CISTO ODONTOGÊNICO','TUMOR ODONTOGÊNICO','OSTEONECROSE DOS MAXILARES','TRAUMATISMO DENTÁRIO','CIRURGIA DE FENDA LABIOPALATINA',
+    'SIALOENDOSCOPIA','CIRURGIA DE GLÂNDULAS SALIVARES','DRENAGEM DE ABCESSO BUCOMAXILOFACIAL','DRENAGEM DE ABCESSO ODONTOGÊNICO',
+    'BIÓPSIA DE CAVIDADE ORAL','BIÓPSIA DE GLÂNDULA SALIVAR','EXÉRESE DE LESÃO BUCOMAXILOFACIAL'
 ];
 
 onValue(ref(db,'.info/connected'),(snap)=>{const s=document.getElementById('connectionStatus');if(snap.val()){s.innerHTML='🟢 Conectado';s.className='connection-status'}else{s.innerHTML='🔴 Reconectando...';s.className='connection-status offline'}});
@@ -941,7 +378,36 @@ window.openCancelModal=function(id){cancelSurgeryId=id;document.getElementById('
 window.closeCancelModal=function(){cancelSurgeryId=null;document.getElementById('cancelModal').classList.remove('active')};
 window.confirmCancel=function(){const r=document.getElementById('cancelReason').value.trim();if(!r){alert('⚠️ Informe o motivo!');return}if(cancelSurgeryId){update(ref(db,'surgeries/'+cancelSurgeryId),{status:'cancelada',cancelReason:r}).then(()=>{closeCancelModal()})}};
 
-window.editSurgery=function(id){const s=allSurgeries.find(s=>s.id===id);if(!s||(s.status!=='pendente'&&s.status!=='cancelada')){alert('⚠️ Só é possível editar cirurgias aguardando ou canceladas!');return}isEditing=true;document.getElementById('editId').value=s.id;document.getElementById('origem').value=s.origem||'';document.getElementById('surgeryDate').value=s.date;document.getElementById('surgeryTime').value=s.time;document.getElementById('patient').value=s.patient;document.getElementById('age').value=s.age||'';document.getElementById('surgeryType').value=s.type;document.getElementById('doctor').value=s.doctor;document.getElementById('specialty').value=s.specialty||'';document.getElementById('anesthetist').value=s.anesthetist||'';document.getElementById('circulante').value=s.circulante||'';document.getElementById('room').value=s.room;document.getElementById('formActionTitle').textContent='Editar Cirurgia';document.getElementById('submitBtn').textContent='💾 Salvar';document.getElementById('cancelEditBtn').style.display='block'};
+// ========== EDITAR CIRURGIA (PERMITE EDITAR QUALQUER STATUS) ==========
+window.editSurgery = function(id) {
+    const surgery = allSurgeries.find(s => s.id === id);
+    if (!surgery) {
+        alert('⚠️ Cirurgia não encontrada!');
+        return;
+    }
+    
+    // Permite editar qualquer cirurgia (pendente, em andamento, finalizada ou cancelada)
+    isEditing = true;
+    document.getElementById('editId').value = surgery.id;
+    document.getElementById('origem').value = surgery.origem || '';
+    document.getElementById('surgeryDate').value = surgery.date;
+    document.getElementById('surgeryTime').value = surgery.time || '';
+    document.getElementById('patient').value = surgery.patient || '';
+    document.getElementById('age').value = surgery.age || '';
+    document.getElementById('surgeryType').value = surgery.type || '';
+    document.getElementById('doctor').value = surgery.doctor || '';
+    document.getElementById('specialty').value = surgery.specialty || '';
+    document.getElementById('anesthetist').value = surgery.anesthetist || '';
+    document.getElementById('circulante').value = surgery.circulante || '';
+    document.getElementById('room').value = surgery.room || '';
+    
+    document.getElementById('formActionTitle').textContent = 'Editar Cirurgia';
+    document.getElementById('submitBtn').textContent = '💾 Salvar Alterações';
+    document.getElementById('cancelEditBtn').style.display = 'block';
+    
+    document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+};
+
 window.cancelEdit=function(){isEditing=false;document.getElementById('editId').value='';document.getElementById('formActionTitle').textContent='Registrar Cirurgia';document.getElementById('submitBtn').textContent='✅ Registrar';document.getElementById('cancelEditBtn').style.display='none';clearForm()};
 window.deleteSurgery=function(id){if(confirm('Excluir permanentemente?'))remove(ref(db,'surgeries/'+id))};
 window.switchTab=function(tab){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');document.getElementById('listTitle').textContent=tab==='today'?'Cirurgias do Dia':'Cirurgias Agendadas (Futuras)';updateList()};
@@ -958,7 +424,7 @@ function updateList(){
         const it=s.date===TODAY,dd=it?'HOJE':new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR');
         const ci=s.cancelReason?`<div class="cancel-reason">❌ Motivo: ${s.cancelReason}</div>`:'';
         const origemMap={Interno:'🏥 Interno','CR - Bucomaxilofacial':'🦷 CR Bucomaxilo','Solicitação Externa':'📋 Solic. Externa',Transferência:'🚑 Transferência','Urgência/Emergência':'🚨 Urgência/Emergência'};
-        return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ Dr. ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 Anestesista: Dr. ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>`:''}${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
+        return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ Dr. ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 Anestesista: Dr. ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
     }).join('')
 }
 
