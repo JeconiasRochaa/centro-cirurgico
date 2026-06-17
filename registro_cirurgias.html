@@ -64,8 +64,56 @@
         .stat-value { font-size: 32px; font-weight: 700; color: var(--text-primary); }
         .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; font-weight: 500; }
 
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-        .card { background: var(--bg-card); border-radius: 16px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+       /* AMBOS OS LADOS COM MESMA ALTURA */
+.main-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 22px; 
+    align-items: stretch; /* Estica os cards para mesma altura */
+}
+
+.card { 
+    background: var(--bg-card); 
+    border-radius: 16px; 
+    padding: 20px; /* Reduzido um pouco */
+    box-shadow: 0 2px 10px rgba(0,0,0,.08); 
+    display: flex; 
+    flex-direction: column;
+    /* Remove max-height e overflow hidden */
+}
+
+/* Formulário mostra todos os campos */
+.card form {
+    flex: 1;
+    overflow-y: visible; /* Sem scroll */
+    padding-right: 0;
+}
+
+/* Apenas a lista de cirurgias tem scroll */
+.card .surgery-list { 
+    flex: 1; 
+    overflow-y: auto; 
+    max-height: calc(100vh - 300px); /* Altura máxima com scroll */
+    padding-right: 5px;
+    min-height: 400px; /* Altura mínima */
+}
+
+/* Scrollbar apenas na lista */
+.surgery-list::-webkit-scrollbar { width: 6px; }
+.surgery-list::-webkit-scrollbar-track { background: var(--bg-body); }
+.surgery-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Tamanhos de fonte reduzidos no formulário para caber tudo */
+.card form .form-group { margin-bottom: 10px; }
+.card form label { font-size: 10px; margin-bottom: 3px; }
+.card form input, .card form select, .card form textarea { 
+    padding: 7px 10px; 
+    font-size: 12px; 
+}
+.card form textarea { min-height: 45px; }
+.card form small { font-size: 8px; }
+.card form .btn { padding: 9px; font-size: 13px; }
+.card form .btn-warning { margin-bottom: 4px; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 10px; }
         .card-title { font-size: 18px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
         .btn-report {
@@ -75,43 +123,44 @@
         }
         .btn-report:hover { background: var(--gold); color: var(--bg-dark); }
 
-        .form-group { margin-bottom: 16px; position: relative; }
-        label { display: block; margin-bottom: 6px; color: var(--text-secondary); font-size: 12px; font-weight: 600; letter-spacing: .5px; }
+        .form-group { margin-bottom: 14px; position: relative; }
+        label { display: block; margin-bottom: 5px; color: var(--text-secondary); font-size: 11px; font-weight: 600; letter-spacing: .5px; }
         label .required { color: var(--red); }
         input, select, textarea {
-            width: 100%; padding: 10px 14px; background: var(--bg-input);
+            width: 100%; padding: 9px 12px; background: var(--bg-input);
             border: 2px solid var(--border); border-radius: 8px;
-            color: var(--text-primary); font-size: 14px; transition: .3s;
+            color: var(--text-primary); font-size: 13px; transition: .3s;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        textarea { resize: vertical; min-height: 60px; }
+        textarea { resize: vertical; min-height: 55px; }
         input:focus, select:focus, textarea:focus {
             outline: none; border-color: var(--gold); background: #fff;
             box-shadow: 0 0 0 3px rgba(200,169,74,.15);
         }
+        .idade-calculada { display: inline-block; margin-left: 8px; font-weight: 700; color: var(--gold); font-size: 12px; }
 
         .suggestions-box {
             position: absolute; top: 100%; left: 0; right: 0;
             background: #fff; border: 2px solid var(--gold); border-radius: 8px;
-            max-height: 250px; overflow-y: auto; z-index: 100;
+            max-height: 200px; overflow-y: auto; z-index: 100;
             display: none; box-shadow: 0 10px 30px rgba(0,0,0,.2);
         }
         .suggestions-box.show { display: block; }
         .suggestion-item {
-            padding: 12px 15px; cursor: pointer; transition: .2s;
-            color: var(--text-secondary); font-size: 14px; border-bottom: 1px solid var(--border);
+            padding: 10px 14px; cursor: pointer; transition: .2s;
+            color: var(--text-secondary); font-size: 13px; border-bottom: 1px solid var(--border);
         }
         .suggestion-item:last-child { border-bottom: none; }
         .suggestion-item:hover { background: #fef9e7; color: var(--gold); }
         .suggestion-item .add-icon { color: var(--gold); margin-right: 8px; font-weight: 700; }
 
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: .3s; letter-spacing: .5px; }
-        .btn-primary { background: var(--gold); color: #fff; margin-bottom: 8px; }
+        .btn { width: 100%; padding: 11px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: .3s; letter-spacing: .5px; }
+        .btn-primary { background: var(--gold); color: #fff; margin-bottom: 6px; }
         .btn-primary:hover { background: var(--gold-hover); }
         .btn-danger { background: #fff; border: 2px solid var(--red); color: var(--red); }
         .btn-danger:hover { background: #fef2f2; }
-        .btn-warning { background: #fff; border: 2px solid var(--orange); color: var(--orange); margin-bottom: 8px; display: none; }
-        .btn-sm { padding: 5px 12px; border: 1px solid; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: .3s; background: #fff; }
+        .btn-warning { background: #fff; border: 2px solid var(--orange); color: var(--orange); margin-bottom: 6px; display: none; }
+        .btn-sm { padding: 4px 10px; border: 1px solid; border-radius: 5px; font-size: 10px; font-weight: 600; cursor: pointer; transition: .3s; background: #fff; }
         .btn-sm-start { border-color: var(--blue); color: var(--blue); }
         .btn-sm-start:hover { background: #eff6ff; }
         .btn-sm-finish { border-color: var(--green); color: var(--green); }
@@ -123,25 +172,24 @@
         .btn-sm-delete { border-color: #64748b; color: #64748b; }
         .btn-sm-delete:hover { background: #f1f5f9; }
 
-        .tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-        .tab { padding: 8px 20px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; transition: .3s; font-weight: 600; font-size: 13px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .tab { padding: 7px 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; transition: .3s; font-weight: 600; font-size: 12px; }
         .tab.active { background: var(--gold); border-color: var(--gold); color: #fff; }
 
-        .surgery-list { max-height: 520px; overflow-y: auto; }
-        .surgery-item { background: var(--bg-input); border-radius: 8px; padding: 14px; margin-bottom: 10px; border-left: 4px solid var(--border); transition: .3s; font-size: 13px; }
+        .surgery-item { background: var(--bg-input); border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 4px solid var(--border); transition: .3s; font-size: 12px; }
         .surgery-item:hover { background: #f1f5f9; transform: translateX(3px); }
         .surgery-item.pending { border-left-color: var(--orange); }
         .surgery-item.ongoing { border-left-color: var(--blue); background: rgba(59,130,246,.05); }
         .surgery-item.completed { border-left-color: var(--green); }
         .surgery-item.cancelled { border-left-color: var(--red); opacity: .7; }
-        .surgery-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
-        .surgery-type { font-weight: 600; color: var(--text-primary); font-size: 15px; }
-        .surgery-date-badge { font-size: 11px; color: var(--text-muted); background: var(--border); padding: 3px 10px; border-radius: 12px; font-weight: 500; }
+        .surgery-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
+        .surgery-type { font-weight: 600; color: var(--text-primary); font-size: 14px; }
+        .surgery-date-badge { font-size: 10px; color: var(--text-muted); background: var(--border); padding: 2px 8px; border-radius: 10px; font-weight: 500; }
         .surgery-date-badge.today { background: #dbeafe; color: #1e40af; }
         .surgery-date-badge.upcoming { background: #fef3c7; color: #92400e; }
-        .surgery-details { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
-        .cancel-reason { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: #991b1b; }
-        .action-btns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .surgery-details { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+        .cancel-reason { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 5px; padding: 6px 10px; margin-top: 6px; font-size: 11px; color: #991b1b; }
+        .action-btns { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 
         .connection-status { position: fixed; bottom: 20px; right: 20px; background: var(--bg-dark); color: var(--gold); padding: 10px 18px; border-radius: 10px; font-size: 12px; z-index: 1000; font-weight: 600; border: 1px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,.2); }
         .connection-status.offline { color: var(--red); border-color: var(--red); }
@@ -191,99 +239,19 @@
             <div class="card-header"><div class="card-title"><span id="formTitle">📝</span> <span id="formActionTitle">Registrar Cirurgia</span></div><button class="btn-report" onclick="openReportModal()">📊 Relatórios</button></div>
             <form id="surgeryForm">
                 <input type="hidden" id="editId">
-                
-                <div class="form-group">
-                    <label>🏥 Origem do Paciente <span class="required">*</span></label>
-                    <select id="origem" required>
-                        <option value="">Selecione a origem</option>
-                        <option value="Interno">Interno (Hospital)</option>
-                        <option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option>
-                        <option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option>
-                        <option value="Transferência">Transferência</option>
-                        <option value="Urgência/Emergência">Urgência/Emergência</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>👤 Nome do Paciente <span class="required">*</span></label>
-                    <input type="text" id="patient" placeholder="Nome completo do paciente" required>
-                </div>
-
-                <div class="form-group">
-                    <label>🎂 Idade <span class="required">*</span></label>
-                    <input type="number" id="age" placeholder="Idade do paciente" min="0" max="150" required>
-                </div>
-
-                <div class="form-group">
-                    <label>📅 Data da Cirurgia</label>
-                    <input type="date" id="surgeryDate" required onchange="checkConflict()">
-                </div>
-
-                <div class="form-group">
-                    <label>⏰ Horário de Início</label>
-                    <input type="time" id="surgeryTime" onchange="checkConflict()">
-                </div>
-
-                <div class="form-group">
-                    <label>🔬 Especialidade</label>
-                    <select id="specialty">
-                        <option value="">Selecione</option>
-                        <option value="Cirurgia Geral">Cirurgia Geral</option>
-                        <option value="Neurocirurgia">Neurocirurgia</option>
-                        <option value="Cirurgia Cardíaca">Cirurgia Cardíaca</option>
-                        <option value="Cirurgia Vascular">Cirurgia Vascular</option>
-                        <option value="Cirurgia Plástica">Cirurgia Plástica</option>
-                        <option value="Cirurgia Pediátrica">Cirurgia Pediátrica</option>
-                        <option value="Cirurgia Torácica">Cirurgia Torácica</option>
-                        <option value="Cirurgia Oncológica">Cirurgia Oncológica</option>
-                        <option value="Ortopedia">Ortopedia</option>
-                        <option value="Oftalmologia">Oftalmologia</option>
-                        <option value="Otorrinolaringologia">Otorrinolaringologia</option>
-                        <option value="Urologia">Urologia</option>
-                        <option value="Ginecologia">Ginecologia</option>
-                        <option value="Obstetrícia">Obstetrícia</option>
-                        <option value="Coloproctologia">Coloproctologia</option>
-                        <option value="Bucomaxilofacial">Bucomaxilofacial</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>🔪 Procedimento(s) <span class="required">*</span></label>
-                    <textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea>
-                    <div class="suggestions-box" id="suggestionsBox"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>👨‍⚕️ Médico(s) Responsável(is)</label>
-                    <input type="text" id="doctor" placeholder="Nome do médico (separe por vírgula para mais de um)">
-                    <small style="color:#64748b;font-size:10px">Para adicionar mais de um médico, separe os nomes por vírgula</small>
-                </div>
-
-                <div class="form-group">
-                    <label>💉 Anestesista</label>
-                    <input type="text" id="anesthetist" placeholder="Nome do anestesista">
-                </div>
-
-                <div class="form-group">
-                    <label>🔄 Instrumentista(s)</label>
-                    <input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)">
-                    <small style="color:#64748b;font-size:10px">Separe por vírgula para mais de um</small>
-                </div>
-
-                <div class="form-group">
-                    <label>🏥 Sala Cirúrgica</label>
-                    <select id="room" onchange="checkConflict()">
-                        <option value="">Selecione a sala</option>
-                        <option value="SALA A">SALA A</option>
-                        <option value="SALA B">SALA B</option>
-                        <option value="SALA C">SALA C</option>
-                        <option value="SALA D">SALA D</option>
-                    </select>
-                </div>
-
-                <div class="conflict-warning" id="conflictWarning" style="background:#fef3c7;border:1px solid var(--orange);border-radius:8px;padding:12px;color:#92400e;font-size:13px;margin-top:10px;display:none;font-weight:500;">
-                    ⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.
-                </div>
+                <div class="form-group"><label>🏥 Origem do Paciente <span class="required">*</span></label><select id="origem" required><option value="">Selecione a origem</option><option value="Interno">Interno (Hospital)</option><option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option><option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option><option value="Transferência">Transferência</option><option value="Urgência/Emergência">Urgência/Emergência</option></select></div>
+                <div class="form-group"><label>👤 Nome do Paciente <span class="required">*</span></label><input type="text" id="patient" placeholder="Nome completo do paciente" required></div>
+                <div class="form-group"><label>🎂 Data de Nascimento <span class="required">*</span></label><input type="date" id="birthDate" required onchange="calculateAge()"><span class="idade-calculada" id="calculatedAge"></span></div>
+                <input type="hidden" id="age">
+                <div class="form-group"><label>📅 Data da Cirurgia</label><input type="date" id="surgeryDate" required onchange="checkConflict()"></div>
+                <div class="form-group"><label>⏰ Horário de Início</label><input type="time" id="surgeryTime" onchange="checkConflict()"></div>
+                <div class="form-group"><label>🔬 Especialidade</label><select id="specialty"><option value="">Selecione</option><option value="Cirurgia Geral">Cirurgia Geral</option><option value="Neurocirurgia">Neurocirurgia</option><option value="Cirurgia Cardíaca">Cirurgia Cardíaca</option><option value="Cirurgia Vascular">Cirurgia Vascular</option><option value="Cirurgia Plástica">Cirurgia Plástica</option><option value="Cirurgia Pediátrica">Cirurgia Pediátrica</option><option value="Cirurgia Torácica">Cirurgia Torácica</option><option value="Cirurgia Oncológica">Cirurgia Oncológica</option><option value="Ortopedia">Ortopedia</option><option value="Oftalmologia">Oftalmologia</option><option value="Otorrinolaringologia">Otorrinolaringologia</option><option value="Urologia">Urologia</option><option value="Ginecologia">Ginecologia</option><option value="Obstetrícia">Obstetrícia</option><option value="Coloproctologia">Coloproctologia</option><option value="Bucomaxilofacial">Bucomaxilofacial</option></select></div>
+                <div class="form-group"><label>🔪 Procedimento(s) <span class="required">*</span></label><textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea><div class="suggestions-box" id="suggestionsBox"></div></div>
+                <div class="form-group"><label>👨‍⚕️ Médico(s) Responsável(is)</label><input type="text" id="doctor" placeholder="Nome do médico (separe por vírgula para mais de um)"><small style="color:#64748b;font-size:9px">Separe os nomes por vírgula</small></div>
+                <div class="form-group"><label>💉 Anestesista</label><input type="text" id="anesthetist" placeholder="Nome do anestesista"></div>
+                <div class="form-group"><label>🔄 Instrumentista(s)</label><input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)"><small style="color:#64748b;font-size:9px">Separe por vírgula</small></div>
+                <div class="form-group"><label>🏥 Sala Cirúrgica</label><select id="room" onchange="checkConflict()"><option value="">Selecione a sala</option><option value="SALA A">SALA A</option><option value="SALA B">SALA B</option><option value="SALA C">SALA C</option><option value="SALA D">SALA D</option></select></div>
+                <div class="conflict-warning" id="conflictWarning" style="background:#fef3c7;border:1px solid var(--orange);border-radius:8px;padding:10px;color:#92400e;font-size:12px;margin-top:8px;display:none;font-weight:500;">⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.</div>
                 <button type="submit" class="btn btn-primary" id="submitBtn">✅ Registrar Cirurgia</button>
                 <button type="button" class="btn btn-warning" id="cancelEditBtn" onclick="cancelEdit()">❌ Cancelar Edição</button>
                 <button type="button" class="btn btn-danger" onclick="clearForm()">🗑️ Limpar Formulário</button>
@@ -291,23 +259,19 @@
         </div>
 
         <div class="card">
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('today')">📅 Hoje</button>
-                <button class="tab" onclick="switchTab('upcoming')">📆 Agendadas</button>
-            </div>
+            <div class="tabs"><button class="tab active" onclick="switchTab('today')">📅 Hoje</button><button class="tab" onclick="switchTab('upcoming')">📆 Agendadas</button></div>
             <div class="card-header"><div class="card-title"><span>📋</span> <span id="listTitle">Cirurgias do Dia</span></div></div>
             <div class="surgery-list" id="surgeryList"><div style="text-align:center;padding:40px;color:#94a3b8">Nenhuma cirurgia registrada</div></div>
         </div>
     </div>
 </div>
 
-<!-- Modais -->
 <div class="modal-overlay" id="cancelModal"><div class="modal-content"><h2>❌ Cancelar Cirurgia</h2><p style="margin-bottom:15px;color:#64748b;font-size:14px">Informe o motivo:</p><textarea id="cancelReason" placeholder="Descreva o motivo..." style="width:100%;min-height:80px;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></textarea><button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar</button><button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button></div></div>
 <div class="modal-overlay" id="passwordModal"><div class="modal-content"><h2>🔐 Senha Administrativa</h2><p style="margin-bottom:15px;color:#64748b;font-size:14px">Digite a senha para acessar os relatórios:</p><input type="password" id="adminPassword" placeholder="Digite a senha..." style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:15px"><button class="modal-option" onclick="verifyPassword()" style="text-align:center">✅ Acessar Relatórios</button><button class="btn-close-modal" onclick="closePasswordModal()">❌ Cancelar</button></div></div>
 <div class="modal-overlay" id="changePasswordModal"><div class="modal-content"><h2>🔑 Alterar Senha</h2><input type="password" id="oldPassword" placeholder="Senha atual" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:10px"><input type="password" id="newPassword" placeholder="Nova senha" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:10px"><input type="password" id="confirmPassword" placeholder="Confirmar nova senha" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:15px"><button class="modal-option" onclick="changePassword()" style="text-align:center">✅ Alterar Senha</button><button class="btn-close-modal" onclick="closeChangePasswordModal()">❌ Cancelar</button></div></div>
 <div class="modal-overlay" id="reportModal"><div class="modal-content"><h2>📊 Gerar Relatório PDF</h2><button class="modal-option" onclick="generateReport('daily')">📅 Relatório Diário</button><button class="modal-option" onclick="generateReport('weekly')">📆 Relatório Semanal</button><button class="modal-option" onclick="generateReport('monthly')">📊 Relatório Mensal</button><button class="modal-option" onclick="generateReport('custom')">📋 Relatório Personalizado</button><button class="modal-option" onclick="generateReport('specialty')">🔬 Relatório por Especialidade</button><button class="modal-option" onclick="generateReport('all')">📁 Relatório Geral</button><button class="btn-close-modal" onclick="closeReportModal()">❌ Cancelar</button></div></div>
 <div class="modal-overlay" id="customDateModal"><div class="modal-content"><h2>📋 Período</h2><div style="margin-bottom:15px"><label>Data Inicial</label><input type="date" id="customStartDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><div style="margin-bottom:20px"><label>Data Final</label><input type="date" id="customEndDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><button class="modal-option" onclick="generateCustomReport()" style="text-align:center">✅ Gerar</button><button class="btn-close-modal" onclick="closeCustomDateModal()">❌ Cancelar</button></div></div>
-<div class="modal-overlay" id="specialtyModal"><div class="modal-content"><h2>🔬 Especialidade</h2><div style="margin-bottom:20px"><label>Especialidade</label><select id="specialtyFilter" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"><option value="">Todas</option><option>Cirurgia Geral</option><option>Neurocirurgia</option><option>Cirurgia Cardíaca</option><option>Cirurgia Plástica</option><option>Ortopedia</option><option>Oftalmologia</option><option>Urologia</option><option>Ginecologia</option><option>Obstetrícia</option><option>Bucomaxilofacial</option><option>Coloproctologia</option></select></div><button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center">✅ Gerar</button><button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button></div></div>
+<div class="modal-overlay" id="specialtyModal"><div class="modal-content"><h2>🔬 Relatório por Especialidade</h2><div style="margin-bottom:15px"><label>Especialidade</label><select id="specialtyFilter" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"><option value="">Todas</option><option>Cirurgia Geral</option><option>Neurocirurgia</option><option>Cirurgia Cardíaca</option><option>Cirurgia Plástica</option><option>Ortopedia</option><option>Oftalmologia</option><option>Urologia</option><option>Ginecologia</option><option>Obstetrícia</option><option>Bucomaxilofacial</option><option>Coloproctologia</option></select></div><div style="margin-bottom:10px"><label>Data Inicial</label><input type="date" id="specialtyStartDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><div style="margin-bottom:20px"><label>Data Final</label><input type="date" id="specialtyEndDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center">✅ Gerar Relatório</button><button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button></div></div>
 
 <div class="connection-status" id="connectionStatus">🟢 Conectado</div>
 <button class="btn-senha" title="Alterar senha" onclick="openChangePasswordModal()">🔑</button>
@@ -325,34 +289,110 @@ let TODAY=getToday(), currentTab='today', hasConflict=false, isEditing=false, al
 document.getElementById('surgeryDate').value=TODAY;
 document.getElementById('currentDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
+window.calculateAge = function() {
+    const birthDate = document.getElementById('birthDate').value;
+    const ageDisplay = document.getElementById('calculatedAge');
+    const ageHidden = document.getElementById('age');
+    if (!birthDate) { ageDisplay.textContent = ''; ageHidden.value = ''; return; }
+    const today = new Date(); const birth = new Date(birthDate + 'T00:00:00');
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) { age--; }
+    if (age < 0) age = 0;
+    ageDisplay.textContent = `(${age} anos)`; ageHidden.value = age;
+};
+
 const surgeryTypes = [
-    'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','APENDICECTOMIA','APENDICECTOMIA VIDEOLAPAROSCÓPICA',
-    'HERNIOPLASTIA INGUINAL','HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA','HERNIOPLASTIA UMBILICAL','HERNIOPLASTIA EPIGÁSTRICA','HERNIOPLASTIA INCISIONAL',
-    'LAPAROTOMIA EXPLORADORA','COLECTOMIA DIREITA','COLECTOMIA ESQUERDA','COLECTOMIA TOTAL','COLECTOMIA VIDEOLAPAROSCÓPICA',
+    // CIRURGIA GERAL
+    'CURATIVO GRAU II COM DEBRIDAMENTO','CURATIVO GRAU II SEM DEBRIDAMENTO','GASTROSTOMIA','APENDICECTOMIA','APENDICECTOMIA VIDEOLAPAROSCÓPICA',
+    'DRENAGEM DE ABCESSO ÂNU-RETAL','ENTERECTOMIA','ENTEROANASTOMOSE','TRATAMENTO CIRÚRGICO DE PROLAPSO ANAL',
+    'MARSUPIALIZAÇÃO DE ABCESSO','MARSUPIALIZAÇÃO DE CISTO','DRENAGEM DE HEMATOMA PRÉ-PERITONEAL','DRENAGEM DE ABCESSO PRÉ-PERITONEAL',
+    'HERNIOPLASTIA EPIGÁSTRICA','HERNIOPLASTIA INGUINAL UNILATERAL','HERNIOPLASTIA INGUINAL','HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA',
+    'HERNIOPLASTIA CRURAL UNILATERAL','HERNIOPLASTIA UMBILICAL','HERNIOPLASTIA INCISIONAL',
+    'LAPAROTOMIA EXPLORADORA','LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA DRENAGEM','LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA BIÓPSIA',
+    'CISTOSTOMIA','OOFRECTOMIA','OOFOROPLASTIA','SALPINGECTOMIA UNILATERAL','SALPINGECTOMIA BILATERAL',
+    'DRENAGEM DE ABCESSO DE MAMA','TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEAL','TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEOBRÔNQUICA',
+    'TORACOSTOMIA COM DRENAGEM PLEURAL FECHADA','TORACOCENTESE','DRENAGEM DE PLEURA',
+    'DEBRIDAMENTO DE ÚLCERA','DEBRIDAMENTO DE TECIDOS DESVITALIZADOS',
+    'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','COLECTOMIA DIREITA','COLECTOMIA ESQUERDA','COLECTOMIA TOTAL','COLECTOMIA VIDEOLAPAROSCÓPICA',
     'GASTRECTOMIA PARCIAL','GASTRECTOMIA TOTAL','GASTRECTOMIA VIDEOLAPAROSCÓPICA','BYPASS GÁSTRICO','SLEEVE GÁSTRICO','CIRURGIA BARIÁTRICA',
     'ESPLENECTOMIA','HEMORROIDECTOMIA','FISTULECTOMIA ANAL','FISTULECTOMIA PERIANAL','ESFINCTEROPLASTIA ANAL',
     'CESARIANA','HISTERECTOMIA TOTAL','HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA','HISTERECTOMIA PARCIAL','HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
-    'MASTECTOMIA','MASTECTOMIA COM RECONSTRUÇÃO','RECONSTRUÇÃO MAMÁRIA','MASTOPEXIA','OOFRECTOMIA','SALPINGECTOMIA','LAQUEADURA TUBÁRIA',
-    'CRANIOTOMIA','CRANIOTOMIA PARA TUMOR CEREBRAL','ANEURISMA CEREBRAL','HÉRNIA DE DISCO CERVICAL','HÉRNIA DE DISCO LOMBAR',
-    'CIRURGIA DE COLUNA','ARTRODESE DE COLUNA CERVICAL','ARTRODESE DE COLUNA LOMBAR','DESCOMPRESSÃO MEDULAR',
-    'REVASCULARIZAÇÃO MIOCÁRDICA','TROCA VALVAR AÓRTICA','TROCA VALVAR MITRAL','CATETERISMO CARDÍACO','COLOCAÇÃO DE MARCA-PASSO',
-    'SAFENECTOMIA','ESCLEROTERAPIA DE VARIZES',
+    'MASTECTOMIA','MASTECTOMIA COM RECONSTRUÇÃO','RECONSTRUÇÃO MAMÁRIA','MASTOPEXIA','LAQUEADURA TUBÁRIA',
+    'CRANIOTOMIA','CRANIOTOMIA PARA TUMOR CEREBRAL','ANEURISMA CEREBRAL',
+    'HÉRNIA DE DISCO CERVICAL','HÉRNIA DE DISCO LOMBAR','CIRURGIA DE COLUNA','ARTRODESE DE COLUNA CERVICAL','ARTRODESE DE COLUNA LOMBAR','DESCOMPRESSÃO MEDULAR',
+    'REVASCULARIZAÇÃO MIOCÁRDICA','TROCA VALVAR AÓRTICA','TROCA VALVAR MITRAL','CATETERISMO CARDÍACO','COLOCAÇÃO DE MARCA-PASSO','SAFENECTOMIA','ESCLEROTERAPIA DE VARIZES',
+    // ORTOPEDIA
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA CLAVÍCULA','TRATAMENTO CIRÚRGICO DE LUXAÇÃO ACROMIOCLAVICULAR',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO ACROMIOCLAVICULAR','TRATAMENTO CIRÚRGICO DE LUXAÇÃO ESCÁPULO-UMERAL AGUDA',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO ESCÁPULO-UMERAL AGUDA','REDUÇÃO INCRUENTA DE FRATURA DA DIÁFISE DO ÚMERO',
+    'REDUÇÃO INCRUENTA DE FRATURA DOS METACARPIANOS','TRATAMENTO CIRÚRGICO DE FRATURA DA EXTREMIDADE PROXIMAL DO ÚMERO',
+    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DA EXTREMIDADE PROXIMAL DO ÚMERO','TRATAMENTO CIRÚRGICO DE FRATURA DAS FALANGES DA MÃO',
+    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DAS FALANGES DA MÃO','TRATAMENTO CIRÚRGICO DE FRATURA DOS METACARPIANOS',
+    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DOS METACARPIANOS','TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DO ÚMERO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA EXTREMIDADE DISTAL DOS OSSOS DO ANTEBRAÇO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA METÁFISE DISTAL DOS OSSOS DO ANTEBRAÇO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA EXTREMIDADE PROXIMAL DOS OSSOS DO ANTEBRAÇO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA METÁFISE PROXIMAL DOS OSSOS DO ANTEBRAÇO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DE RÁDIO E ULNA','TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DO RÁDIO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DA ULNA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DE GALEAZZI',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DE MONTEGGIA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DE ESSEX-LOPRESTI',
+    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO CARPOMETACARPIANA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO CARPOMETACARPIANA',
+    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO METACARPOFALANGIANA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO METACARPOFALANGIANA',
+    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO DO COTOVELO','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DO COTOVELO',
+    'TRATAMENTO CIRÚRGICO DE PSEUDOARTROSE DO ÚMERO','TRATAMENTO CIRÚRGICO DE RETARDO DE CONSOLIDAÇÃO DO ÚMERO',
+    'TRATAMENTO CIRÚRGICO DE PERDA ÓSSEA DO ÚMERO','RECONSTRUÇÃO DE TENDÃO PATELAR','RECONSTRUÇÃO DE TENDÃO QUADRICIPITAL',
+    'REDUÇÃO INCRUENTA DE LUXAÇÃO METATARSOFALANGIANA','REDUÇÃO INCRUENTA DE FRATURA-LUXAÇÃO METATARSOFALANGIANA',
+    'REDUÇÃO INCRUENTA DE LUXAÇÃO INTERFALANGIANA DO PÉ','REDUÇÃO INCRUENTA DE FRATURA-LUXAÇÃO INTERFALANGIANA DO PÉ',
+    'REDUÇÃO INCRUENTA DE FRATURA DOS METATARSIANOS','REDUÇÃO INCRUENTA DE LESÃO FISÁRIA DOS METATARSIANOS',
+    'REDUÇÃO INCRUENTA DE FRATURA DO TORNOZELO','REDUÇÃO INCRUENTA DE LUXAÇÃO DO TORNOZELO',
+    'REDUÇÃO INCRUENTA DE FRATURA-LUXAÇÃO DO TORNOZELO','REDUÇÃO INCRUENTA DE FRATURA DIAFISÁRIA DISTAL DA TÍBIA',
+    'REDUÇÃO INCRUENTA DE LESÃO FISÁRIA DISTAL DA TÍBIA','REDUÇÃO INCRUENTA DE FRATURA PROXIMAL DO FÊMUR',
+    'REDUÇÃO INCRUENTA DE LESÃO FISÁRIA PROXIMAL DO FÊMUR','TRATAMENTO CIRÚRGICO DE FRATURA DOS METATARSIANOS',
+    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DOS METATARSIANOS','TRATAMENTO CIRÚRGICO DE FRATURA BIMALEOLAR DO TORNOZELO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA TRIMALEOLAR DO TORNOZELO','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DO TORNOZELO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DA TÍBIA','TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DO FÊMUR',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA PATELA','TRATAMENTO CIRÚRGICO DE FRATURA DO CALCÂNEO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DO PILÃO TIBIAL','TRATAMENTO CIRÚRGICO DE FRATURA DO PLANALTO TIBIAL',
+    'TRATAMENTO CIRÚRGICO DE FRATURA UNIMALEOLAR DO TORNOZELO','TRATAMENTO CIRÚRGICO DE FRATURA AO NÍVEL DO JOELHO',
+    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA AO NÍVEL DO JOELHO','TRATAMENTO CIRÚRGICO DE FRATURA DISTAL DA TÍBIA',
+    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DISTAL DA TÍBIA','TRATAMENTO CIRÚRGICO DE LESÃO AGUDA CÁPSULO-LIGAMENTAR DO JOELHO',
+    'TRATAMENTO CIRÚRGICO DE LESÃO AGUDA CÁPSULO-LIGAMENTAR DO TORNOZELO','TRATAMENTO CIRÚRGICO DE LUXAÇÃO DO JOELHO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DO JOELHO','TRATAMENTO CIRÚRGICO DE LUXAÇÃO METATARSOFALANGIANA',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO METATARSOFALANGIANA','TRATAMENTO CIRÚRGICO DE LUXAÇÃO INTERFALANGIANA',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO INTERFALANGIANA','TRATAMENTO CIRÚRGICO DE LUXAÇÃO TARSOMETATÁRSICA',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO TARSOMETATÁRSICA','MANIPULAÇÃO ARTICULAR',
+    'RESSECÇÃO SIMPLES DE TUMOR ÓSSEO','RESSECÇÃO SIMPLES DE TUMOR DE PARTES MOLES',
+    'RETIRADA DE CORPO ESTRANHO INTRA-ARTICULAR','RETIRADA DE CORPO ESTRANHO INTRAÓSSEO',
+    'RETIRADA DE FIO INTRAÓSSEO','RETIRADA DE PINO INTRAÓSSEO','RETIRADA DE FIXADOR EXTERNO',
+    'RETIRADA DE PLACA','RETIRADA DE PARAFUSOS','TENÓLISE','TENOPLASTIA','ENXERTO DE TENDÃO ÚNICO','TENORRAFIA EM TÚNEL ÓSTEO-FIBROSO',
     'ARTROPLASTIA DE QUADRIL','ARTROPLASTIA DE QUADRIL REVISÃO','ARTROPLASTIA DE JOELHO','ARTROPLASTIA DE JOELHO REVISÃO',
     'OSTEOSSÍNTESE DE FÊMUR','OSTEOSSÍNTESE DE FÊMUR COM PLACA','OSTEOSSÍNTESE DE FÊMUR COM HASTE','OSTEOSSÍNTESE DE TÍBIA','OSTEOSSÍNTESE DE TÍBIA COM PLACA',
     'OSTEOSSÍNTESE DE ÚMERO','OSTEOSSÍNTESE DE RÁDIO','OSTEOSSÍNTESE DE RÁDIO DISTAL','OSTEOSSÍNTESE DE TORNOZELO','OSTEOSSÍNTESE DE CLAVÍCULA',
     'RECONSTRUÇÃO DE LCA','MENISCECTOMIA','ARTROSCOPIA DE JOELHO','ARTROSCOPIA DE OMBRO','ARTROSCOPIA DE TORNOZELO',
     'CIRURGIA DE MANGUITO ROTADOR','TENODESE','TENORRAFIA','PRÓTESE DE OMBRO','PRÓTESE DE QUADRIL','PRÓTESE DE JOELHO',
-    'CIRURGIA DE CATARATA','FACECTOMIA','FACECTOMIA COM IMPLANTE DE LENTE','TRABECULECTOMIA','VITRECTOMIA','RETINOPEXIA',
-    'AMIGDALECTOMIA','ADENOIDECTOMIA','TIMPANOPLASTIA','SEPTOPLASTIA','RINOPLASTIA','SINUSECTOMIA','LARINGOSCOPIA',
-    'PROSTATECTOMIA','NEFRECTOMIA','NEFRECTOMIA VIDEOLAPAROSCÓPICA','LITÍASE RENAL','POSTECTOMIA','VASECTOMIA','CISTECTOMIA',
-    'ABDOMINOPLASTIA','LIPOASPIRAÇÃO','LIPOASPIRAÇÃO ABDOMEN','LIPOASPIRAÇÃO MEMBROS','BLEFAROPLASTIA','RITIDOPLASTIA','OTOPLASTIA',
+    // BUCOMAXILOFACIAL
+    'NEURÓLISE NÃO FUNCIONAL DE NERVOS PERIFÉRICOS','GLOSSECTOMIA PARCIAL','OSTEOTOMIA DA MAXILA','OSTEOTOMIA DA MANDÍBULA',
+    'RECONSTRUÇÃO DO SULCO GENGIVO-LABIAL','OSTEOSSÍNTESE DA FRATURA COMPLEXA DA MANDÍBULA',
+    'OSTEOSSÍNTESE DE FRATURA DO COMPLEXO ÓRBITO-ZIGOMÁTICO-MAXILAR','ARTROPLASTIA DA ARTICULAÇÃO TEMPOROMANDIBULAR',
+    'REDUÇÃO DE FRATURA ALVÉOLO-DENTÁRIA','REDUÇÃO DE FRATURA DA MAXILA LE FORT I',
+    'TRATAMENTO CIRÚRGICO DE OSTEOMA','TRATAMENTO CIRÚRGICO DE ODONTOMA','TRATAMENTO CIRÚRGICO DE OUTRAS LESÕES ESPECIFICADAS',
+    'OSTEOSSÍNTESE DA FRATURA DO OSSO ZIGOMÁTICO','RECONSTRUÇÃO PARCIAL DE MANDÍBULA','RECONSTRUÇÃO PARCIAL DE MAXILA',
+    'RESSECÇÃO DE LESÃO DA BOCA','OSTEOTOMIA DE MAXILA PARA ANOMALIA CRANIOFACIAL',
+    'OSTEOTOMIA DE MAXILA PARA ANOMALIA BUCOMAXILOFACIAL','OSTEOTOMIA DE MANDÍBULA PARA ANOMALIA CRANIOFACIAL',
+    'OSTEOTOMIA DE MANDÍBULA PARA ANOMALIA BUCOMAXILOFACIAL',
     'EXODONTIA DE TERCEIRO MOLAR SUPERIOR','EXODONTIA DE TERCEIRO MOLAR INFERIOR','EXODONTIA DE TERCEIRO MOLAR','EXODONTIA MÚLTIPLA','EXODONTIA SIMPLES',
     'FRATURA DE MANDÍBULA','FRATURA DE MANDÍBULA COM PLACA','FRATURA DE MAXILA','FRATURA DE ZIGOMÁTICO','FRATURA DE ÓRBITA','FRATURA DE OSSOS NASAIS',
     'CIRURGIA ORTOGNÁTICA','CIRURGIA ORTOGNÁTICA BIMAXILAR','ARTROPLASTIA DE ATM','RECONSTRUÇÃO DE MANDÍBULA','RECONSTRUÇÃO DE MAXILA',
     'ENXERTO ÓSSEO ALVEOLAR','ENXERTO ÓSSEO AUTÓGENO','IMPLANTE DENTÁRIO UNITÁRIO','IMPLANTE DENTÁRIO MÚLTIPLO','LEVANTAMENTO DE SEIO MAXILAR',
     'CISTO ODONTOGÊNICO','TUMOR ODONTOGÊNICO','OSTEONECROSE DOS MAXILARES','TRAUMATISMO DENTÁRIO','CIRURGIA DE FENDA LABIOPALATINA',
     'SIALOENDOSCOPIA','CIRURGIA DE GLÂNDULAS SALIVARES','DRENAGEM DE ABCESSO BUCOMAXILOFACIAL','DRENAGEM DE ABCESSO ODONTOGÊNICO',
-    'BIÓPSIA DE CAVIDADE ORAL','BIÓPSIA DE GLÂNDULA SALIVAR','EXÉRESE DE LESÃO BUCOMAXILOFACIAL'
+    'BIÓPSIA DE CAVIDADE ORAL','BIÓPSIA DE GLÂNDULA SALIVAR','EXÉRESE DE LESÃO BUCOMAXILOFACIAL',
+    // OUTROS
+    'CIRURGIA DE CATARATA','FACECTOMIA','FACECTOMIA COM IMPLANTE DE LENTE','TRABECULECTOMIA','VITRECTOMIA','RETINOPEXIA',
+    'AMIGDALECTOMIA','ADENOIDECTOMIA','TIMPANOPLASTIA','SEPTOPLASTIA','RINOPLASTIA','SINUSECTOMIA','LARINGOSCOPIA',
+    'PROSTATECTOMIA','NEFRECTOMIA','NEFRECTOMIA VIDEOLAPAROSCÓPICA','LITÍASE RENAL','POSTECTOMIA','VASECTOMIA','CISTECTOMIA',
+    'ABDOMINOPLASTIA','LIPOASPIRAÇÃO','LIPOASPIRAÇÃO ABDOMEN','LIPOASPIRAÇÃO MEMBROS','BLEFAROPLASTIA','RITIDOPLASTIA','OTOPLASTIA'
 ];
 
 onValue(ref(db,'.info/connected'),(snap)=>{const s=document.getElementById('connectionStatus');if(snap.val()){s.innerHTML='🟢 Conectado';s.className='connection-status'}else{s.innerHTML='🔴 Reconectando...';s.className='connection-status offline'}});
@@ -364,13 +404,13 @@ window.uploadLogo=function(e){const f=e.target.files[0];if(f){const r=new FileRe
 window.uploadGovLogo=function(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=function(ev){set(ref(db,'settings/govLogo'),ev.target.result).then(()=>{document.getElementById('govLogoUpload').innerHTML=`<img src="${ev.target.result}" alt="Logo Governo"><input type="file" accept="image/*" onchange="uploadGovLogo(event)"><div class="logo-hint">Governo</div>`})};r.readAsDataURL(f)}};
 
 const si=document.getElementById('surgeryType'),sb=document.getElementById('suggestionsBox');
-si.addEventListener('input',function(){const l=this.value.split('\n'),ll=l[l.length-1].trim().toUpperCase();if(ll.length<2){sb.classList.remove('show');return}const m=surgeryTypes.filter(t=>t.includes(ll));if(m.length){sb.innerHTML=m.slice(0,10).map(m=>`<div class="suggestion-item" onclick="addProcedure('${m.replace(/'/g,"\\'")}')"><span class="add-icon">➕</span> ${m.replace(new RegExp(`(${ll})`,'gi'),'<strong style="color:#c8a94a">$1</strong>')}</div>`).join('');sb.classList.add('show')}else sb.classList.remove('show')});
+si.addEventListener('input',function(){const l=this.value.split('\n'),ll=l[l.length-1].trim().toUpperCase();if(ll.length<2){sb.classList.remove('show');return}const m=surgeryTypes.filter(t=>t.includes(ll));if(m.length){sb.innerHTML=m.slice(0,8).map(m=>`<div class="suggestion-item" onclick="addProcedure('${m.replace(/'/g,"\\'")}')"><span class="add-icon">➕</span> ${m.replace(new RegExp(`(${ll})`,'gi'),'<strong style="color:#c8a94a">$1</strong>')}</div>`).join('');sb.classList.add('show')}else sb.classList.remove('show')});
 window.addProcedure=function(p){const t=document.getElementById('surgeryType'),l=t.value.split('\n');l.pop();l.push(p);t.value=l.join('\n')+'\n';sb.classList.remove('show');t.focus();t.setSelectionRange(t.value.length,t.value.length)};
 document.addEventListener('click',function(e){if(!si.contains(e.target)&&!sb.contains(e.target))sb.classList.remove('show')});
 
 function checkConflict(){const d=document.getElementById('surgeryDate').value,t=document.getElementById('surgeryTime').value,r=document.getElementById('room').value,e=document.getElementById('editId').value;if(!d||!t||!r){document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false;return}const c=allSurgeries.some(s=>s.date===d&&s.time===t&&s.room===r&&s.status!=='concluida'&&s.status!=='cancelada'&&s.id!==e);if(c){document.getElementById('conflictWarning').style.display='block';document.getElementById('submitBtn').disabled=true;hasConflict=true}else{document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false}}
 
-document.getElementById('surgeryForm').addEventListener('submit',function(e){e.preventDefault();if(hasConflict){alert('⚠️ Conflito!');return}const ed=document.getElementById('editId').value;const s={id:ed||push(ref(db,'surgeries')).key,origem:document.getElementById('origem').value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,patient:document.getElementById('patient').value.toUpperCase(),age:document.getElementById('age').value,type:document.getElementById('surgeryType').value.toUpperCase(),doctor:document.getElementById('doctor').value.toUpperCase(),specialty:document.getElementById('specialty').value,anesthetist:document.getElementById('anesthetist').value.toUpperCase(),circulante:document.getElementById('circulante').value.toUpperCase(),room:document.getElementById('room').value,status:'pendente',cancelReason:null};if(ed&&isEditing){const ex=allSurgeries.find(s=>s.id===ed);if(ex){s.status=ex.status;s.cancelReason=ex.cancelReason||null}}set(ref(db,'surgeries/'+s.id),s).then(()=>{clearForm();cancelEdit()})});
+document.getElementById('surgeryForm').addEventListener('submit',function(e){e.preventDefault();if(hasConflict){alert('⚠️ Conflito!');return}const ed=document.getElementById('editId').value;const s={id:ed||push(ref(db,'surgeries')).key,origem:document.getElementById('origem').value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,patient:document.getElementById('patient').value.toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,type:document.getElementById('surgeryType').value.toUpperCase(),doctor:document.getElementById('doctor').value.toUpperCase(),specialty:document.getElementById('specialty').value,anesthetist:document.getElementById('anesthetist').value.toUpperCase(),circulante:document.getElementById('circulante').value.toUpperCase(),room:document.getElementById('room').value,status:'pendente',cancelReason:null};if(ed&&isEditing){const ex=allSurgeries.find(s=>s.id===ed);if(ex){s.status=ex.status;s.cancelReason=ex.cancelReason||null}}set(ref(db,'surgeries/'+s.id),s).then(()=>{clearForm();cancelEdit()})});
 
 window.startSurgery=function(id){update(ref(db,'surgeries/'+id),{status:'em_andamento'})};
 window.finishSurgery=function(id){update(ref(db,'surgeries/'+id),{status:'concluida'})};
@@ -378,34 +418,26 @@ window.openCancelModal=function(id){cancelSurgeryId=id;document.getElementById('
 window.closeCancelModal=function(){cancelSurgeryId=null;document.getElementById('cancelModal').classList.remove('active')};
 window.confirmCancel=function(){const r=document.getElementById('cancelReason').value.trim();if(!r){alert('⚠️ Informe o motivo!');return}if(cancelSurgeryId){update(ref(db,'surgeries/'+cancelSurgeryId),{status:'cancelada',cancelReason:r}).then(()=>{closeCancelModal()})}};
 
-// ========== EDITAR CIRURGIA (PERMITE EDITAR QUALQUER STATUS) ==========
 window.editSurgery = function(id) {
     const surgery = allSurgeries.find(s => s.id === id);
-    if (!surgery) {
-        alert('⚠️ Cirurgia não encontrada!');
-        return;
-    }
-    
-    // Permite editar qualquer cirurgia (pendente, em andamento, finalizada ou cancelada)
+    if (!surgery) { alert('⚠️ Cirurgia não encontrada!'); return; }
     isEditing = true;
     document.getElementById('editId').value = surgery.id;
     document.getElementById('origem').value = surgery.origem || '';
     document.getElementById('surgeryDate').value = surgery.date;
     document.getElementById('surgeryTime').value = surgery.time || '';
     document.getElementById('patient').value = surgery.patient || '';
-    document.getElementById('age').value = surgery.age || '';
+    document.getElementById('birthDate').value = surgery.birthDate || '';
+    calculateAge();
     document.getElementById('surgeryType').value = surgery.type || '';
     document.getElementById('doctor').value = surgery.doctor || '';
     document.getElementById('specialty').value = surgery.specialty || '';
     document.getElementById('anesthetist').value = surgery.anesthetist || '';
     document.getElementById('circulante').value = surgery.circulante || '';
     document.getElementById('room').value = surgery.room || '';
-    
     document.getElementById('formActionTitle').textContent = 'Editar Cirurgia';
     document.getElementById('submitBtn').textContent = '💾 Salvar Alterações';
     document.getElementById('cancelEditBtn').style.display = 'block';
-    
-    document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
 };
 
 window.cancelEdit=function(){isEditing=false;document.getElementById('editId').value='';document.getElementById('formActionTitle').textContent='Registrar Cirurgia';document.getElementById('submitBtn').textContent='✅ Registrar';document.getElementById('cancelEditBtn').style.display='none';clearForm()};
@@ -428,10 +460,9 @@ function updateList(){
     }).join('')
 }
 
-window.clearForm=function(){document.getElementById('surgeryForm').reset();document.getElementById('surgeryDate').value=TODAY;document.getElementById('editId').value='';document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false};
+window.clearForm=function(){document.getElementById('surgeryForm').reset();document.getElementById('surgeryDate').value=TODAY;document.getElementById('editId').value='';document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;document.getElementById('calculatedAge').textContent='';hasConflict=false};
 window.checkConflict=checkConflict;
 
-// SENHA
 window.openReportModal=function(){document.getElementById('passwordModal').classList.add('active')};
 window.closePasswordModal=function(){document.getElementById('passwordModal').classList.remove('active')};
 window.verifyPassword=function(){const p=document.getElementById('adminPassword').value;if(p===ADMIN_PASSWORD){document.getElementById('adminPassword').value='';closePasswordModal();document.getElementById('reportModal').classList.add('active')}else{alert('❌ Senha incorreta!')}};
@@ -448,7 +479,21 @@ window.closeSpecialtyModal=function(){document.getElementById('specialtyModal').
 
 window.generateReport=function(type){closeReportModal();if(type==='custom'){openCustomDateModal();return}if(type==='specialty'){openSpecialtyModal();return}let f=[],t='';const td=new Date();if(type==='daily'){f=allSurgeries.filter(s=>s.date===TODAY);t='Relatório Diário'}else if(type==='weekly'){const w=new Date(td);w.setDate(w.getDate()-7);f=allSurgeries.filter(s=>s.date>=w.toISOString().split('T')[0]);t='Relatório Semanal'}else if(type==='monthly'){const m=new Date(td);m.setDate(m.getDate()-30);f=allSurgeries.filter(s=>s.date>=m.toISOString().split('T')[0]);t='Relatório Mensal'}else{f=allSurgeries;t='Relatório Geral'}createPDF(t,f)};
 window.generateCustomReport=function(){const s=document.getElementById('customStartDate').value,e=document.getElementById('customEndDate').value;if(!s||!e){alert('⚠️ Selecione as datas!');return}if(s>e){alert('⚠️ Data inicial maior!');return}closeCustomDateModal();createPDF('Relatório Personalizado',allSurgeries.filter(x=>x.date>=s&&x.date<=e),s,e)};
-window.generateSpecialtyReport=function(){const sp=document.getElementById('specialtyFilter').value,f=sp?allSurgeries.filter(s=>s.specialty===sp):allSurgeries;closeSpecialtyModal();createPDF(`Relatório${sp?' - '+sp:' Geral'}`,f)};
+
+window.generateSpecialtyReport = function() {
+    const sp = document.getElementById('specialtyFilter').value;
+    const startDate = document.getElementById('specialtyStartDate').value;
+    const endDate = document.getElementById('specialtyEndDate').value;
+    let filtered = allSurgeries;
+    if (sp) { filtered = filtered.filter(s => s.specialty === sp); }
+    if (startDate && endDate) {
+        if (startDate > endDate) { alert('⚠️ Data inicial maior que final!'); return; }
+        filtered = filtered.filter(s => s.date >= startDate && s.date <= endDate);
+    }
+    closeSpecialtyModal();
+    const periodText = startDate && endDate ? `Período: ${new Date(startDate+'T00:00:00').toLocaleDateString('pt-BR')} a ${new Date(endDate+'T00:00:00').toLocaleDateString('pt-BR')}` : '';
+    createPDF(`Relatório${sp?' - '+sp:' Geral'}${periodText?' - '+periodText:''}`, filtered, startDate || undefined, endDate || undefined);
+};
 
 function createPDF(title,surgeries,startDate,endDate){
     const {jsPDF}=window.jspdf,doc=new jsPDF('landscape');
