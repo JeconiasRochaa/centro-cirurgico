@@ -161,7 +161,6 @@
             text-transform: uppercase; border-bottom: 2px solid var(--gold);
             white-space: nowrap; font-weight: 700;
         }
-        /* Colunas atualizadas: Sala, Horário, Paciente, Idade, Origem, Procedimento, Médico, Especialid., Anestesista, Instrum., Status */
         thead th:nth-child(1){width:5%} thead th:nth-child(2){width:6%}
         thead th:nth-child(3){width:11%} thead th:nth-child(4){width:4%}
         thead th:nth-child(5){width:8%} thead th:nth-child(6){width:16%}
@@ -279,17 +278,9 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Sala</th>
-                            <th>Horário</th>
-                            <th>Paciente</th>
-                            <th>Idade</th>
-                            <th>Origem</th>
-                            <th>Procedimento</th>
-                            <th>Médico</th>
-                            <th>Especialid.</th>
-                            <th>Anestesista</th>
-                            <th>Instrum.</th>
-                            <th>Status</th>
+                            <th>Sala</th><th>Horário</th><th>Paciente</th><th>Idade</th>
+                            <th>Origem</th><th>Procedimento</th><th>Médico</th>
+                            <th>Especialid.</th><th>Anestesista</th><th>Instrum.</th><th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="surgeriesTableBody">
@@ -325,7 +316,6 @@
         function getToday(){const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
         let TODAY=getToday(),currentSurgeries=[],lastDayCheck=new Date().getDate(),notificationTimeout=null,lastNotifiedSurgeryId=null;
 
-        // Mapeamento de origem para exibição resumida
         const origemMap = {
             'Interno': '🏥 Interno',
             'CR - Bucomaxilofacial': '🦷 CR Bucomaxilo',
@@ -379,29 +369,26 @@
             document.getElementById('cancelled').textContent=String(t.filter(s=>s.status==='cancelada').length).padStart(2,'0');
             const b=document.getElementById('surgeriesTableBody');
             if(!t.length){b.innerHTML='<tr><td colspan="11"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
-            else{b.innerHTML=t.sort((a,b)=>a.time.localeCompare(b.time)).map(s=>{
-                let sh='',rc='';
-                if(s.status==='pendente')sh=`<span class="status-badge status-waiting">⏳ Aguardando</span>`;
-                else if(s.status==='em_andamento'){sh=`<span class="status-badge status-progress">⚙️ Em Andamento</span>`;rc='row-ongoing'}
-                else if(s.status==='concluida')sh=`<span class="status-badge status-done">✅ Finalizado</span>`;
-                else{sh=`<span class="status-badge status-cancelled">❌ Cancelada</span>`;rc='row-cancelled'}
-                const mh=s.cancelReason?`<br><span class="cancel-badge" title="${s.cancelReason}">Motivo: ${s.cancelReason.substring(0,15)}${s.cancelReason.length>15?'...':''}</span>`:'';
-                const pr=(s.type||'-').replace(/\n/g,'<br>');
-                const origemCurta = origemMap[s.origem] || s.origem || '-';
-                return `<tr class="${rc}">
-                    <td><strong>${s.room||'-'}</strong></td>
-                    <td>${s.time||'-'}</td>
-                    <td><span class="cell-content">${s.patient||'-'}</span></td>
-                    <td>${s.age||'-'}</td>
-                    <td>${origemCurta}</td>
-                    <td><span class="cell-content">${pr}${mh}</span></td>
-                    <td><span class="cell-content">Dr. ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td>
-                    <td>${s.specialty||'-'}</td>
-                    <td><span class="cell-content">Dr. ${s.anesthetist||'-'}</span></td>
-                    <td>${s.circulante||'-'}</td>
-                    <td>${sh}</td>
-                </tr>`
-            }).join('')}
+            else{
+                // ORDENAÇÃO: Em Andamento > Aguardando > Finalizadas > Canceladas
+                const statusOrder = { 'em_andamento': 1, 'pendente': 2, 'concluida': 3, 'cancelada': 4 };
+                b.innerHTML=t.sort((a,b)=>{
+                    const sa = statusOrder[a.status] || 5;
+                    const sb = statusOrder[b.status] || 5;
+                    if (sa !== sb) return sa - sb;
+                    return a.time.localeCompare(b.time);
+                }).map(s=>{
+                    let sh='',rc='';
+                    if(s.status==='pendente')sh=`<span class="status-badge status-waiting">⏳ Aguardando</span>`;
+                    else if(s.status==='em_andamento'){sh=`<span class="status-badge status-progress">⚙️ Em Andamento</span>`;rc='row-ongoing'}
+                    else if(s.status==='concluida')sh=`<span class="status-badge status-done">✅ Finalizado</span>`;
+                    else{sh=`<span class="status-badge status-cancelled">❌ Cancelada</span>`;rc='row-cancelled'}
+                    const mh=s.cancelReason?`<br><span class="cancel-badge" title="${s.cancelReason}">Motivo: ${s.cancelReason.substring(0,15)}${s.cancelReason.length>15?'...':''}</span>`:'';
+                    const pr=(s.type||'-').replace(/\n/g,'<br>');
+                    const origemCurta = origemMap[s.origem] || s.origem || '-';
+                    return `<tr class="${rc}"><td><strong>${s.room||'-'}</strong></td><td>${s.time||'-'}</td><td><span class="cell-content">${s.patient||'-'}</span></td><td>${s.age||'-'}</td><td>${origemCurta}</td><td><span class="cell-content">${pr}${mh}</span></td><td><span class="cell-content">Dr. ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td><td>${s.specialty||'-'}</td><td><span class="cell-content">Dr. ${s.anesthetist||'-'}</span></td><td>${s.circulante||'-'}</td><td>${sh}</td></tr>`
+                }).join('')
+            }
             document.getElementById('updateTime').textContent=`Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`
         }
 
