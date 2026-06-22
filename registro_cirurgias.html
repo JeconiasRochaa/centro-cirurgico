@@ -71,12 +71,18 @@
         .date-display-header { font-weight: 600; font-size: 14px; color: #fff; text-align: right; }
 
         .header-actions { display: flex; gap: 8px; align-items: center; }
-        .theme-toggle, .btn-header {
+        .theme-toggle {
+            background: transparent; border: none; color: var(--gold);
+            padding: 5px 8px; border-radius: 6px; cursor: pointer;
+            font-size: 18px; transition: 0.3s; line-height: 1;
+        }
+        .theme-toggle:hover { background: rgba(200,169,74,.2); }
+        .btn-header {
             background: transparent; border: 1px solid var(--gold); color: var(--gold);
             padding: 5px 10px; border-radius: 6px; cursor: pointer;
             font-size: 12px; font-weight: 600; transition: 0.3s; white-space: nowrap;
         }
-        .theme-toggle:hover, .btn-header:hover { background: var(--gold); color: var(--bg-dark); }
+        .btn-header:hover { background: var(--gold); color: var(--bg-dark); }
 
         .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px; }
         .stat-card {
@@ -236,7 +242,7 @@
         <div class="header-right">
             <div class="date-display-header" id="currentDate"></div>
             <div class="header-actions">
-                <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">🌙 Tema</button>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema" id="themeIcon">☀️</button>
                 <button class="btn-header" onclick="openReportModal()">📊 Relatórios</button>
             </div>
         </div>
@@ -260,13 +266,13 @@
             </div>
             <form id="surgeryForm">
                 <input type="hidden" id="editId">
-                <input type="hidden" id="doctorCRMHidden">
                 
-                <!-- 4 CAMPOS OBRIGATÓRIOS -->
+                <!-- 5 CAMPOS OBRIGATÓRIOS -->
                 <div class="form-group"><label>🏥 Origem do Paciente <span class="required">*</span></label><select id="origem" required><option value="">Selecione a origem</option><option value="Interno">Interno (Hospital)</option><option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option><option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option><option value="Transferência">Transferência</option><option value="Urgência/Emergência">Urgência/Emergência</option></select></div>
                 <div class="form-group"><label>👤 Nome do Paciente <span class="required">*</span></label><input type="text" id="patient" placeholder="Nome completo do paciente" required></div>
                 <div class="form-group"><label>🎂 Data de Nascimento <span class="required">*</span></label><input type="date" id="birthDate" required onchange="calculateAge()"><span class="idade-calculada" id="calculatedAge"></span></div>
                 <input type="hidden" id="age">
+                <div class="form-group"><label>📋 Nº Prontuário <span class="required">*</span></label><input type="text" id="prontuario" placeholder="Número do prontuário" required></div>
                 <div class="form-group"><label>🔪 Procedimento(s) <span class="required">*</span></label><textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea><div class="suggestions-box" id="suggestionsBox"></div></div>
                 
                 <!-- CAMPOS OPCIONAIS -->
@@ -299,7 +305,6 @@
 <!-- MODAIS -->
 <div class="modal-overlay" id="cancelModal"><div class="modal-content"><h2>❌ Cancelar Cirurgia</h2><p style="margin-bottom:12px;color:var(--text-muted);font-size:13px">Informe o motivo:</p><textarea id="cancelReason" placeholder="Descreva o motivo..." style="width:100%;min-height:70px;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></textarea><button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar</button><button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button></div></div>
 
-<!-- MODAL DE SENHA (COM ENTER) -->
 <div class="modal-overlay" id="passwordModal">
     <div class="modal-content">
         <h2>🔐 Senha Administrativa</h2>
@@ -310,9 +315,59 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="reportModal"><div class="modal-content"><h2>📊 Gerar Relatório PDF</h2><button class="modal-option" onclick="generateReport('daily')">📅 Relatório Diário</button><button class="modal-option" onclick="generateReport('weekly')">📆 Relatório Semanal</button><button class="modal-option" onclick="generateReport('monthly')">📊 Relatório Mensal</button><button class="modal-option" onclick="generateReport('custom')">📋 Relatório Personalizado</button><button class="modal-option" onclick="generateReport('specialty')">🔬 Relatório por Especialidade</button><button class="modal-option" onclick="generateReport('all')">📁 Relatório Geral</button><button class="btn-close-modal" onclick="closeReportModal()">❌ Cancelar</button></div></div>
-<div class="modal-overlay" id="customDateModal"><div class="modal-content"><h2>📋 Período</h2><div style="margin-bottom:12px"><label>Data Inicial</label><input type="date" id="customStartDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><div style="margin-bottom:16px"><label>Data Final</label><input type="date" id="customEndDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><button class="modal-option" onclick="generateCustomReport()" style="text-align:center">✅ Gerar</button><button class="btn-close-modal" onclick="closeCustomDateModal()">❌ Cancelar</button></div></div>
-<div class="modal-overlay" id="specialtyModal"><div class="modal-content"><h2>🔬 Relatório por Especialidade</h2><div style="margin-bottom:12px"><label>Especialidade</label><select id="specialtyFilter" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"><option value="">Todas</option><option>Cirurgia Geral</option><option>Neurocirurgia</option><option>Cirurgia Cardíaca</option><option>Cirurgia Plástica</option><option>Ortopedia</option><option>Oftalmologia</option><option>Urologia</option><option>Ginecologia</option><option>Obstetrícia</option><option>Bucomaxilofacial</option><option>Coloproctologia</option></select></div><div style="margin-bottom:8px"><label>Data Inicial</label><input type="date" id="specialtyStartDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><div style="margin-bottom:16px"><label>Data Final</label><input type="date" id="specialtyEndDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center">✅ Gerar Relatório</button><button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button></div></div>
+<div class="modal-overlay" id="reportModal">
+    <div class="modal-content">
+        <h2>📊 Gerar Relatório PDF</h2>
+    <button class="modal-option" onclick="generateReport('daily')">📅 Relatório Diário</button>
+        <button class="modal-option" onclick="generateReport('weekly')">📆 Relatório Semanal</button>
+        <button class="modal-option" onclick="generateReport('monthly')">📊 Relatório Mensal</button>
+        <button class="modal-option" onclick="generateReport('custom')">📋 Relatório Personalizado</button>
+        <button class="modal-option" onclick="generateReport('specialty')">🔬 Relatório por Especialidade</button>
+        <button class="modal-option" onclick="generateReport('all')">📁 Relatório Geral</button>
+        <button class="btn-close-modal" onclick="closeReportModal()">❌ Cancelar</button>
+    </div>
+</div>
+<div class="modal-overlay" id="customDateModal">
+    <div class="modal-content">
+    <h2>📋 Período</h2>
+    <div style="margin-bottom:12px">
+        <label>Data Inicial</label>
+        <input type="date" id="customStartDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div>
+    <div style="margin-bottom:16px"><label>Data Final</label>
+        <input type="date" id="customEndDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div>
+        <button class="modal-option" onclick="generateCustomReport()" style="text-align:center">✅ Gerar</button>
+        <button class="btn-close-modal" onclick="closeCustomDateModal()">❌ Cancelar</button>
+    </div>
+</div>
+<div class="modal-overlay" id="specialtyModal">
+    <div class="modal-content">
+    <h2>🔬 Relatório por Especialidade</h2>
+    <div style="margin-bottom:12px">
+        <label>Especialidade</label>
+        <select id="specialtyFilter" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)">
+            <option value="">Todas</option>
+            <option>Cirurgia Geral</option>
+            <option>Neurocirurgia</option>
+            <option>Cirurgia Cardíaca</option>
+            <option>Cirurgia Plástica</option>
+            <option>Ortopedia</option>
+            <option>Oftalmologia</option>
+            <option>Urologia</option>
+            <option>Ginecologia</option>
+            <option>Obstetrícia</option>
+            <option>Bucomaxilofacial</option>
+            <option>Coloproctologia</option>
+        </select>
+    </div>
+        <div style="margin-bottom:8px"><label>Data Inicial</label>
+            <input type="date" id="specialtyStartDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div>
+        <div style="margin-bottom:16px">
+            <label>Data Final</label>
+            <input type="date" id="specialtyEndDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div>
+        <button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center">✅ Gerar Relatório</button>
+        <button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button>
+    </div>
+</div>
 
 <div class="connection-status" id="connectionStatus">🟢 Conectado</div>
 
@@ -329,7 +384,7 @@ let TODAY=getToday(), currentTab='today', hasConflict=false, isEditing=false, al
 document.getElementById('surgeryDate').value=TODAY;
 document.getElementById('currentDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
-// ========== DETECTAR Dr./Dra. (Médico E Anestesista) ==========
+// ========== DETECTAR Dr./Dra. ==========
 function getDoctorTitle(name) {
     if (!name) return 'Dr.';
     const cleanName = name.replace(/^(dr\.?|dra\.?)\s*/i, '').trim();
@@ -354,13 +409,29 @@ function getDoctorTitle(name) {
     return 'Dr.';
 }
 
-// ========== TEMA ==========
+// ========== TEMA (SOL/LUA) ==========
 window.toggleTheme = function() {
     const body = document.documentElement;
-    if (body.getAttribute('data-theme') === 'dark') { body.removeAttribute('data-theme'); localStorage.setItem('hrpi_theme', 'light'); }
-    else { body.setAttribute('data-theme', 'dark'); localStorage.setItem('hrpi_theme', 'dark'); }
+    const icon = document.getElementById('themeIcon');
+    if (body.getAttribute('data-theme') === 'dark') {
+        body.removeAttribute('data-theme');
+        localStorage.setItem('hrpi_theme', 'light');
+        icon.textContent = '☀️';
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('hrpi_theme', 'dark');
+        icon.textContent = '🌙';
+    }
 };
-(function loadTheme() { if (localStorage.getItem('hrpi_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); })();
+(function loadTheme() {
+    const icon = document.getElementById('themeIcon');
+    if (localStorage.getItem('hrpi_theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.textContent = '🌙';
+    } else {
+        icon.textContent = '☀️';
+    }
+})();
 
 // ========== CÁLCULO DE IDADE ==========
 window.calculateAge = function() {
@@ -412,7 +483,7 @@ document.addEventListener('click',function(e){if(!si.contains(e.target)&&!sb.con
 function checkConflict(){const d=document.getElementById('surgeryDate').value,t=document.getElementById('surgeryTime').value,r=document.getElementById('room').value,e=document.getElementById('editId').value;if(!d||!t||!r){document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false;return}const c=allSurgeries.some(s=>s.date===d&&s.time===t&&s.room===r&&s.status!=='concluida'&&s.status!=='cancelada'&&s.id!==e);if(c){document.getElementById('conflictWarning').style.display='block';document.getElementById('submitBtn').disabled=true;hasConflict=true}else{document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false}}
 
 // ========== SUBMIT ==========
-document.getElementById('surgeryForm').addEventListener('submit',function(e){e.preventDefault();if(hasConflict){alert('⚠️ Conflito!');return}const ed=document.getElementById('editId').value;const s={id:ed||push(ref(db,'surgeries')).key,origem:document.getElementById('origem').value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,patient:document.getElementById('patient').value.toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,type:document.getElementById('surgeryType').value.toUpperCase(),doctor:document.getElementById('doctor').value.toUpperCase(),doctorCRM:document.getElementById('doctorCRMHidden').value,specialty:document.getElementById('specialty').value,anesthetist:document.getElementById('anesthetist').value.toUpperCase(),circulante:document.getElementById('circulante').value.toUpperCase(),room:document.getElementById('room').value,status:'pendente',cancelReason:null};if(ed&&isEditing){const ex=allSurgeries.find(s=>s.id===ed);if(ex){s.status=ex.status;s.cancelReason=ex.cancelReason||null}}set(ref(db,'surgeries/'+s.id),s).then(()=>{clearForm();cancelEdit()})});
+document.getElementById('surgeryForm').addEventListener('submit',function(e){e.preventDefault();if(hasConflict){alert('⚠️ Conflito!');return}const ed=document.getElementById('editId').value;const s={id:ed||push(ref(db,'surgeries')).key,origem:document.getElementById('origem').value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,patient:document.getElementById('patient').value.toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,prontuario:document.getElementById('prontuario').value,type:document.getElementById('surgeryType').value.toUpperCase(),doctor:document.getElementById('doctor').value.toUpperCase(),specialty:document.getElementById('specialty').value,anesthetist:document.getElementById('anesthetist').value.toUpperCase(),circulante:document.getElementById('circulante').value.toUpperCase(),room:document.getElementById('room').value,status:'pendente',cancelReason:null};if(ed&&isEditing){const ex=allSurgeries.find(s=>s.id===ed);if(ex){s.status=ex.status;s.cancelReason=ex.cancelReason||null}}set(ref(db,'surgeries/'+s.id),s).then(()=>{clearForm();cancelEdit()})});
 
 // ========== AÇÕES ==========
 window.startSurgery=function(id){update(ref(db,'surgeries/'+id),{status:'em_andamento'})};
@@ -430,9 +501,9 @@ window.editSurgery = function(id) {
     document.getElementById('surgeryTime').value = surgery.time || '';
     document.getElementById('patient').value = surgery.patient || '';
     document.getElementById('birthDate').value = surgery.birthDate || ''; calculateAge();
+    document.getElementById('prontuario').value = surgery.prontuario || '';
     document.getElementById('surgeryType').value = surgery.type || '';
     document.getElementById('doctor').value = surgery.doctor || '';
-    document.getElementById('doctorCRMHidden').value = surgery.doctorCRM || '';
     document.getElementById('specialty').value = surgery.specialty || '';
     document.getElementById('anesthetist').value = surgery.anesthetist || '';
     document.getElementById('circulante').value = surgery.circulante || '';
@@ -472,14 +543,14 @@ function updateList(){
         const origemMap={Interno:'🏥 Interno','CR - Bucomaxilofacial':'🦷 CR Bucomaxilo','Solicitação Externa':'📋 Solic. Externa',Transferência:'🚑 Transferência','Urgência/Emergência':'🚨 Urgência/Emergência'};
         const doctorTitle = getDoctorTitle(s.doctor);
         const anesthetistTitle = getDoctorTitle(s.anesthetist);
-        return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}${s.doctorCRM?`<br>📋 CRM: ${s.doctorCRM}`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ ${doctorTitle} ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 ${anesthetistTitle} ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
+        return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}${s.prontuario?`<br>📋 Prontuário: ${s.prontuario}`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ ${doctorTitle} ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 ${anesthetistTitle} ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
     }).join('')
 }
 
 window.clearForm=function(){document.getElementById('surgeryForm').reset();document.getElementById('surgeryDate').value=TODAY;document.getElementById('editId').value='';document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;document.getElementById('calculatedAge').textContent='';hasConflict=false};
 window.checkConflict=checkConflict;
 
-// ========== RELATÓRIOS (COM SENHA E ENTER) ==========
+// ========== RELATÓRIOS ==========
 window.openReportModal = function() {
     document.getElementById('passwordModal').classList.add('active');
     setTimeout(() => document.getElementById('adminPassword').focus(), 300);
@@ -524,8 +595,8 @@ function createPDF(title,surgeries,startDate,endDate){
     doc.text(pt,14,34);
     const co=surgeries.filter(s=>s.status==='concluida').length,ip=surgeries.filter(s=>s.status==='em_andamento').length,wa=surgeries.filter(s=>s.status==='pendente').length,ca=surgeries.filter(s=>s.status==='cancelada').length;
     doc.setFontSize(9);doc.setTextColor(6,34,74);doc.text(`Total: ${surgeries.length} | Finalizadas: ${co} | Em Andamento: ${ip} | Aguardando: ${wa} | Canceladas: ${ca}`,14,40);
-    const td=surgeries.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time)).map((s,i)=>[i+1,new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR'),s.time||'-',s.patient,s.age||'-',s.type.replace(/\n/g,' | '),s.origem||'-',`${getDoctorTitle(s.doctor)} ${s.doctor||'-'} (CRM: ${s.doctorCRM||'-'})`,s.specialty||'-',`${getDoctorTitle(s.anesthetist)} ${s.anesthetist||'-'}`,s.room||'-',s.circulante||'-',s.status==='pendente'?'Aguardando':s.status==='em_andamento'?'Em andamento':s.status==='concluida'?'Finalizada':'Cancelada',s.cancelReason||'-']);
-    doc.autoTable({startY:44,head:[['Nº','Data','Horário','Paciente','Idade','Procedimentos','Origem','Médico (CRM)','Especialidade','Anestesista','Sala','Instrumentista(s)','Status','Motivo Cancel.']],body:td,styles:{fontSize:6,cellPadding:2},headStyles:{fillColor:[6,34,74],textColor:255,fontStyle:'bold',fontSize:6},alternateRowStyles:{fillColor:[245,247,250]},didParseCell:function(d){if(d.column.index===12&&d.cell.raw==='Em andamento')d.cell.styles.textColor=[59,130,246];else if(d.column.index===12&&d.cell.raw==='Finalizada')d.cell.styles.textColor=[16,185,129];else if(d.column.index===12&&d.cell.raw==='Cancelada')d.cell.styles.textColor=[239,68,68]}});
+    const td=surgeries.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time)).map((s,i)=>[i+1,new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR'),s.time||'-',s.patient,s.age||'-',s.prontuario||'-',s.type.replace(/\n/g,' | '),s.origem||'-',`${getDoctorTitle(s.doctor)} ${s.doctor||'-'}`,s.specialty||'-',`${getDoctorTitle(s.anesthetist)} ${s.anesthetist||'-'}`,s.room||'-',s.circulante||'-',s.status==='pendente'?'Aguardando':s.status==='em_andamento'?'Em andamento':s.status==='concluida'?'Finalizada':'Cancelada',s.cancelReason||'-']);
+    doc.autoTable({startY:44,head:[['Nº','Data','Horário','Paciente','Idade','Prontuário','Procedimentos','Origem','Médico','Especialidade','Anestesista','Sala','Instrumentista(s)','Status','Motivo Cancel.']],body:td,styles:{fontSize:6,cellPadding:2},headStyles:{fillColor:[6,34,74],textColor:255,fontStyle:'bold',fontSize:6},alternateRowStyles:{fillColor:[245,247,250]},didParseCell:function(d){if(d.column.index===13&&d.cell.raw==='Em andamento')d.cell.styles.textColor=[59,130,246];else if(d.column.index===13&&d.cell.raw==='Finalizada')d.cell.styles.textColor=[16,185,129];else if(d.column.index===13&&d.cell.raw==='Cancelada')d.cell.styles.textColor=[239,68,68]}});
     const pc=doc.internal.getNumberOfPages();for(let i=1;i<=pc;i++){doc.setPage(i);doc.setFontSize(7);doc.setTextColor(150,150,150);doc.text(`HRPI - Centro Cirúrgico - Página ${i} de ${pc}`,148,doc.internal.pageSize.height-8,{align:'center'});doc.text(`Gerado em ${new Date().toLocaleString('pt-BR')}`,14,doc.internal.pageSize.height-8)}
     doc.save(`relatorio_${new Date().toISOString().split('T')[0]}.pdf`)
 }
