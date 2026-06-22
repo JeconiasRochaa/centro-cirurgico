@@ -20,147 +20,146 @@
             --orange: #f59e0b;
             --red: #ef4444;
             --bg-dark: #06224a;
+            --input-text: #1e293b;
+            --placeholder-color: #94a3b8;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #e2e8f0;
+            --text-muted: #cbd5e1;
+            --border: #475569;
+            --bg-dark: #020617;
+            --input-text: #f1f5f9;
+            --placeholder-color: #64748b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg-body); color: var(--text-primary); min-height: 100vh; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: var(--bg-body); 
+            color: var(--text-primary); 
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
         .container { max-width: 1440px; margin: 0 auto; padding: 20px; }
 
         .header {
-            background: var(--bg-dark); border-radius: 16px; padding: 22px 30px;
-            margin-bottom: 22px; box-shadow: 0 4px 20px rgba(6,34,74,.3);
+            background: var(--bg-dark); border-radius: 16px; padding: 18px 25px;
+            margin-bottom: 18px; box-shadow: 0 4px 20px rgba(6,34,74,.3);
             display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 15px; color: #fff;
+            flex-wrap: wrap; gap: 12px; color: #fff;
         }
-        .brand { display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0; }
-        .logos-container { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .brand { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+        .logos-container { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .logo-upload {
-            width: 70px; height: 70px; min-width: 70px; background: #fff;
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            width: 60px; height: 60px; min-width: 60px; background: #fff;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
             overflow: hidden; border: 2px solid var(--gold); cursor: pointer;
             position: relative; transition: .3s;
         }
         .logo-upload:hover { border-color: var(--gold-hover); box-shadow: 0 0 20px rgba(200,169,74,.4); }
-        .logo-upload img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+        .logo-upload img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
         .logo-upload input { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-        .logo-upload .logo-hint { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 9px; color: #fff; white-space: nowrap; font-weight: 500; }
-        .brand h1 { font-size: 20px; color: #fff; }
-        .brand span { font-size: 12px; color: var(--gold); letter-spacing: 1px; font-weight: 500; }
-        .user-info { text-align: right; color: #fff; }
-        .user-info .date { font-weight: 600; font-size: 15px; }
-        .user-info .role { font-size: 12px; color: var(--gold); }
+        .logo-upload .logo-hint { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 8px; color: #fff; white-space: nowrap; font-weight: 500; }
+        .brand h1 { font-size: 18px; color: #fff; }
+        .brand span { font-size: 11px; color: var(--gold); letter-spacing: 1px; font-weight: 500; }
+        .header-right { display: flex; align-items: center; gap: 10px; }
+        .date-display-header { font-weight: 600; font-size: 14px; color: #fff; text-align: right; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 22px; }
+        .header-actions { display: flex; gap: 8px; align-items: center; }
+        .theme-toggle, .btn-header {
+            background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            padding: 5px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 12px; font-weight: 600; transition: 0.3s; white-space: nowrap;
+        }
+        .theme-toggle:hover, .btn-header:hover { background: var(--gold); color: var(--bg-dark); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px; }
         .stat-card {
-            background: var(--bg-card); border-radius: 12px; padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.08); border-left: 4px solid var(--gold);
+            background: var(--bg-card); border-radius: 10px; padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06); border-left: 4px solid var(--gold);
             transition: .2s;
         }
-        .stat-card:hover { transform: translateY(-3px); }
+        .stat-card:hover { transform: translateY(-2px); }
         .stat-card.orange { border-left-color: var(--orange); }
         .stat-card.blue { border-left-color: var(--blue); }
         .stat-card.green { border-left-color: var(--green); }
         .stat-card.red { border-left-color: var(--red); }
-        .stat-value { font-size: 32px; font-weight: 700; color: var(--text-primary); }
-        .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; font-weight: 500; }
+        .stat-value { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+        .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; font-weight: 500; }
 
-       /* AMBOS OS LADOS COM MESMA ALTURA */
-.main-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 22px; 
-    align-items: stretch; /* Estica os cards para mesma altura */
-}
-
-.card { 
-    background: var(--bg-card); 
-    border-radius: 16px; 
-    padding: 20px; /* Reduzido um pouco */
-    box-shadow: 0 2px 10px rgba(0,0,0,.08); 
-    display: flex; 
-    flex-direction: column;
-    /* Remove max-height e overflow hidden */
-}
-
-/* Formulário mostra todos os campos */
-.card form {
-    flex: 1;
-    overflow-y: visible; /* Sem scroll */
-    padding-right: 0;
-}
-
-/* Apenas a lista de cirurgias tem scroll */
-.card .surgery-list { 
-    flex: 1; 
-    overflow-y: auto; 
-    max-height: calc(100vh - 300px); /* Altura máxima com scroll */
-    padding-right: 5px;
-    min-height: 400px; /* Altura mínima */
-}
-
-/* Scrollbar apenas na lista */
-.surgery-list::-webkit-scrollbar { width: 6px; }
-.surgery-list::-webkit-scrollbar-track { background: var(--bg-body); }
-.surgery-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* Tamanhos de fonte reduzidos no formulário para caber tudo */
-.card form .form-group { margin-bottom: 10px; }
-.card form label { font-size: 10px; margin-bottom: 3px; }
-.card form input, .card form select, .card form textarea { 
-    padding: 7px 10px; 
-    font-size: 12px; 
-}
-.card form textarea { min-height: 45px; }
-.card form small { font-size: 8px; }
-.card form .btn { padding: 9px; font-size: 13px; }
-.card form .btn-warning { margin-bottom: 4px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 10px; }
-        .card-title { font-size: 18px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
-        .btn-report {
-            background: var(--bg-dark); border: 2px solid var(--gold); color: var(--gold);
-            padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
-            border-radius: 8px; transition: .3s;
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+        .card { 
+            background: var(--bg-card); border-radius: 14px; padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06); 
+            display: flex; flex-direction: column;
+            transition: background-color 0.3s;
         }
-        .btn-report:hover { background: var(--gold); color: var(--bg-dark); }
+        .card form { flex: 1; overflow-y: visible; padding-right: 0; }
+        .card .surgery-list { flex: 1; overflow-y: auto; max-height: calc(100vh - 280px); padding-right: 4px; min-height: 350px; }
+        .surgery-list::-webkit-scrollbar { width: 5px; }
+        .surgery-list::-webkit-scrollbar-track { background: var(--bg-body); }
+        .surgery-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .card form .form-group { margin-bottom: 8px; }
+        .card form label { font-size: 10px; margin-bottom: 2px; color: var(--text-secondary); }
+        .card form input, .card form select, .card form textarea { 
+            padding: 6px 9px; font-size: 12px; 
+            background: var(--bg-input); 
+            color: var(--input-text);
+            border-color: var(--border);
+        }
+        .card form input::placeholder, .card form textarea::placeholder { color: var(--placeholder-color); }
+        .card form textarea { min-height: 40px; }
+        .card form small { font-size: 7px; color: var(--text-muted); }
+        .card form .btn { padding: 8px; font-size: 12px; }
+        .card form .btn-warning { margin-bottom: 3px; }
 
-        .form-group { margin-bottom: 14px; position: relative; }
-        label { display: block; margin-bottom: 5px; color: var(--text-secondary); font-size: 11px; font-weight: 600; letter-spacing: .5px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 16px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+
+        .form-group { margin-bottom: 12px; position: relative; }
+        label { display: block; margin-bottom: 4px; color: var(--text-secondary); font-size: 10px; font-weight: 600; letter-spacing: .5px; }
         label .required { color: var(--red); }
         input, select, textarea {
-            width: 100%; padding: 9px 12px; background: var(--bg-input);
-            border: 2px solid var(--border); border-radius: 8px;
-            color: var(--text-primary); font-size: 13px; transition: .3s;
+            width: 100%; padding: 8px 10px; background: var(--bg-input);
+            border: 2px solid var(--border); border-radius: 7px;
+            color: var(--input-text); font-size: 12px; transition: .3s;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        textarea { resize: vertical; min-height: 55px; }
+        textarea { resize: vertical; min-height: 45px; }
         input:focus, select:focus, textarea:focus {
-            outline: none; border-color: var(--gold); background: #fff;
+            outline: none; border-color: var(--gold); background: var(--bg-card);
             box-shadow: 0 0 0 3px rgba(200,169,74,.15);
         }
-        .idade-calculada { display: inline-block; margin-left: 8px; font-weight: 700; color: var(--gold); font-size: 12px; }
+        select { color: var(--input-text); }
+        select option { background: var(--bg-card); color: var(--input-text); }
+        .idade-calculada { display: inline-block; margin-left: 6px; font-weight: 700; color: var(--gold); font-size: 11px; }
 
         .suggestions-box {
             position: absolute; top: 100%; left: 0; right: 0;
-            background: #fff; border: 2px solid var(--gold); border-radius: 8px;
-            max-height: 200px; overflow-y: auto; z-index: 100;
-            display: none; box-shadow: 0 10px 30px rgba(0,0,0,.2);
+            background: var(--bg-card); border: 2px solid var(--gold); border-radius: 7px;
+            max-height: 180px; overflow-y: auto; z-index: 100;
+            display: none; box-shadow: 0 10px 25px rgba(0,0,0,.15);
         }
         .suggestions-box.show { display: block; }
         .suggestion-item {
-            padding: 10px 14px; cursor: pointer; transition: .2s;
-            color: var(--text-secondary); font-size: 13px; border-bottom: 1px solid var(--border);
+            padding: 8px 12px; cursor: pointer; transition: .2s;
+            color: var(--text-secondary); font-size: 12px; border-bottom: 1px solid var(--border);
         }
         .suggestion-item:last-child { border-bottom: none; }
         .suggestion-item:hover { background: #fef9e7; color: var(--gold); }
-        .suggestion-item .add-icon { color: var(--gold); margin-right: 8px; font-weight: 700; }
 
-        .btn { width: 100%; padding: 11px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: .3s; letter-spacing: .5px; }
-        .btn-primary { background: var(--gold); color: #fff; margin-bottom: 6px; }
+        .btn { width: 100%; padding: 10px; border: none; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; transition: .3s; letter-spacing: .5px; }
+        .btn-primary { background: var(--gold); color: #fff; margin-bottom: 5px; }
         .btn-primary:hover { background: var(--gold-hover); }
-        .btn-danger { background: #fff; border: 2px solid var(--red); color: var(--red); }
+        .btn-danger { background: var(--bg-card); border: 2px solid var(--red); color: var(--red); }
         .btn-danger:hover { background: #fef2f2; }
-        .btn-warning { background: #fff; border: 2px solid var(--orange); color: var(--orange); margin-bottom: 6px; display: none; }
-        .btn-sm { padding: 4px 10px; border: 1px solid; border-radius: 5px; font-size: 10px; font-weight: 600; cursor: pointer; transition: .3s; background: #fff; }
+        .btn-warning { background: var(--bg-card); border: 2px solid var(--orange); color: var(--orange); margin-bottom: 5px; display: none; }
+        .btn-sm { padding: 3px 8px; border: 1px solid; border-radius: 4px; font-size: 9px; font-weight: 600; cursor: pointer; transition: .3s; background: var(--bg-card); }
         .btn-sm-start { border-color: var(--blue); color: var(--blue); }
         .btn-sm-start:hover { background: #eff6ff; }
         .btn-sm-finish { border-color: var(--green); color: var(--green); }
@@ -172,40 +171,47 @@
         .btn-sm-delete { border-color: #64748b; color: #64748b; }
         .btn-sm-delete:hover { background: #f1f5f9; }
 
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-        .tab { padding: 7px 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; transition: .3s; font-weight: 600; font-size: 12px; }
+        .tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .tab { padding: 6px 14px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 7px; color: var(--text-muted); cursor: pointer; transition: .3s; font-weight: 600; font-size: 11px; }
         .tab.active { background: var(--gold); border-color: var(--gold); color: #fff; }
 
-        .surgery-item { background: var(--bg-input); border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 4px solid var(--border); transition: .3s; font-size: 12px; }
-        .surgery-item:hover { background: #f1f5f9; transform: translateX(3px); }
+        .upcoming-badge {
+            display: inline-block; background: #fef3c7; color: #92400e;
+            padding: 2px 8px; border-radius: 10px; font-size: 10px;
+            font-weight: 600; margin-left: 6px; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        .surgery-item { background: var(--bg-input); border-radius: 7px; padding: 10px; margin-bottom: 7px; border-left: 4px solid var(--border); transition: .3s; font-size: 11px; }
+        .surgery-item:hover { background: var(--bg-card); transform: translateX(3px); }
         .surgery-item.pending { border-left-color: var(--orange); }
         .surgery-item.ongoing { border-left-color: var(--blue); background: rgba(59,130,246,.05); }
         .surgery-item.completed { border-left-color: var(--green); }
         .surgery-item.cancelled { border-left-color: var(--red); opacity: .7; }
-        .surgery-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
-        .surgery-type { font-weight: 600; color: var(--text-primary); font-size: 14px; }
-        .surgery-date-badge { font-size: 10px; color: var(--text-muted); background: var(--border); padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+        .surgery-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 5px; flex-wrap: wrap; gap: 3px; }
+        .surgery-type { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .surgery-date-badge { font-size: 9px; color: var(--text-muted); background: var(--border); padding: 2px 7px; border-radius: 8px; font-weight: 500; }
         .surgery-date-badge.today { background: #dbeafe; color: #1e40af; }
         .surgery-date-badge.upcoming { background: #fef3c7; color: #92400e; }
-        .surgery-details { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
-        .cancel-reason { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 5px; padding: 6px 10px; margin-top: 6px; font-size: 11px; color: #991b1b; }
-        .action-btns { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .surgery-details { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+        .cancel-reason { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 4px; padding: 5px 8px; margin-top: 5px; font-size: 10px; color: #991b1b; }
+        .action-btns { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
 
-        .connection-status { position: fixed; bottom: 20px; right: 20px; background: var(--bg-dark); color: var(--gold); padding: 10px 18px; border-radius: 10px; font-size: 12px; z-index: 1000; font-weight: 600; border: 1px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,.2); }
+        .connection-status { position: fixed; bottom: 16px; right: 16px; background: var(--bg-dark); color: var(--gold); padding: 8px 14px; border-radius: 8px; font-size: 11px; z-index: 1000; font-weight: 600; border: 1px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
         .connection-status.offline { color: var(--red); border-color: var(--red); }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.6); z-index: 2000; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: #fff; border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,.3); max-height: 80vh; overflow-y: auto; }
-        .modal-content h2 { margin-bottom: 20px; color: var(--text-primary); font-size: 18px; }
-        .modal-option { display: block; width: 100%; padding: 14px 18px; margin-bottom: 8px; background: var(--bg-input); border: 2px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 14px; font-weight: 600; cursor: pointer; transition: .3s; text-align: left; }
+        .modal-content { background: var(--bg-card); border-radius: 14px; padding: 25px; max-width: 480px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,.25); max-height: 80vh; overflow-y: auto; }
+        .modal-content h2 { margin-bottom: 18px; color: var(--text-primary); font-size: 16px; }
+        .modal-option { display: block; width: 100%; padding: 12px 16px; margin-bottom: 7px; background: var(--bg-input); border: 2px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 13px; font-weight: 600; cursor: pointer; transition: .3s; text-align: left; }
         .modal-option:hover { border-color: var(--gold); background: #fef9e7; }
-        .btn-close-modal { width: 100%; padding: 12px; background: #fff; border: 2px solid var(--red); color: var(--red); border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 12px; transition: .3s; }
+        .btn-close-modal { width: 100%; padding: 10px; background: var(--bg-card); border: 2px solid var(--red); color: var(--red); border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: .3s; }
         .btn-close-modal:hover { background: #fef2f2; }
-        .btn-submit-cancel { width: 100%; padding: 12px; background: var(--red); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: .3s; }
+        .btn-submit-cancel { width: 100%; padding: 10px; background: var(--red); color: #fff; border: none; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 12px; transition: .3s; }
         .btn-submit-cancel:hover { background: #dc2626; }
-        .btn-senha { position: absolute; bottom: 60px; right: 20px; background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 16px; z-index: 1001; opacity: 0.5; transition: .3s; }
-        .btn-senha:hover { opacity: 1; }
+
+        .conflict-warning { background:#fef3c7; border:1px solid var(--orange); border-radius:7px; padding:8px; color:#92400e; font-size:11px; margin-top:6px; display:none; font-weight:500; }
 
         @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .header { flex-direction: column; align-items: flex-start; } }
@@ -215,17 +221,28 @@
 </head>
 <body>
 <div class="container">
+    <!-- HEADER -->
     <div class="header">
         <div class="brand">
             <div class="logos-container">
-                <div class="logo-upload" id="logoUpload" title="Logo do Hospital"><span style="font-size:28px">🏥</span><input type="file" accept="image/*" onchange="uploadLogo(event)"><div class="logo-hint">Hospital</div></div>
-                <div class="logo-upload" id="govLogoUpload" title="Logo do Governo"><span style="font-size:28px">🏛️</span><input type="file" accept="image/*" onchange="uploadGovLogo(event)"><div class="logo-hint">Governo</div></div>
+                <div class="logo-upload" id="logoUpload" title="Logo do Hospital"><span style="font-size:24px">🏥</span><input type="file" accept="image/*" onchange="uploadLogo(event)"><div class="logo-hint">Hospital</div></div>
+                <div class="logo-upload" id="govLogoUpload" title="Logo do Governo"><span style="font-size:24px">🏛️</span><input type="file" accept="image/*" onchange="uploadGovLogo(event)"><div class="logo-hint">Governo</div></div>
             </div>
-            <div><h1>Hospital Regional de Palmeira dos Índios</h1><span>HRPI • Gestão de Cirurgias • Centro Cirúrgico</span></div>
+            <div>
+                <h1>Hospital Regional de Palmeira dos Índios</h1>
+                <span>HRPI • Gestão de Cirurgias • Centro Cirúrgico</span>
+            </div>
         </div>
-        <div class="user-info"><div class="date" id="currentDate"></div><div class="role">Painel Administrativo</div></div>
+        <div class="header-right">
+            <div class="date-display-header" id="currentDate"></div>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema">🌙 Tema</button>
+                <button class="btn-header" onclick="openReportModal()">📊 Relatórios</button>
+            </div>
+        </div>
     </div>
 
+    <!-- ESTATÍSTICAS -->
     <div class="stats-grid">
         <div class="stat-card"><div class="stat-value" id="totalToday">00</div><div class="stat-label">Total Hoje</div></div>
         <div class="stat-card orange"><div class="stat-value" id="waitingCount">00</div><div class="stat-label">Aguardando</div></div>
@@ -234,47 +251,70 @@
         <div class="stat-card red"><div class="stat-value" id="cancelledCount">00</div><div class="stat-label">Canceladas</div></div>
     </div>
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <div class="main-grid">
+        <!-- FORMULÁRIO -->
         <div class="card">
-            <div class="card-header"><div class="card-title"><span id="formTitle">📝</span> <span id="formActionTitle">Registrar Cirurgia</span></div><button class="btn-report" onclick="openReportModal()">📊 Relatórios</button></div>
+            <div class="card-header">
+                <div class="card-title"><span id="formTitle">📝</span> <span id="formActionTitle">Registrar Cirurgia</span></div>
+            </div>
             <form id="surgeryForm">
                 <input type="hidden" id="editId">
+                <input type="hidden" id="doctorCRMHidden">
+                
+                <!-- 4 CAMPOS OBRIGATÓRIOS -->
                 <div class="form-group"><label>🏥 Origem do Paciente <span class="required">*</span></label><select id="origem" required><option value="">Selecione a origem</option><option value="Interno">Interno (Hospital)</option><option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option><option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option><option value="Transferência">Transferência</option><option value="Urgência/Emergência">Urgência/Emergência</option></select></div>
                 <div class="form-group"><label>👤 Nome do Paciente <span class="required">*</span></label><input type="text" id="patient" placeholder="Nome completo do paciente" required></div>
                 <div class="form-group"><label>🎂 Data de Nascimento <span class="required">*</span></label><input type="date" id="birthDate" required onchange="calculateAge()"><span class="idade-calculada" id="calculatedAge"></span></div>
                 <input type="hidden" id="age">
+                <div class="form-group"><label>🔪 Procedimento(s) <span class="required">*</span></label><textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea><div class="suggestions-box" id="suggestionsBox"></div></div>
+                
+                <!-- CAMPOS OPCIONAIS -->
                 <div class="form-group"><label>📅 Data da Cirurgia</label><input type="date" id="surgeryDate" required onchange="checkConflict()"></div>
                 <div class="form-group"><label>⏰ Horário de Início</label><input type="time" id="surgeryTime" onchange="checkConflict()"></div>
                 <div class="form-group"><label>🔬 Especialidade</label><select id="specialty"><option value="">Selecione</option><option value="Cirurgia Geral">Cirurgia Geral</option><option value="Neurocirurgia">Neurocirurgia</option><option value="Cirurgia Cardíaca">Cirurgia Cardíaca</option><option value="Cirurgia Vascular">Cirurgia Vascular</option><option value="Cirurgia Plástica">Cirurgia Plástica</option><option value="Cirurgia Pediátrica">Cirurgia Pediátrica</option><option value="Cirurgia Torácica">Cirurgia Torácica</option><option value="Cirurgia Oncológica">Cirurgia Oncológica</option><option value="Ortopedia">Ortopedia</option><option value="Oftalmologia">Oftalmologia</option><option value="Otorrinolaringologia">Otorrinolaringologia</option><option value="Urologia">Urologia</option><option value="Ginecologia">Ginecologia</option><option value="Obstetrícia">Obstetrícia</option><option value="Coloproctologia">Coloproctologia</option><option value="Bucomaxilofacial">Bucomaxilofacial</option></select></div>
-                <div class="form-group"><label>🔪 Procedimento(s) <span class="required">*</span></label><textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea><div class="suggestions-box" id="suggestionsBox"></div></div>
-                <div class="form-group"><label>👨‍⚕️ Médico(s) Responsável(is)</label><input type="text" id="doctor" placeholder="Nome do médico (separe por vírgula para mais de um)"><small style="color:#64748b;font-size:9px">Separe os nomes por vírgula</small></div>
+                <div class="form-group"><label>👨‍⚕️ Médico(s) Responsável(is)</label><input type="text" id="doctor" placeholder="Digite o nome do médico..."><small style="color:var(--text-muted);font-size:8px">Separe os nomes por vírgula</small></div>
                 <div class="form-group"><label>💉 Anestesista</label><input type="text" id="anesthetist" placeholder="Nome do anestesista"></div>
-                <div class="form-group"><label>🔄 Instrumentista(s)</label><input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)"><small style="color:#64748b;font-size:9px">Separe por vírgula</small></div>
+                <div class="form-group"><label>🔄 Instrumentista(s)</label><input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)"><small style="color:var(--text-muted);font-size:8px">Separe por vírgula</small></div>
                 <div class="form-group"><label>🏥 Sala Cirúrgica</label><select id="room" onchange="checkConflict()"><option value="">Selecione a sala</option><option value="SALA A">SALA A</option><option value="SALA B">SALA B</option><option value="SALA C">SALA C</option><option value="SALA D">SALA D</option></select></div>
-                <div class="conflict-warning" id="conflictWarning" style="background:#fef3c7;border:1px solid var(--orange);border-radius:8px;padding:10px;color:#92400e;font-size:12px;margin-top:8px;display:none;font-weight:500;">⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.</div>
+                <div class="conflict-warning" id="conflictWarning">⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.</div>
                 <button type="submit" class="btn btn-primary" id="submitBtn">✅ Registrar Cirurgia</button>
                 <button type="button" class="btn btn-warning" id="cancelEditBtn" onclick="cancelEdit()">❌ Cancelar Edição</button>
                 <button type="button" class="btn btn-danger" onclick="clearForm()">🗑️ Limpar Formulário</button>
             </form>
         </div>
 
+        <!-- LISTA DE CIRURGIAS -->
         <div class="card">
-            <div class="tabs"><button class="tab active" onclick="switchTab('today')">📅 Hoje</button><button class="tab" onclick="switchTab('upcoming')">📆 Agendadas</button></div>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('today')">📅 Hoje</button>
+                <button class="tab" onclick="switchTab('upcoming')">📆 Agendadas <span class="upcoming-badge" id="upcomingBadge" style="display:none;">0</span></button>
+            </div>
             <div class="card-header"><div class="card-title"><span>📋</span> <span id="listTitle">Cirurgias do Dia</span></div></div>
-            <div class="surgery-list" id="surgeryList"><div style="text-align:center;padding:40px;color:#94a3b8">Nenhuma cirurgia registrada</div></div>
+            <div class="surgery-list" id="surgeryList"><div style="text-align:center;padding:40px;color:var(--text-muted)">Nenhuma cirurgia registrada</div></div>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="cancelModal"><div class="modal-content"><h2>❌ Cancelar Cirurgia</h2><p style="margin-bottom:15px;color:#64748b;font-size:14px">Informe o motivo:</p><textarea id="cancelReason" placeholder="Descreva o motivo..." style="width:100%;min-height:80px;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></textarea><button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar</button><button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button></div></div>
-<div class="modal-overlay" id="passwordModal"><div class="modal-content"><h2>🔐 Senha Administrativa</h2><p style="margin-bottom:15px;color:#64748b;font-size:14px">Digite a senha para acessar os relatórios:</p><input type="password" id="adminPassword" placeholder="Digite a senha..." style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:15px"><button class="modal-option" onclick="verifyPassword()" style="text-align:center">✅ Acessar Relatórios</button><button class="btn-close-modal" onclick="closePasswordModal()">❌ Cancelar</button></div></div>
-<div class="modal-overlay" id="changePasswordModal"><div class="modal-content"><h2>🔑 Alterar Senha</h2><input type="password" id="oldPassword" placeholder="Senha atual" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:10px"><input type="password" id="newPassword" placeholder="Nova senha" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:10px"><input type="password" id="confirmPassword" placeholder="Confirmar nova senha" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;margin-bottom:15px"><button class="modal-option" onclick="changePassword()" style="text-align:center">✅ Alterar Senha</button><button class="btn-close-modal" onclick="closeChangePasswordModal()">❌ Cancelar</button></div></div>
+<!-- MODAIS -->
+<div class="modal-overlay" id="cancelModal"><div class="modal-content"><h2>❌ Cancelar Cirurgia</h2><p style="margin-bottom:12px;color:var(--text-muted);font-size:13px">Informe o motivo:</p><textarea id="cancelReason" placeholder="Descreva o motivo..." style="width:100%;min-height:70px;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></textarea><button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar</button><button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button></div></div>
+
+<!-- MODAL DE SENHA (COM ENTER) -->
+<div class="modal-overlay" id="passwordModal">
+    <div class="modal-content">
+        <h2>🔐 Senha Administrativa</h2>
+        <p style="margin-bottom:12px;color:var(--text-muted);font-size:13px">Digite a senha para acessar os relatórios:</p>
+        <input type="password" id="adminPassword" placeholder="Digite a senha..." onkeydown="if(event.key==='Enter')verifyPassword()" style="width:100%;padding:10px;border:2px solid var(--border);border-radius:7px;margin-bottom:12px;background:var(--bg-input);color:var(--input-text)">
+        <button class="modal-option" onclick="verifyPassword()" style="text-align:center">✅ Acessar Relatórios</button>
+        <button class="btn-close-modal" onclick="closePasswordModal()">❌ Cancelar</button>
+    </div>
+</div>
+
 <div class="modal-overlay" id="reportModal"><div class="modal-content"><h2>📊 Gerar Relatório PDF</h2><button class="modal-option" onclick="generateReport('daily')">📅 Relatório Diário</button><button class="modal-option" onclick="generateReport('weekly')">📆 Relatório Semanal</button><button class="modal-option" onclick="generateReport('monthly')">📊 Relatório Mensal</button><button class="modal-option" onclick="generateReport('custom')">📋 Relatório Personalizado</button><button class="modal-option" onclick="generateReport('specialty')">🔬 Relatório por Especialidade</button><button class="modal-option" onclick="generateReport('all')">📁 Relatório Geral</button><button class="btn-close-modal" onclick="closeReportModal()">❌ Cancelar</button></div></div>
-<div class="modal-overlay" id="customDateModal"><div class="modal-content"><h2>📋 Período</h2><div style="margin-bottom:15px"><label>Data Inicial</label><input type="date" id="customStartDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><div style="margin-bottom:20px"><label>Data Final</label><input type="date" id="customEndDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><button class="modal-option" onclick="generateCustomReport()" style="text-align:center">✅ Gerar</button><button class="btn-close-modal" onclick="closeCustomDateModal()">❌ Cancelar</button></div></div>
-<div class="modal-overlay" id="specialtyModal"><div class="modal-content"><h2>🔬 Relatório por Especialidade</h2><div style="margin-bottom:15px"><label>Especialidade</label><select id="specialtyFilter" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"><option value="">Todas</option><option>Cirurgia Geral</option><option>Neurocirurgia</option><option>Cirurgia Cardíaca</option><option>Cirurgia Plástica</option><option>Ortopedia</option><option>Oftalmologia</option><option>Urologia</option><option>Ginecologia</option><option>Obstetrícia</option><option>Bucomaxilofacial</option><option>Coloproctologia</option></select></div><div style="margin-bottom:10px"><label>Data Inicial</label><input type="date" id="specialtyStartDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><div style="margin-bottom:20px"><label>Data Final</label><input type="date" id="specialtyEndDate" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px"></div><button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center">✅ Gerar Relatório</button><button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button></div></div>
+<div class="modal-overlay" id="customDateModal"><div class="modal-content"><h2>📋 Período</h2><div style="margin-bottom:12px"><label>Data Inicial</label><input type="date" id="customStartDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><div style="margin-bottom:16px"><label>Data Final</label><input type="date" id="customEndDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><button class="modal-option" onclick="generateCustomReport()" style="text-align:center">✅ Gerar</button><button class="btn-close-modal" onclick="closeCustomDateModal()">❌ Cancelar</button></div></div>
+<div class="modal-overlay" id="specialtyModal"><div class="modal-content"><h2>🔬 Relatório por Especialidade</h2><div style="margin-bottom:12px"><label>Especialidade</label><select id="specialtyFilter" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"><option value="">Todas</option><option>Cirurgia Geral</option><option>Neurocirurgia</option><option>Cirurgia Cardíaca</option><option>Cirurgia Plástica</option><option>Ortopedia</option><option>Oftalmologia</option><option>Urologia</option><option>Ginecologia</option><option>Obstetrícia</option><option>Bucomaxilofacial</option><option>Coloproctologia</option></select></div><div style="margin-bottom:8px"><label>Data Inicial</label><input type="date" id="specialtyStartDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><div style="margin-bottom:16px"><label>Data Final</label><input type="date" id="specialtyEndDate" style="width:100%;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></div><button class="modal-option" onclick="generateSpecialtyReport()" style="text-align:center">✅ Gerar Relatório</button><button class="btn-close-modal" onclick="closeSpecialtyModal()">❌ Cancelar</button></div></div>
 
 <div class="connection-status" id="connectionStatus">🟢 Conectado</div>
-<button class="btn-senha" title="Alterar senha" onclick="openChangePasswordModal()">🔑</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -283,12 +323,46 @@ import { getDatabase, ref, onValue, set, push, update, remove } from "https://ww
 const firebaseConfig = { apiKey:"AIzaSyBiuJsJ-Wt2L6NB0WFlalLLFGcgLWJ49w8", authDomain:"centro-cirurgico-eaf76.firebaseapp.com", databaseURL:"https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com", projectId:"centro-cirurgico-eaf76", storageBucket:"centro-cirurgico-eaf76.firebasestorage.app", messagingSenderId:"620414910337", appId:"1:620414910337:web:4592fa24f0d8f41d673280" };
 const app=initializeApp(firebaseConfig), db=getDatabase(app);
 
-let ADMIN_PASSWORD = "Hrpi2026";
+// ========== VARIÁVEIS ==========
 function getToday(){const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`}
 let TODAY=getToday(), currentTab='today', hasConflict=false, isEditing=false, allSurgeries=[], cancelSurgeryId=null;
 document.getElementById('surgeryDate').value=TODAY;
 document.getElementById('currentDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
+// ========== DETECTAR Dr./Dra. (Médico E Anestesista) ==========
+function getDoctorTitle(name) {
+    if (!name) return 'Dr.';
+    const cleanName = name.replace(/^(dr\.?|dra\.?)\s*/i, '').trim();
+    const femaleNames = [
+        'MARIA', 'ANA', 'JULIA', 'JÚLIA', 'BEATRIZ', 'CAMILA', 'CAROLINA', 'CRISTINA',
+        'DANIELA', 'FERNANDA', 'GABRIELA', 'HELENA', 'ISABELA', 'JOANA', 'LARISSA',
+        'LAURA', 'LETÍCIA', 'LUCIANA', 'MARCIA', 'MÁRCIA', 'MARINA', 'NATALIA', 'NATÁLIA',
+        'PATRICIA', 'PATRÍCIA', 'PAULA', 'RAFAELA', 'RENATA', 'ROBERTA', 'SANDRA',
+        'SARA', 'SOFIA', 'TATIANA', 'VANESSA', 'VERA', 'VIVIANE', 'ALINE', 'AMANDA',
+        'ANDREIA', 'ANDREZA', 'ANGELA', 'ÂNGELA', 'BIANCA', 'BRUNA', 'CARLA', 'CARMEM',
+        'CLARA', 'CLAUDIA', 'CLÁUDIA', 'DEBORA', 'DÉBORA', 'ELIANA', 'ELISA', 'FABIANA',
+        'FLAVIA', 'FLÁVIA', 'GISELE', 'GIOVANA', 'INGRID', 'IRENE', 'JULIANA', 'KARINA',
+        'KATIA', 'KÁTIA', 'LIGIA', 'LÍGIA', 'LILIAN', 'LORENA', 'LUANA', 'LUCIA', 'LÚCIA',
+        'MANUELA', 'MICHELE', 'MONICA', 'MÔNICA', 'NADIA', 'NÁDIA', 'PRISCILA', 'RAQUEL',
+        'REGINA', 'ROSANA', 'SABRINA', 'SAMANTA', 'SILVIA', 'SÍLVIA', 'SIMONE', 'SUELI',
+        'TANIA', 'TÂNIA', 'TEREZA', 'VALERIA', 'VALÉRIA', 'VANDA', 'VERONICA', 'VERÔNICA'
+    ];
+    const firstName = cleanName.split(' ')[0].toUpperCase();
+    if (femaleNames.includes(firstName)) return 'Dra.';
+    const maleExceptions = ['JOSÉ', 'ANDRÉ', 'NOÉ', 'CAUÊ', 'RENÊ'];
+    if (firstName.slice(-1) === 'A' && !maleExceptions.includes(firstName)) return 'Dra.';
+    return 'Dr.';
+}
+
+// ========== TEMA ==========
+window.toggleTheme = function() {
+    const body = document.documentElement;
+    if (body.getAttribute('data-theme') === 'dark') { body.removeAttribute('data-theme'); localStorage.setItem('hrpi_theme', 'light'); }
+    else { body.setAttribute('data-theme', 'dark'); localStorage.setItem('hrpi_theme', 'dark'); }
+};
+(function loadTheme() { if (localStorage.getItem('hrpi_theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); })();
+
+// ========== CÁLCULO DE IDADE ==========
 window.calculateAge = function() {
     const birthDate = document.getElementById('birthDate').value;
     const ageDisplay = document.getElementById('calculatedAge');
@@ -302,99 +376,24 @@ window.calculateAge = function() {
     ageDisplay.textContent = `(${age} anos)`; ageHidden.value = age;
 };
 
+// ========== PROCEDIMENTOS ==========
 const surgeryTypes = [
-    // CIRURGIA GERAL
-    'CURATIVO GRAU II COM DEBRIDAMENTO','CURATIVO GRAU II SEM DEBRIDAMENTO','GASTROSTOMIA','APENDICECTOMIA','APENDICECTOMIA VIDEOLAPAROSCÓPICA',
+    'CURATIVO GRAU II COM DEBRIDAMENTO','CURATIVO GRAU II SEM DEBRIDAMENTO','GASTROSTOMIA','APENDICECTOMIA',
     'DRENAGEM DE ABCESSO ÂNU-RETAL','ENTERECTOMIA','ENTEROANASTOMOSE','TRATAMENTO CIRÚRGICO DE PROLAPSO ANAL',
-    'MARSUPIALIZAÇÃO DE ABCESSO','MARSUPIALIZAÇÃO DE CISTO','DRENAGEM DE HEMATOMA PRÉ-PERITONEAL','DRENAGEM DE ABCESSO PRÉ-PERITONEAL',
-    'HERNIOPLASTIA EPIGÁSTRICA','HERNIOPLASTIA INGUINAL UNILATERAL','HERNIOPLASTIA INGUINAL','HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA',
-    'HERNIOPLASTIA CRURAL UNILATERAL','HERNIOPLASTIA UMBILICAL','HERNIOPLASTIA INCISIONAL',
-    'LAPAROTOMIA EXPLORADORA','LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA DRENAGEM','LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA BIÓPSIA',
-    'CISTOSTOMIA','OOFRECTOMIA','OOFOROPLASTIA','SALPINGECTOMIA UNILATERAL','SALPINGECTOMIA BILATERAL',
-    'DRENAGEM DE ABCESSO DE MAMA','TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEAL','TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEOBRÔNQUICA',
-    'TORACOSTOMIA COM DRENAGEM PLEURAL FECHADA','TORACOCENTESE','DRENAGEM DE PLEURA',
-    'DEBRIDAMENTO DE ÚLCERA','DEBRIDAMENTO DE TECIDOS DESVITALIZADOS',
-    'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','COLECTOMIA DIREITA','COLECTOMIA ESQUERDA','COLECTOMIA TOTAL','COLECTOMIA VIDEOLAPAROSCÓPICA',
-    'GASTRECTOMIA PARCIAL','GASTRECTOMIA TOTAL','GASTRECTOMIA VIDEOLAPAROSCÓPICA','BYPASS GÁSTRICO','SLEEVE GÁSTRICO','CIRURGIA BARIÁTRICA',
-    'ESPLENECTOMIA','HEMORROIDECTOMIA','FISTULECTOMIA ANAL','FISTULECTOMIA PERIANAL','ESFINCTEROPLASTIA ANAL',
-    'CESARIANA','HISTERECTOMIA TOTAL','HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA','HISTERECTOMIA PARCIAL','HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
-    'MASTECTOMIA','MASTECTOMIA COM RECONSTRUÇÃO','RECONSTRUÇÃO MAMÁRIA','MASTOPEXIA','LAQUEADURA TUBÁRIA',
-    'CRANIOTOMIA','CRANIOTOMIA PARA TUMOR CEREBRAL','ANEURISMA CEREBRAL',
-    'HÉRNIA DE DISCO CERVICAL','HÉRNIA DE DISCO LOMBAR','CIRURGIA DE COLUNA','ARTRODESE DE COLUNA CERVICAL','ARTRODESE DE COLUNA LOMBAR','DESCOMPRESSÃO MEDULAR',
-    'REVASCULARIZAÇÃO MIOCÁRDICA','TROCA VALVAR AÓRTICA','TROCA VALVAR MITRAL','CATETERISMO CARDÍACO','COLOCAÇÃO DE MARCA-PASSO','SAFENECTOMIA','ESCLEROTERAPIA DE VARIZES',
-    // ORTOPEDIA
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA CLAVÍCULA','TRATAMENTO CIRÚRGICO DE LUXAÇÃO ACROMIOCLAVICULAR',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO ACROMIOCLAVICULAR','TRATAMENTO CIRÚRGICO DE LUXAÇÃO ESCÁPULO-UMERAL AGUDA',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO ESCÁPULO-UMERAL AGUDA','REDUÇÃO INCRUENTA DE FRATURA DA DIÁFISE DO ÚMERO',
-    'REDUÇÃO INCRUENTA DE FRATURA DOS METACARPIANOS','TRATAMENTO CIRÚRGICO DE FRATURA DA EXTREMIDADE PROXIMAL DO ÚMERO',
-    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DA EXTREMIDADE PROXIMAL DO ÚMERO','TRATAMENTO CIRÚRGICO DE FRATURA DAS FALANGES DA MÃO',
-    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DAS FALANGES DA MÃO','TRATAMENTO CIRÚRGICO DE FRATURA DOS METACARPIANOS',
-    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DOS METACARPIANOS','TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DO ÚMERO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA EXTREMIDADE DISTAL DOS OSSOS DO ANTEBRAÇO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA METÁFISE DISTAL DOS OSSOS DO ANTEBRAÇO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA EXTREMIDADE PROXIMAL DOS OSSOS DO ANTEBRAÇO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA METÁFISE PROXIMAL DOS OSSOS DO ANTEBRAÇO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DE RÁDIO E ULNA','TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DO RÁDIO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DA ULNA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DE GALEAZZI',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DE MONTEGGIA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DE ESSEX-LOPRESTI',
-    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO CARPOMETACARPIANA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO CARPOMETACARPIANA',
-    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO METACARPOFALANGIANA','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO METACARPOFALANGIANA',
-    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO DO COTOVELO','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DO COTOVELO',
-    'TRATAMENTO CIRÚRGICO DE PSEUDOARTROSE DO ÚMERO','TRATAMENTO CIRÚRGICO DE RETARDO DE CONSOLIDAÇÃO DO ÚMERO',
-    'TRATAMENTO CIRÚRGICO DE PERDA ÓSSEA DO ÚMERO','RECONSTRUÇÃO DE TENDÃO PATELAR','RECONSTRUÇÃO DE TENDÃO QUADRICIPITAL',
-    'REDUÇÃO INCRUENTA DE LUXAÇÃO METATARSOFALANGIANA','REDUÇÃO INCRUENTA DE FRATURA-LUXAÇÃO METATARSOFALANGIANA',
-    'REDUÇÃO INCRUENTA DE LUXAÇÃO INTERFALANGIANA DO PÉ','REDUÇÃO INCRUENTA DE FRATURA-LUXAÇÃO INTERFALANGIANA DO PÉ',
-    'REDUÇÃO INCRUENTA DE FRATURA DOS METATARSIANOS','REDUÇÃO INCRUENTA DE LESÃO FISÁRIA DOS METATARSIANOS',
-    'REDUÇÃO INCRUENTA DE FRATURA DO TORNOZELO','REDUÇÃO INCRUENTA DE LUXAÇÃO DO TORNOZELO',
-    'REDUÇÃO INCRUENTA DE FRATURA-LUXAÇÃO DO TORNOZELO','REDUÇÃO INCRUENTA DE FRATURA DIAFISÁRIA DISTAL DA TÍBIA',
-    'REDUÇÃO INCRUENTA DE LESÃO FISÁRIA DISTAL DA TÍBIA','REDUÇÃO INCRUENTA DE FRATURA PROXIMAL DO FÊMUR',
-    'REDUÇÃO INCRUENTA DE LESÃO FISÁRIA PROXIMAL DO FÊMUR','TRATAMENTO CIRÚRGICO DE FRATURA DOS METATARSIANOS',
-    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DOS METATARSIANOS','TRATAMENTO CIRÚRGICO DE FRATURA BIMALEOLAR DO TORNOZELO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA TRIMALEOLAR DO TORNOZELO','TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DO TORNOZELO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DA TÍBIA','TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DO FÊMUR',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DA PATELA','TRATAMENTO CIRÚRGICO DE FRATURA DO CALCÂNEO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA DO PILÃO TIBIAL','TRATAMENTO CIRÚRGICO DE FRATURA DO PLANALTO TIBIAL',
-    'TRATAMENTO CIRÚRGICO DE FRATURA UNIMALEOLAR DO TORNOZELO','TRATAMENTO CIRÚRGICO DE FRATURA AO NÍVEL DO JOELHO',
-    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA AO NÍVEL DO JOELHO','TRATAMENTO CIRÚRGICO DE FRATURA DISTAL DA TÍBIA',
-    'TRATAMENTO CIRÚRGICO DE LESÃO FISÁRIA DISTAL DA TÍBIA','TRATAMENTO CIRÚRGICO DE LESÃO AGUDA CÁPSULO-LIGAMENTAR DO JOELHO',
-    'TRATAMENTO CIRÚRGICO DE LESÃO AGUDA CÁPSULO-LIGAMENTAR DO TORNOZELO','TRATAMENTO CIRÚRGICO DE LUXAÇÃO DO JOELHO',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO DO JOELHO','TRATAMENTO CIRÚRGICO DE LUXAÇÃO METATARSOFALANGIANA',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO METATARSOFALANGIANA','TRATAMENTO CIRÚRGICO DE LUXAÇÃO INTERFALANGIANA',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO INTERFALANGIANA','TRATAMENTO CIRÚRGICO DE LUXAÇÃO TARSOMETATÁRSICA',
-    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO TARSOMETATÁRSICA','MANIPULAÇÃO ARTICULAR',
-    'RESSECÇÃO SIMPLES DE TUMOR ÓSSEO','RESSECÇÃO SIMPLES DE TUMOR DE PARTES MOLES',
-    'RETIRADA DE CORPO ESTRANHO INTRA-ARTICULAR','RETIRADA DE CORPO ESTRANHO INTRAÓSSEO',
-    'RETIRADA DE FIO INTRAÓSSEO','RETIRADA DE PINO INTRAÓSSEO','RETIRADA DE FIXADOR EXTERNO',
-    'RETIRADA DE PLACA','RETIRADA DE PARAFUSOS','TENÓLISE','TENOPLASTIA','ENXERTO DE TENDÃO ÚNICO','TENORRAFIA EM TÚNEL ÓSTEO-FIBROSO',
-    'ARTROPLASTIA DE QUADRIL','ARTROPLASTIA DE QUADRIL REVISÃO','ARTROPLASTIA DE JOELHO','ARTROPLASTIA DE JOELHO REVISÃO',
-    'OSTEOSSÍNTESE DE FÊMUR','OSTEOSSÍNTESE DE FÊMUR COM PLACA','OSTEOSSÍNTESE DE FÊMUR COM HASTE','OSTEOSSÍNTESE DE TÍBIA','OSTEOSSÍNTESE DE TÍBIA COM PLACA',
-    'OSTEOSSÍNTESE DE ÚMERO','OSTEOSSÍNTESE DE RÁDIO','OSTEOSSÍNTESE DE RÁDIO DISTAL','OSTEOSSÍNTESE DE TORNOZELO','OSTEOSSÍNTESE DE CLAVÍCULA',
-    'RECONSTRUÇÃO DE LCA','MENISCECTOMIA','ARTROSCOPIA DE JOELHO','ARTROSCOPIA DE OMBRO','ARTROSCOPIA DE TORNOZELO',
-    'CIRURGIA DE MANGUITO ROTADOR','TENODESE','TENORRAFIA','PRÓTESE DE OMBRO','PRÓTESE DE QUADRIL','PRÓTESE DE JOELHO',
-    // BUCOMAXILOFACIAL
-    'NEURÓLISE NÃO FUNCIONAL DE NERVOS PERIFÉRICOS','GLOSSECTOMIA PARCIAL','OSTEOTOMIA DA MAXILA','OSTEOTOMIA DA MANDÍBULA',
-    'RECONSTRUÇÃO DO SULCO GENGIVO-LABIAL','OSTEOSSÍNTESE DA FRATURA COMPLEXA DA MANDÍBULA',
-    'OSTEOSSÍNTESE DE FRATURA DO COMPLEXO ÓRBITO-ZIGOMÁTICO-MAXILAR','ARTROPLASTIA DA ARTICULAÇÃO TEMPOROMANDIBULAR',
-    'REDUÇÃO DE FRATURA ALVÉOLO-DENTÁRIA','REDUÇÃO DE FRATURA DA MAXILA LE FORT I',
-    'TRATAMENTO CIRÚRGICO DE OSTEOMA','TRATAMENTO CIRÚRGICO DE ODONTOMA','TRATAMENTO CIRÚRGICO DE OUTRAS LESÕES ESPECIFICADAS',
-    'OSTEOSSÍNTESE DA FRATURA DO OSSO ZIGOMÁTICO','RECONSTRUÇÃO PARCIAL DE MANDÍBULA','RECONSTRUÇÃO PARCIAL DE MAXILA',
-    'RESSECÇÃO DE LESÃO DA BOCA','OSTEOTOMIA DE MAXILA PARA ANOMALIA CRANIOFACIAL',
-    'OSTEOTOMIA DE MAXILA PARA ANOMALIA BUCOMAXILOFACIAL','OSTEOTOMIA DE MANDÍBULA PARA ANOMALIA CRANIOFACIAL',
-    'OSTEOTOMIA DE MANDÍBULA PARA ANOMALIA BUCOMAXILOFACIAL',
-    'EXODONTIA DE TERCEIRO MOLAR SUPERIOR','EXODONTIA DE TERCEIRO MOLAR INFERIOR','EXODONTIA DE TERCEIRO MOLAR','EXODONTIA MÚLTIPLA','EXODONTIA SIMPLES',
-    'FRATURA DE MANDÍBULA','FRATURA DE MANDÍBULA COM PLACA','FRATURA DE MAXILA','FRATURA DE ZIGOMÁTICO','FRATURA DE ÓRBITA','FRATURA DE OSSOS NASAIS',
-    'CIRURGIA ORTOGNÁTICA','CIRURGIA ORTOGNÁTICA BIMAXILAR','ARTROPLASTIA DE ATM','RECONSTRUÇÃO DE MANDÍBULA','RECONSTRUÇÃO DE MAXILA',
-    'ENXERTO ÓSSEO ALVEOLAR','ENXERTO ÓSSEO AUTÓGENO','IMPLANTE DENTÁRIO UNITÁRIO','IMPLANTE DENTÁRIO MÚLTIPLO','LEVANTAMENTO DE SEIO MAXILAR',
-    'CISTO ODONTOGÊNICO','TUMOR ODONTOGÊNICO','OSTEONECROSE DOS MAXILARES','TRAUMATISMO DENTÁRIO','CIRURGIA DE FENDA LABIOPALATINA',
-    'SIALOENDOSCOPIA','CIRURGIA DE GLÂNDULAS SALIVARES','DRENAGEM DE ABCESSO BUCOMAXILOFACIAL','DRENAGEM DE ABCESSO ODONTOGÊNICO',
-    'BIÓPSIA DE CAVIDADE ORAL','BIÓPSIA DE GLÂNDULA SALIVAR','EXÉRESE DE LESÃO BUCOMAXILOFACIAL',
-    // OUTROS
-    'CIRURGIA DE CATARATA','FACECTOMIA','FACECTOMIA COM IMPLANTE DE LENTE','TRABECULECTOMIA','VITRECTOMIA','RETINOPEXIA',
-    'AMIGDALECTOMIA','ADENOIDECTOMIA','TIMPANOPLASTIA','SEPTOPLASTIA','RINOPLASTIA','SINUSECTOMIA','LARINGOSCOPIA',
-    'PROSTATECTOMIA','NEFRECTOMIA','NEFRECTOMIA VIDEOLAPAROSCÓPICA','LITÍASE RENAL','POSTECTOMIA','VASECTOMIA','CISTECTOMIA',
-    'ABDOMINOPLASTIA','LIPOASPIRAÇÃO','LIPOASPIRAÇÃO ABDOMEN','LIPOASPIRAÇÃO MEMBROS','BLEFAROPLASTIA','RITIDOPLASTIA','OTOPLASTIA'
+    'MARSUPIALIZAÇÃO DE ABCESSO','MARSUPIALIZAÇÃO DE CISTO','HERNIOPLASTIA EPIGÁSTRICA','HERNIOPLASTIA INGUINAL',
+    'LAPAROTOMIA EXPLORADORA','CISTOSTOMIA','OOFRECTOMIA','SALPINGECTOMIA','TRAQUEOSTOMIA','TORACOSTOMIA',
+    'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','COLECTOMIA','GASTRECTOMIA','BYPASS GÁSTRICO',
+    'ESPLENECTOMIA','HEMORROIDECTOMIA','FISTULECTOMIA ANAL','CESARIANA','HISTERECTOMIA','MASTECTOMIA',
+    'CRANIOTOMIA','ANEURISMA CEREBRAL','HÉRNIA DE DISCO','CIRURGIA DE COLUNA','REVASCULARIZAÇÃO MIOCÁRDICA',
+    'ARTROPLASTIA DE QUADRIL','ARTROPLASTIA DE JOELHO','OSTEOSSÍNTESE DE FÊMUR','OSTEOSSÍNTESE DE TÍBIA',
+    'RECONSTRUÇÃO DE LCA','MENISCECTOMIA','ARTROSCOPIA','CIRURGIA DE MANGUITO ROTADOR',
+    'EXODONTIA DE TERCEIRO MOLAR','EXODONTIA MÚLTIPLA','FRATURA DE MANDÍBULA','FRATURA DE MAXILA',
+    'CIRURGIA ORTOGNÁTICA','ENXERTO ÓSSEO ALVEOLAR','IMPLANTE DENTÁRIO','LEVANTAMENTO DE SEIO MAXILAR',
+    'CIRURGIA DE CATARATA','FACECTOMIA','AMIGDALECTOMIA','SEPTOPLASTIA','RINOPLASTIA',
+    'PROSTATECTOMIA','NEFRECTOMIA','POSTECTOMIA','ABDOMINOPLASTIA','LIPOASPIRAÇÃO'
 ];
 
+// ========== FIREBASE ==========
 onValue(ref(db,'.info/connected'),(snap)=>{const s=document.getElementById('connectionStatus');if(snap.val()){s.innerHTML='🟢 Conectado';s.className='connection-status'}else{s.innerHTML='🔴 Reconectando...';s.className='connection-status offline'}});
 onValue(ref(db,'surgeries'),(snap)=>{allSurgeries=snap.val()?Object.values(snap.val()):[];updateAll()});
 onValue(ref(db,'settings/logo'),(snap)=>{if(snap.val())document.getElementById('logoUpload').innerHTML=`<img src="${snap.val()}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)"><div class="logo-hint">Hospital</div>`});
@@ -403,21 +402,24 @@ onValue(ref(db,'settings/govLogo'),(snap)=>{if(snap.val())document.getElementByI
 window.uploadLogo=function(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=function(ev){set(ref(db,'settings/logo'),ev.target.result).then(()=>{document.getElementById('logoUpload').innerHTML=`<img src="${ev.target.result}" alt="Logo HRPI"><input type="file" accept="image/*" onchange="uploadLogo(event)"><div class="logo-hint">Hospital</div>`})};r.readAsDataURL(f)}};
 window.uploadGovLogo=function(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=function(ev){set(ref(db,'settings/govLogo'),ev.target.result).then(()=>{document.getElementById('govLogoUpload').innerHTML=`<img src="${ev.target.result}" alt="Logo Governo"><input type="file" accept="image/*" onchange="uploadGovLogo(event)"><div class="logo-hint">Governo</div>`})};r.readAsDataURL(f)}};
 
+// ========== AUTOCOMPLETE ==========
 const si=document.getElementById('surgeryType'),sb=document.getElementById('suggestionsBox');
-si.addEventListener('input',function(){const l=this.value.split('\n'),ll=l[l.length-1].trim().toUpperCase();if(ll.length<2){sb.classList.remove('show');return}const m=surgeryTypes.filter(t=>t.includes(ll));if(m.length){sb.innerHTML=m.slice(0,8).map(m=>`<div class="suggestion-item" onclick="addProcedure('${m.replace(/'/g,"\\'")}')"><span class="add-icon">➕</span> ${m.replace(new RegExp(`(${ll})`,'gi'),'<strong style="color:#c8a94a">$1</strong>')}</div>`).join('');sb.classList.add('show')}else sb.classList.remove('show')});
+si.addEventListener('input',function(){const l=this.value.split('\n'),ll=l[l.length-1].trim().toUpperCase();if(ll.length<2){sb.classList.remove('show');return}const m=surgeryTypes.filter(t=>t.includes(ll));if(m.length){sb.innerHTML=m.slice(0,8).map(m=>`<div class="suggestion-item" onclick="addProcedure('${m.replace(/'/g,"\\'")}')">➕ ${m.replace(new RegExp(`(${ll})`,'gi'),'<strong style="color:#c8a94a">$1</strong>')}</div>`).join('');sb.classList.add('show')}else sb.classList.remove('show')});
 window.addProcedure=function(p){const t=document.getElementById('surgeryType'),l=t.value.split('\n');l.pop();l.push(p);t.value=l.join('\n')+'\n';sb.classList.remove('show');t.focus();t.setSelectionRange(t.value.length,t.value.length)};
 document.addEventListener('click',function(e){if(!si.contains(e.target)&&!sb.contains(e.target))sb.classList.remove('show')});
 
+// ========== CONFLITO ==========
 function checkConflict(){const d=document.getElementById('surgeryDate').value,t=document.getElementById('surgeryTime').value,r=document.getElementById('room').value,e=document.getElementById('editId').value;if(!d||!t||!r){document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false;return}const c=allSurgeries.some(s=>s.date===d&&s.time===t&&s.room===r&&s.status!=='concluida'&&s.status!=='cancelada'&&s.id!==e);if(c){document.getElementById('conflictWarning').style.display='block';document.getElementById('submitBtn').disabled=true;hasConflict=true}else{document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;hasConflict=false}}
 
-document.getElementById('surgeryForm').addEventListener('submit',function(e){e.preventDefault();if(hasConflict){alert('⚠️ Conflito!');return}const ed=document.getElementById('editId').value;const s={id:ed||push(ref(db,'surgeries')).key,origem:document.getElementById('origem').value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,patient:document.getElementById('patient').value.toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,type:document.getElementById('surgeryType').value.toUpperCase(),doctor:document.getElementById('doctor').value.toUpperCase(),specialty:document.getElementById('specialty').value,anesthetist:document.getElementById('anesthetist').value.toUpperCase(),circulante:document.getElementById('circulante').value.toUpperCase(),room:document.getElementById('room').value,status:'pendente',cancelReason:null};if(ed&&isEditing){const ex=allSurgeries.find(s=>s.id===ed);if(ex){s.status=ex.status;s.cancelReason=ex.cancelReason||null}}set(ref(db,'surgeries/'+s.id),s).then(()=>{clearForm();cancelEdit()})});
+// ========== SUBMIT ==========
+document.getElementById('surgeryForm').addEventListener('submit',function(e){e.preventDefault();if(hasConflict){alert('⚠️ Conflito!');return}const ed=document.getElementById('editId').value;const s={id:ed||push(ref(db,'surgeries')).key,origem:document.getElementById('origem').value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,patient:document.getElementById('patient').value.toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,type:document.getElementById('surgeryType').value.toUpperCase(),doctor:document.getElementById('doctor').value.toUpperCase(),doctorCRM:document.getElementById('doctorCRMHidden').value,specialty:document.getElementById('specialty').value,anesthetist:document.getElementById('anesthetist').value.toUpperCase(),circulante:document.getElementById('circulante').value.toUpperCase(),room:document.getElementById('room').value,status:'pendente',cancelReason:null};if(ed&&isEditing){const ex=allSurgeries.find(s=>s.id===ed);if(ex){s.status=ex.status;s.cancelReason=ex.cancelReason||null}}set(ref(db,'surgeries/'+s.id),s).then(()=>{clearForm();cancelEdit()})});
 
+// ========== AÇÕES ==========
 window.startSurgery=function(id){update(ref(db,'surgeries/'+id),{status:'em_andamento'})};
 window.finishSurgery=function(id){update(ref(db,'surgeries/'+id),{status:'concluida'})};
 window.openCancelModal=function(id){cancelSurgeryId=id;document.getElementById('cancelReason').value='';document.getElementById('cancelModal').classList.add('active')};
 window.closeCancelModal=function(){cancelSurgeryId=null;document.getElementById('cancelModal').classList.remove('active')};
 window.confirmCancel=function(){const r=document.getElementById('cancelReason').value.trim();if(!r){alert('⚠️ Informe o motivo!');return}if(cancelSurgeryId){update(ref(db,'surgeries/'+cancelSurgeryId),{status:'cancelada',cancelReason:r}).then(()=>{closeCancelModal()})}};
-
 window.editSurgery = function(id) {
     const surgery = allSurgeries.find(s => s.id === id);
     if (!surgery) { alert('⚠️ Cirurgia não encontrada!'); return; }
@@ -427,10 +429,10 @@ window.editSurgery = function(id) {
     document.getElementById('surgeryDate').value = surgery.date;
     document.getElementById('surgeryTime').value = surgery.time || '';
     document.getElementById('patient').value = surgery.patient || '';
-    document.getElementById('birthDate').value = surgery.birthDate || '';
-    calculateAge();
+    document.getElementById('birthDate').value = surgery.birthDate || ''; calculateAge();
     document.getElementById('surgeryType').value = surgery.type || '';
     document.getElementById('doctor').value = surgery.doctor || '';
+    document.getElementById('doctorCRMHidden').value = surgery.doctorCRM || '';
     document.getElementById('specialty').value = surgery.specialty || '';
     document.getElementById('anesthetist').value = surgery.anesthetist || '';
     document.getElementById('circulante').value = surgery.circulante || '';
@@ -439,39 +441,59 @@ window.editSurgery = function(id) {
     document.getElementById('submitBtn').textContent = '💾 Salvar Alterações';
     document.getElementById('cancelEditBtn').style.display = 'block';
 };
-
 window.cancelEdit=function(){isEditing=false;document.getElementById('editId').value='';document.getElementById('formActionTitle').textContent='Registrar Cirurgia';document.getElementById('submitBtn').textContent='✅ Registrar';document.getElementById('cancelEditBtn').style.display='none';clearForm()};
 window.deleteSurgery=function(id){if(confirm('Excluir permanentemente?'))remove(ref(db,'surgeries/'+id))};
 window.switchTab=function(tab){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');document.getElementById('listTitle').textContent=tab==='today'?'Cirurgias do Dia':'Cirurgias Agendadas (Futuras)';updateList()};
 
-function updateAll(){updateStats();updateList()}
-function updateStats(){const t=allSurgeries.filter(s=>s.date===TODAY);document.getElementById('totalToday').textContent=String(t.length).padStart(2,'0');document.getElementById('waitingCount').textContent=String(t.filter(s=>s.status==='pendente').length).padStart(2,'0');document.getElementById('inProgressCount').textContent=String(t.filter(s=>s.status==='em_andamento').length).padStart(2,'0');document.getElementById('completedCount').textContent=String(t.filter(s=>s.status==='concluida').length).padStart(2,'0');document.getElementById('cancelledCount').textContent=String(t.filter(s=>s.status==='cancelada').length).padStart(2,'0')}
-
+// ========== ATUALIZAÇÕES ==========
+function updateAll(){updateStats();updateList();updateUpcomingBadge()}
+function updateStats(){
+    const t=allSurgeries.filter(s=>s.date===TODAY);
+    document.getElementById('totalToday').textContent=String(t.length).padStart(2,'0');
+    document.getElementById('waitingCount').textContent=String(t.filter(s=>s.status==='pendente').length).padStart(2,'0');
+    document.getElementById('inProgressCount').textContent=String(t.filter(s=>s.status==='em_andamento').length).padStart(2,'0');
+    document.getElementById('completedCount').textContent=String(t.filter(s=>s.status==='concluida').length).padStart(2,'0');
+    document.getElementById('cancelledCount').textContent=String(t.filter(s=>s.status==='cancelada').length).padStart(2,'0');
+}
+function updateUpcomingBadge() {
+    const upcoming = allSurgeries.filter(s => s.date > TODAY).length;
+    const badge = document.getElementById('upcomingBadge');
+    if (upcoming > 0) { badge.textContent = upcoming; badge.style.display = 'inline-block'; }
+    else { badge.style.display = 'none'; }
+}
 function updateList(){
     const l=document.getElementById('surgeryList');
-    let s=currentTab==='today'?allSurgeries.filter(s=>s.date===TODAY).sort((a,b)=>a.time.localeCompare(b.time)):allSurgeries.filter(s=>s.date>TODAY).sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
-    if(!s.length){l.innerHTML=`<div style="text-align:center;padding:40px;color:#94a3b8">${currentTab==='today'?'Nenhuma cirurgia para hoje':'Nenhuma cirurgia agendada'}</div>`;return}
+    let s = currentTab==='today' ? allSurgeries.filter(s=>s.date===TODAY).sort((a,b)=>a.time.localeCompare(b.time)) : allSurgeries.filter(s=>s.date>TODAY).sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+    if(!s.length){l.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text-muted)">${currentTab==='today'?'Nenhuma cirurgia para hoje':'Nenhuma cirurgia agendada para datas futuras'}</div>`;return}
     l.innerHTML=s.map(s=>{
         let sc='pending';if(s.status==='em_andamento')sc='ongoing';if(s.status==='concluida')sc='completed';if(s.status==='cancelada')sc='cancelled';
         const it=s.date===TODAY,dd=it?'HOJE':new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR');
         const ci=s.cancelReason?`<div class="cancel-reason">❌ Motivo: ${s.cancelReason}</div>`:'';
         const origemMap={Interno:'🏥 Interno','CR - Bucomaxilofacial':'🦷 CR Bucomaxilo','Solicitação Externa':'📋 Solic. Externa',Transferência:'🚑 Transferência','Urgência/Emergência':'🚨 Urgência/Emergência'};
-        return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ Dr. ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 Anestesista: Dr. ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
+        const doctorTitle = getDoctorTitle(s.doctor);
+        const anesthetistTitle = getDoctorTitle(s.anesthetist);
+        return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}${s.doctorCRM?`<br>📋 CRM: ${s.doctorCRM}`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ ${doctorTitle} ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 ${anesthetistTitle} ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
     }).join('')
 }
 
 window.clearForm=function(){document.getElementById('surgeryForm').reset();document.getElementById('surgeryDate').value=TODAY;document.getElementById('editId').value='';document.getElementById('conflictWarning').style.display='none';document.getElementById('submitBtn').disabled=false;document.getElementById('calculatedAge').textContent='';hasConflict=false};
 window.checkConflict=checkConflict;
 
-window.openReportModal=function(){document.getElementById('passwordModal').classList.add('active')};
+// ========== RELATÓRIOS (COM SENHA E ENTER) ==========
+window.openReportModal = function() {
+    document.getElementById('passwordModal').classList.add('active');
+    setTimeout(() => document.getElementById('adminPassword').focus(), 300);
+};
 window.closePasswordModal=function(){document.getElementById('passwordModal').classList.remove('active')};
-window.verifyPassword=function(){const p=document.getElementById('adminPassword').value;if(p===ADMIN_PASSWORD){document.getElementById('adminPassword').value='';closePasswordModal();document.getElementById('reportModal').classList.add('active')}else{alert('❌ Senha incorreta!')}};
+window.verifyPassword = function() {
+    const p = document.getElementById('adminPassword').value;
+    if (p === 'Hrpi2026') {
+        document.getElementById('adminPassword').value = '';
+        closePasswordModal();
+        document.getElementById('reportModal').classList.add('active');
+    } else { alert('❌ Senha incorreta!'); }
+};
 window.closeReportModal=function(){document.getElementById('reportModal').classList.remove('active')};
-
-window.openChangePasswordModal=function(){document.getElementById('changePasswordModal').classList.add('active')};
-window.closeChangePasswordModal=function(){document.getElementById('changePasswordModal').classList.remove('active')};
-window.changePassword=function(){const o=document.getElementById('oldPassword').value;const n=document.getElementById('newPassword').value;const c=document.getElementById('confirmPassword').value;if(o!==ADMIN_PASSWORD){alert('❌ Senha atual incorreta!');return}if(n!==c){alert('❌ Nova senha e confirmação não conferem!');return}if(n.length<4){alert('❌ A senha deve ter pelo menos 4 caracteres!');return}ADMIN_PASSWORD=n;document.getElementById('oldPassword').value='';document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value='';closeChangePasswordModal();alert('✅ Senha alterada com sucesso!')};
-
 window.openCustomDateModal=function(){document.getElementById('customDateModal').classList.add('active')};
 window.closeCustomDateModal=function(){document.getElementById('customDateModal').classList.remove('active')};
 window.openSpecialtyModal=function(){document.getElementById('specialtyModal').classList.add('active')};
@@ -479,20 +501,15 @@ window.closeSpecialtyModal=function(){document.getElementById('specialtyModal').
 
 window.generateReport=function(type){closeReportModal();if(type==='custom'){openCustomDateModal();return}if(type==='specialty'){openSpecialtyModal();return}let f=[],t='';const td=new Date();if(type==='daily'){f=allSurgeries.filter(s=>s.date===TODAY);t='Relatório Diário'}else if(type==='weekly'){const w=new Date(td);w.setDate(w.getDate()-7);f=allSurgeries.filter(s=>s.date>=w.toISOString().split('T')[0]);t='Relatório Semanal'}else if(type==='monthly'){const m=new Date(td);m.setDate(m.getDate()-30);f=allSurgeries.filter(s=>s.date>=m.toISOString().split('T')[0]);t='Relatório Mensal'}else{f=allSurgeries;t='Relatório Geral'}createPDF(t,f)};
 window.generateCustomReport=function(){const s=document.getElementById('customStartDate').value,e=document.getElementById('customEndDate').value;if(!s||!e){alert('⚠️ Selecione as datas!');return}if(s>e){alert('⚠️ Data inicial maior!');return}closeCustomDateModal();createPDF('Relatório Personalizado',allSurgeries.filter(x=>x.date>=s&&x.date<=e),s,e)};
-
 window.generateSpecialtyReport = function() {
     const sp = document.getElementById('specialtyFilter').value;
     const startDate = document.getElementById('specialtyStartDate').value;
     const endDate = document.getElementById('specialtyEndDate').value;
     let filtered = allSurgeries;
     if (sp) { filtered = filtered.filter(s => s.specialty === sp); }
-    if (startDate && endDate) {
-        if (startDate > endDate) { alert('⚠️ Data inicial maior que final!'); return; }
-        filtered = filtered.filter(s => s.date >= startDate && s.date <= endDate);
-    }
+    if (startDate && endDate) { if (startDate > endDate) { alert('⚠️ Data inicial maior que final!'); return; } filtered = filtered.filter(s => s.date >= startDate && s.date <= endDate); }
     closeSpecialtyModal();
-    const periodText = startDate && endDate ? `Período: ${new Date(startDate+'T00:00:00').toLocaleDateString('pt-BR')} a ${new Date(endDate+'T00:00:00').toLocaleDateString('pt-BR')}` : '';
-    createPDF(`Relatório${sp?' - '+sp:' Geral'}${periodText?' - '+periodText:''}`, filtered, startDate || undefined, endDate || undefined);
+    createPDF(`Relatório${sp?' - '+sp:' Geral'}`, filtered, startDate || undefined, endDate || undefined);
 };
 
 function createPDF(title,surgeries,startDate,endDate){
@@ -507,19 +524,13 @@ function createPDF(title,surgeries,startDate,endDate){
     doc.text(pt,14,34);
     const co=surgeries.filter(s=>s.status==='concluida').length,ip=surgeries.filter(s=>s.status==='em_andamento').length,wa=surgeries.filter(s=>s.status==='pendente').length,ca=surgeries.filter(s=>s.status==='cancelada').length;
     doc.setFontSize(9);doc.setTextColor(6,34,74);doc.text(`Total: ${surgeries.length} | Finalizadas: ${co} | Em Andamento: ${ip} | Aguardando: ${wa} | Canceladas: ${ca}`,14,40);
-    const td=surgeries.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time)).map((s,i)=>[i+1,new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR'),s.time||'-',s.patient,s.age||'-',s.type.replace(/\n/g,' | '),s.origem||'-',`Dr. ${s.doctor||'-'}`,s.specialty||'-',`Dr. ${s.anesthetist||'-'}`,s.room||'-',s.circulante||'-',s.status==='pendente'?'Aguardando':s.status==='em_andamento'?'Em andamento':s.status==='concluida'?'Finalizada':'Cancelada',s.cancelReason||'-']);
-    doc.autoTable({startY:44,head:[['Nº','Data','Horário','Paciente','Idade','Procedimentos','Origem','Médico','Especialidade','Anestesista','Sala','Instrumentista(s)','Status','Motivo Cancel.']],body:td,styles:{fontSize:6,cellPadding:2},headStyles:{fillColor:[6,34,74],textColor:255,fontStyle:'bold',fontSize:6},alternateRowStyles:{fillColor:[245,247,250]},didParseCell:function(d){if(d.column.index===12&&d.cell.raw==='Em andamento')d.cell.styles.textColor=[59,130,246];else if(d.column.index===12&&d.cell.raw==='Finalizada')d.cell.styles.textColor=[16,185,129];else if(d.column.index===12&&d.cell.raw==='Cancelada')d.cell.styles.textColor=[239,68,68]}});
+    const td=surgeries.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time)).map((s,i)=>[i+1,new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR'),s.time||'-',s.patient,s.age||'-',s.type.replace(/\n/g,' | '),s.origem||'-',`${getDoctorTitle(s.doctor)} ${s.doctor||'-'} (CRM: ${s.doctorCRM||'-'})`,s.specialty||'-',`${getDoctorTitle(s.anesthetist)} ${s.anesthetist||'-'}`,s.room||'-',s.circulante||'-',s.status==='pendente'?'Aguardando':s.status==='em_andamento'?'Em andamento':s.status==='concluida'?'Finalizada':'Cancelada',s.cancelReason||'-']);
+    doc.autoTable({startY:44,head:[['Nº','Data','Horário','Paciente','Idade','Procedimentos','Origem','Médico (CRM)','Especialidade','Anestesista','Sala','Instrumentista(s)','Status','Motivo Cancel.']],body:td,styles:{fontSize:6,cellPadding:2},headStyles:{fillColor:[6,34,74],textColor:255,fontStyle:'bold',fontSize:6},alternateRowStyles:{fillColor:[245,247,250]},didParseCell:function(d){if(d.column.index===12&&d.cell.raw==='Em andamento')d.cell.styles.textColor=[59,130,246];else if(d.column.index===12&&d.cell.raw==='Finalizada')d.cell.styles.textColor=[16,185,129];else if(d.column.index===12&&d.cell.raw==='Cancelada')d.cell.styles.textColor=[239,68,68]}});
     const pc=doc.internal.getNumberOfPages();for(let i=1;i<=pc;i++){doc.setPage(i);doc.setFontSize(7);doc.setTextColor(150,150,150);doc.text(`HRPI - Centro Cirúrgico - Página ${i} de ${pc}`,148,doc.internal.pageSize.height-8,{align:'center'});doc.text(`Gerado em ${new Date().toLocaleString('pt-BR')}`,14,doc.internal.pageSize.height-8)}
     doc.save(`relatorio_${new Date().toISOString().split('T')[0]}.pdf`)
 }
 
-document.getElementById('cancelModal').addEventListener('click',function(e){if(e.target===this)closeCancelModal()});
-document.getElementById('passwordModal').addEventListener('click',function(e){if(e.target===this)closePasswordModal()});
-document.getElementById('changePasswordModal').addEventListener('click',function(e){if(e.target===this)closeChangePasswordModal()});
-document.getElementById('reportModal').addEventListener('click',function(e){if(e.target===this)closeReportModal()});
-document.getElementById('customDateModal').addEventListener('click',function(e){if(e.target===this)closeCustomDateModal()});
-document.getElementById('specialtyModal').addEventListener('click',function(e){if(e.target===this)closeSpecialtyModal()});
-
+document.querySelectorAll('.modal-overlay').forEach(modal => { modal.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); }); });
 updateAll();
 </script>
 </body>
