@@ -324,6 +324,31 @@
             'Urgência/Emergência': '🚨 Urg/Emerg'
         };
 
+        // ========== DETECTAR Dr./Dra. ==========
+        function getDoctorTitle(name) {
+            if (!name) return 'Dr.';
+            const cleanName = name.replace(/^(dr\.?|dra\.?)\s*/i, '').trim();
+            const femaleNames = [
+                'MARIA', 'ANA', 'JULIA', 'JÚLIA', 'BEATRIZ', 'CAMILA', 'CAROLINA', 'CRISTINA',
+                'DANIELA', 'FERNANDA', 'GABRIELA', 'HELENA', 'ISABELA', 'JOANA', 'LARISSA',
+                'LAURA', 'LETÍCIA', 'LUCIANA', 'MARCIA', 'MÁRCIA', 'MARINA', 'NATALIA', 'NATÁLIA',
+                'PATRICIA', 'PATRÍCIA', 'PAULA', 'RAFAELA', 'RENATA', 'ROBERTA', 'SANDRA',
+                'SARA', 'SOFIA', 'TATIANA', 'VANESSA', 'VERA', 'VIVIANE', 'ALINE', 'AMANDA',
+                'ANDREIA', 'ANDREZA', 'ANGELA', 'ÂNGELA', 'BIANCA', 'BRUNA', 'CARLA', 'CARMEM',
+                'CLARA', 'CLAUDIA', 'CLÁUDIA', 'DEBORA', 'DÉBORA', 'ELIANA', 'ELISA', 'FABIANA',
+                'FLAVIA', 'FLÁVIA', 'GISELE', 'GIOVANA', 'INGRID', 'IRENE', 'JULIANA', 'KARINA',
+                'KATIA', 'KÁTIA', 'LIGIA', 'LÍGIA', 'LILIAN', 'LORENA', 'LUANA', 'LUCIA', 'LÚCIA',
+                'MANUELA', 'MICHELE', 'MONICA', 'MÔNICA', 'NADIA', 'NÁDIA', 'PRISCILA', 'RAQUEL',
+                'REGINA', 'ROSANA', 'SABRINA', 'SAMANTA', 'SILVIA', 'SÍLVIA', 'SIMONE', 'SUELI',
+                'TANIA', 'TÂNIA', 'TEREZA', 'VALERIA', 'VALÉRIA', 'VANDA', 'VERONICA', 'VERÔNICA'
+            ];
+            const firstName = cleanName.split(' ')[0].toUpperCase();
+            if (femaleNames.includes(firstName)) return 'Dra.';
+            const maleExceptions = ['JOSÉ', 'ANDRÉ', 'NOÉ', 'CAUÊ', 'RENÊ'];
+            if (firstName.slice(-1) === 'A' && !maleExceptions.includes(firstName)) return 'Dra.';
+            return 'Dr.';
+        }
+
         function playNotificationSound(){
             try{
                 const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();
@@ -370,7 +395,6 @@
             const b=document.getElementById('surgeriesTableBody');
             if(!t.length){b.innerHTML='<tr><td colspan="11"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
             else{
-                // ORDENAÇÃO: Em Andamento > Aguardando > Finalizadas > Canceladas
                 const statusOrder = { 'em_andamento': 1, 'pendente': 2, 'concluida': 3, 'cancelada': 4 };
                 b.innerHTML=t.sort((a,b)=>{
                     const sa = statusOrder[a.status] || 5;
@@ -386,7 +410,9 @@
                     const mh=s.cancelReason?`<br><span class="cancel-badge" title="${s.cancelReason}">Motivo: ${s.cancelReason.substring(0,15)}${s.cancelReason.length>15?'...':''}</span>`:'';
                     const pr=(s.type||'-').replace(/\n/g,'<br>');
                     const origemCurta = origemMap[s.origem] || s.origem || '-';
-                    return `<tr class="${rc}"><td><strong>${s.room||'-'}</strong></td><td>${s.time||'-'}</td><td><span class="cell-content">${s.patient||'-'}</span></td><td>${s.age||'-'}</td><td>${origemCurta}</td><td><span class="cell-content">${pr}${mh}</span></td><td><span class="cell-content">Dr. ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td><td>${s.specialty||'-'}</td><td><span class="cell-content">Dr. ${s.anesthetist||'-'}</span></td><td>${s.circulante||'-'}</td><td>${sh}</td></tr>`
+                    const doctorTitle = getDoctorTitle(s.doctor);
+                    const anesthetistTitle = getDoctorTitle(s.anesthetist);
+                    return `<tr class="${rc}"><td><strong>${s.room||'-'}</strong></td><td>${s.time||'-'}</td><td><span class="cell-content">${s.patient||'-'}</span></td><td>${s.age||'-'}</td><td>${origemCurta}</td><td><span class="cell-content">${pr}${mh}</span></td><td><span class="cell-content">${doctorTitle} ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td><td>${s.specialty||'-'}</td><td><span class="cell-content">${anesthetistTitle} ${s.anesthetist||'-'}</span></td><td>${s.circulante||'-'}</td><td>${sh}</td></tr>`
                 }).join('')
             }
             document.getElementById('updateTime').textContent=`Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`
