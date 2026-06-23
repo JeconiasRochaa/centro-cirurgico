@@ -231,8 +231,16 @@
     <div class="header">
         <div class="brand">
             <div class="logos-container">
-                <div class="logo-upload" id="logoUpload" title="Logo do Hospital"><span style="font-size:24px">🏥</span><input type="file" accept="image/*" onchange="uploadLogo(event)"><div class="logo-hint">Hospital</div></div>
-                <div class="logo-upload" id="govLogoUpload" title="Logo do Governo"><span style="font-size:24px">🏛️</span><input type="file" accept="image/*" onchange="uploadGovLogo(event)"><div class="logo-hint">Governo</div></div>
+                <div class="logo-upload" id="logoUpload" title="Logo do Hospital">
+                    <span style="font-size:24px">🏥</span>
+                    <input type="file" accept="image/*" onchange="uploadLogo(event)">
+                    <div class="logo-hint">Hospital</div>
+                </div>
+                <div class="logo-upload" id="govLogoUpload" title="Logo do Governo">
+                    <span style="font-size:24px">🏛️</span>
+                    <input type="file" accept="image/*" onchange="uploadGovLogo(event)">
+                    <div class="logo-hint">Governo</div>
+                </div>
             </div>
             <div>
                 <h1>Hospital Regional de Palmeira dos Índios</h1>
@@ -268,22 +276,75 @@
                 <input type="hidden" id="editId">
                 
                 <!-- 5 CAMPOS OBRIGATÓRIOS -->
-                <div class="form-group"><label>🏥 Origem do Paciente <span class="required">*</span></label><select id="origem" required><option value="">Selecione a origem</option><option value="Interno">Interno (Hospital)</option><option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option><option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option><option value="Transferência">Transferência</option><option value="Urgência/Emergência">Urgência/Emergência</option></select></div>
-                <div class="form-group"><label>👤 Nome do Paciente <span class="required">*</span></label><input type="text" id="patient" placeholder="Nome completo do paciente" required></div>
-                <div class="form-group"><label>🎂 Data de Nascimento <span class="required">*</span></label><input type="date" id="birthDate" required onchange="calculateAge()"><span class="idade-calculada" id="calculatedAge"></span></div>
+                <div class="form-group"><label>🏥 Origem do Paciente <span class="required">*</span></label>
+                    <select id="origem" required>
+                        <option value="">Selecione a origem</option>
+                        <option value="Interno">Interno (Hospital)</option>
+                        <option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option>
+                        <option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option>
+                        <option value="Transferência">Transferência</option>
+                        <option value="Urgência/Emergência">Urgência/Emergência</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>👤 Nome do Paciente <span class="required">*</span></label>
+                    <input type="text" id="patient" placeholder="Nome completo do paciente" required>
+                </div>
+                <div class="form-group"><label>🎂 Data de Nascimento <span class="required">*</span></label>
+                    <input type="date" id="birthDate" required onchange="calculateAge()">
+                    <span class="idade-calculada" id="calculatedAge"></span>
+                </div>
                 <input type="hidden" id="age">
-                <div class="form-group"><label>📋 Nº Prontuário <span class="required">*</span></label><input type="text" id="prontuario" placeholder="Número do prontuário" required></div>
-                <div class="form-group"><label>🔪 Procedimento(s) <span class="required">*</span></label><textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea><div class="suggestions-box" id="suggestionsBox"></div></div>
+                <div class="form-group"><label>📋 Nº Prontuário <span class="required">*</span></label>
+                    <input type="text" id="prontuario" placeholder="Número do prontuário" required>
+                </div>
+                <div class="form-group"><label>🔪 Procedimento(s) <span class="required">*</span></label>
+                    <textarea id="surgeryType" placeholder="Digite as iniciais do procedimento..." required rows="3"></textarea>
+                    <div class="suggestions-box" id="suggestionsBox"></div>
+                </div>
                 
                 <!-- CAMPOS OPCIONAIS -->
                 <div class="form-group"><label>📅 Data da Cirurgia</label><input type="date" id="surgeryDate" required onchange="checkConflict()"></div>
                 <div class="form-group"><label>⏰ Horário de Início</label><input type="time" id="surgeryTime" onchange="checkConflict()"></div>
-                <div class="form-group"><label>🔬 Especialidade</label><select id="specialty"><option value="">Selecione</option><option value="Cirurgia Geral">Cirurgia Geral</option><option value="Neurocirurgia">Neurocirurgia</option><option value="Cirurgia Cardíaca">Cirurgia Cardíaca</option><option value="Cirurgia Vascular">Cirurgia Vascular</option><option value="Cirurgia Plástica">Cirurgia Plástica</option><option value="Cirurgia Pediátrica">Cirurgia Pediátrica</option><option value="Cirurgia Torácica">Cirurgia Torácica</option><option value="Cirurgia Oncológica">Cirurgia Oncológica</option><option value="Ortopedia">Ortopedia</option><option value="Oftalmologia">Oftalmologia</option><option value="Otorrinolaringologia">Otorrinolaringologia</option><option value="Urologia">Urologia</option><option value="Ginecologia">Ginecologia</option><option value="Obstetrícia">Obstetrícia</option><option value="Coloproctologia">Coloproctologia</option><option value="Bucomaxilofacial">Bucomaxilofacial</option></select></div>
-                <div class="form-group"><label>👨‍⚕️ Médico(s) Responsável(is)</label><input type="text" id="doctor" placeholder="Digite o nome do médico..."><small style="color:var(--text-muted);font-size:8px">Separe os nomes por vírgula</small></div>
-                <div class="form-group"><label>💉 Anestesista</label><input type="text" id="anesthetist" placeholder="Nome do anestesista"></div>
-                <div class="form-group"><label>🔄 Instrumentista(s)</label><input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)"><small style="color:var(--text-muted);font-size:8px">Separe por vírgula</small></div>
-                <div class="form-group"><label>🏥 Sala Cirúrgica</label><select id="room" onchange="checkConflict()"><option value="">Selecione a sala</option><option value="SALA A">SALA A</option><option value="SALA B">SALA B</option><option value="SALA C">SALA C</option><option value="SALA D">SALA D</option></select></div>
-                <div class="conflict-warning" id="conflictWarning">⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.</div>
+                <div class="form-group"><label>🔬 Especialidade</label><select id="specialty">
+                    <option value="">Selecione</option>
+                    <option value="Cirurgia Geral">Cirurgia Geral</option>
+                    <option value="Neurocirurgia">Neurocirurgia</option>
+                    <option value="Cirurgia Cardíaca">Cirurgia Cardíaca</option>
+                    <option value="Cirurgia Vascular">Cirurgia Vascular</option>
+                    <option value="Cirurgia Plástica">Cirurgia Plástica</option>
+                    <option value="Cirurgia Pediátrica">Cirurgia Pediátrica</option>
+                    <option value="Cirurgia Torácica">Cirurgia Torácica</option>
+                    <option value="Cirurgia Oncológica">Cirurgia Oncológica</option>
+                    <option value="Ortopedia">Ortopedia</option>
+                    <option value="Oftalmologia">Oftalmologia</option>
+                    <option value="Otorrinolaringologia">Otorrinolaringologia</option>
+                    <option value="Urologia">Urologia</option>
+                    <option value="Ginecologia">Ginecologia</option>
+                    <option value="Obstetrícia">Obstetrícia</option>
+                    <option value="Coloproctologia">Coloproctologia</option>
+                    <option value="Endoscopia">Endoscopia</option>
+                    <option value="Bucomaxilofacial">Bucomaxilofacial</option>
+                </select>
+            </div>
+            <div class="form-group"><label>👨‍⚕️ Médico(s) Responsável(is)</label>
+                <input type="text" id="doctor" placeholder="Digite o nome do médico..."><small style="color:var(--text-muted);font-size:8px">Separe os nomes por vírgula</small>
+            </div>
+            <div class="form-group"><label>💉 Anestesista</label>
+                <input type="text" id="anesthetist" placeholder="Nome do anestesista">
+            </div>
+            <div class="form-group"><label>🔄 Instrumentista(s)</label>
+                <input type="text" id="circulante" placeholder="Nome do(s) instrumentista(s)">
+                <small style="color:var(--text-muted);font-size:8px">Separe por vírgula</small>
+            </div>
+            <div class="form-group"><label>🏥 Sala Cirúrgica</label>
+                <select id="room" onchange="checkConflict()">
+                    <option value="">Selecione a sala</option>
+                    <option value="SALA A">SALA A</option>
+                    <option value="SALA B">SALA B</option>
+                    <option value="SALA C">SALA C</option>
+                <option value="SALA D">SALA D</option>
+            </select></div>
+            <div class="conflict-warning" id="conflictWarning">⚠️ Conflito detectado! Já existe cirurgia agendada para esta sala neste dia e horário.</div>
                 <button type="submit" class="btn btn-primary" id="submitBtn">✅ Registrar Cirurgia</button>
                 <button type="button" class="btn btn-warning" id="cancelEditBtn" onclick="cancelEdit()">❌ Cancelar Edição</button>
                 <button type="button" class="btn btn-danger" onclick="clearForm()">🗑️ Limpar Formulário</button>
@@ -303,7 +364,15 @@
 </div>
 
 <!-- MODAIS -->
-<div class="modal-overlay" id="cancelModal"><div class="modal-content"><h2>❌ Cancelar Cirurgia</h2><p style="margin-bottom:12px;color:var(--text-muted);font-size:13px">Informe o motivo:</p><textarea id="cancelReason" placeholder="Descreva o motivo..." style="width:100%;min-height:70px;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></textarea><button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar</button><button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button></div></div>
+<div class="modal-overlay" id="cancelModal">
+    <div class="modal-content">
+        <h2>❌ Cancelar Cirurgia</h2>
+        <p style="margin-bottom:12px;color:var(--text-muted);font-size:13px">Informe o motivo:</p>
+        <textarea id="cancelReason" placeholder="Descreva o motivo..." style="width:100%;min-height:70px;padding:8px;border:2px solid var(--border);border-radius:7px;background:var(--bg-input);color:var(--input-text)"></textarea>
+        <button class="btn-submit-cancel" onclick="confirmCancel()">✅ Confirmar</button>
+        <button class="btn-close-modal" onclick="closeCancelModal()">❌ Fechar</button>
+    </div>
+</div>
 
 <div class="modal-overlay" id="passwordModal">
     <div class="modal-content">
@@ -355,8 +424,9 @@
             <option>Urologia</option>
             <option>Ginecologia</option>
             <option>Obstetrícia</option>
-            <option>Bucomaxilofacial</option>
             <option>Coloproctologia</option>
+            <option>Bucomaxilofacial</option>
+            <option>Endoscopia</option>
         </select>
     </div>
         <div style="margin-bottom:8px"><label>Data Inicial</label>
@@ -447,21 +517,544 @@ window.calculateAge = function() {
     ageDisplay.textContent = `(${age} anos)`; ageHidden.value = age;
 };
 
-// ========== PROCEDIMENTOS ==========
 const surgeryTypes = [
-    'CURATIVO GRAU II COM DEBRIDAMENTO','CURATIVO GRAU II SEM DEBRIDAMENTO','GASTROSTOMIA','APENDICECTOMIA',
-    'DRENAGEM DE ABCESSO ÂNU-RETAL','ENTERECTOMIA','ENTEROANASTOMOSE','TRATAMENTO CIRÚRGICO DE PROLAPSO ANAL',
-    'MARSUPIALIZAÇÃO DE ABCESSO','MARSUPIALIZAÇÃO DE CISTO','HERNIOPLASTIA EPIGÁSTRICA','HERNIOPLASTIA INGUINAL',
-    'LAPAROTOMIA EXPLORADORA','CISTOSTOMIA','OOFRECTOMIA','SALPINGECTOMIA','TRAQUEOSTOMIA','TORACOSTOMIA',
-    'COLECISTECTOMIA','COLECISTECTOMIA VIDEOLAPAROSCÓPICA','COLECTOMIA','GASTRECTOMIA','BYPASS GÁSTRICO',
-    'ESPLENECTOMIA','HEMORROIDECTOMIA','FISTULECTOMIA ANAL','CESARIANA','HISTERECTOMIA','MASTECTOMIA',
-    'CRANIOTOMIA','ANEURISMA CEREBRAL','HÉRNIA DE DISCO','CIRURGIA DE COLUNA','REVASCULARIZAÇÃO MIOCÁRDICA',
-    'ARTROPLASTIA DE QUADRIL','ARTROPLASTIA DE JOELHO','OSTEOSSÍNTESE DE FÊMUR','OSTEOSSÍNTESE DE TÍBIA',
-    'RECONSTRUÇÃO DE LCA','MENISCECTOMIA','ARTROSCOPIA','CIRURGIA DE MANGUITO ROTADOR',
-    'EXODONTIA DE TERCEIRO MOLAR','EXODONTIA MÚLTIPLA','FRATURA DE MANDÍBULA','FRATURA DE MAXILA',
-    'CIRURGIA ORTOGNÁTICA','ENXERTO ÓSSEO ALVEOLAR','IMPLANTE DENTÁRIO','LEVANTAMENTO DE SEIO MAXILAR',
-    'CIRURGIA DE CATARATA','FACECTOMIA','AMIGDALECTOMIA','SEPTOPLASTIA','RINOPLASTIA',
-    'PROSTATECTOMIA','NEFRECTOMIA','POSTECTOMIA','ABDOMINOPLASTIA','LIPOASPIRAÇÃO'
+    // ============ CIRURGIA GERAL ============
+    'CURATIVO GRAU II COM DEBRIDAMENTO',
+    'CURATIVO GRAU II SEM DEBRIDAMENTO',
+    'GASTROSTOMIA',
+    'APENDICECTOMIA',
+    'APENDICECTOMIA VIDEOLAPAROSCÓPICA',
+    'DRENAGEM DE ABCESSO ÂNU-RETAL',
+    'ENTERECTOMIA',
+    'ENTEROANASTOMOSE',
+    'TRATAMENTO CIRÚRGICO DE PROLAPSO ANAL',
+    'MARSUPIALIZAÇÃO DE ABCESSO',
+    'MARSUPIALIZAÇÃO DE CISTO',
+    'HERNIOPLASTIA EPIGÁSTRICA',
+    'HERNIOPLASTIA INGUINAL',
+    'HERNIOPLASTIA INGUINAL UNILATERAL',
+    'HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA',
+    'HERNIOPLASTIA CRURAL UNILATERAL',
+    'HERNIOPLASTIA UMBILICAL',
+    'HERNIOPLASTIA INCISIONAL',
+    'LAPAROTOMIA EXPLORADORA',
+    'LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA DRENAGEM',
+    'LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA BIÓPSIA',
+    'CISTOSTOMIA',
+    'OOFRECTOMIA',
+    'OOFOROPLASTIA',
+    'SALPINGECTOMIA',
+    'SALPINGECTOMIA UNILATERAL',
+    'SALPINGECTOMIA BILATERAL',
+    'DRENAGEM DE ABCESSO DE MAMA',
+    'TRAQUEOSTOMIA',
+    'TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEAL',
+    'TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEOBRÔNQUICA',
+    'TORACOSTOMIA',
+    'TORACOSTOMIA COM DRENAGEM PLEURAL FECHADA',
+    'TORACOCENTESE',
+    'DRENAGEM DE PLEURA',
+    'DRENAGEM DE HEMATOMA PRÉ-PERITONEAL',
+    'DRENAGEM DE ABCESSO PRÉ-PERITONEAL',
+    'DEBRIDAMENTO DE ÚLCERA',
+    'DEBRIDAMENTO DE TECIDOS DESVITALIZADOS',
+    'COLECISTECTOMIA',
+    'COLECISTECTOMIA VIDEOLAPAROSCÓPICA',
+    'COLECTOMIA',
+    'COLECTOMIA DIREITA',
+    'COLECTOMIA ESQUERDA',
+    'COLECTOMIA TOTAL',
+    'COLECTOMIA VIDEOLAPAROSCÓPICA',
+    'GASTRECTOMIA',
+    'GASTRECTOMIA PARCIAL',
+    'GASTRECTOMIA TOTAL',
+    'GASTRECTOMIA VIDEOLAPAROSCÓPICA',
+    'BYPASS GÁSTRICO',
+    'SLEEVE GÁSTRICO',
+    'CIRURGIA BARIÁTRICA',
+    'ESPLENECTOMIA',
+    'ESPLENECTOMIA VIDEOLAPAROSCÓPICA',
+    'HEMORROIDECTOMIA',
+    'FISTULECTOMIA ANAL',
+    'FISTULECTOMIA PERIANAL',
+    'ESFINCTEROPLASTIA ANAL',
+    'TRATAMENTO CIRÚRGICO DE FÍSTULA RETOVAGINAL',
+
+    // ============ GINECOLOGIA E OBSTETRÍCIA ============
+    'CESARIANA',
+    'HISTERECTOMIA',
+    'HISTERECTOMIA TOTAL',
+    'HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA',
+    'HISTERECTOMIA PARCIAL',
+    'HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA',
+    'HISTERECTOMIA RADICAL',
+    'MIOMECTOMIA',
+    'MIOMECTOMIA VIDEOLAPAROSCÓPICA',
+    'MASTECTOMIA',
+    'MASTECTOMIA COM RECONSTRUÇÃO',
+    'QUADRANTECTOMIA',
+    'SETORECTOMIA',
+    'RECONSTRUÇÃO MAMÁRIA',
+    'MASTOPEXIA',
+    'MAMOPLASTIA DE AUMENTO',
+    'MAMOPLASTIA REDUTORA',
+    'LAQUEADURA TUBÁRIA',
+    'CAUTERIZAÇÃO TUBÁRIA',
+    'CURETAGEM UTERINA',
+    'HISTEROSCOPIA CIRÚRGICA',
+    'COLPOPERINEOPLASTIA',
+    'COLPORRAFIA ANTERIOR',
+    'COLPORRAFIA POSTERIOR',
+    'PERINEOPLASTIA',
+    'TRATAMENTO DE ENDOMETRIOSE',
+
+    // ============ NEUROCIRURGIA ============
+    'CRANIOTOMIA',
+    'CRANIOTOMIA PARA TUMOR CEREBRAL',
+    'CRANIOTOMIA DESCOMPRESSIVA',
+    'ANEURISMA CEREBRAL',
+    'CLIPAGEM DE ANEURISMA',
+    'DRENAGEM DE HEMATOMA SUBDURAL',
+    'DRENAGEM DE HEMATOMA EXTRADURAL',
+    'HÉRNIA DE DISCO',
+    'HÉRNIA DE DISCO CERVICAL',
+    'HÉRNIA DE DISCO LOMBAR',
+    'HÉRNIA DE DISCO TORÁCICA',
+    'CIRURGIA DE COLUNA',
+    'ARTRODESE DE COLUNA CERVICAL',
+    'ARTRODESE DE COLUNA LOMBAR',
+    'ARTRODESE DE COLUNA TORÁCICA',
+    'DESCOMPRESSÃO MEDULAR',
+    'LAMINECTOMIA',
+    'FORAMINOTOMIA',
+    'VERTEBROPLASTIA',
+    'CIFOPLASTIA',
+
+    // ============ CIRURGIA CARDÍACA E VASCULAR ============
+    'REVASCULARIZAÇÃO MIOCÁRDICA',
+    'TROCA VALVAR AÓRTICA',
+    'TROCA VALVAR MITRAL',
+    'CATETERISMO CARDÍACO',
+    'COLOCAÇÃO DE MARCA-PASSO',
+    'TROCA DE MARCA-PASSO',
+    'ANGIOPLASTIA',
+    'COLOCAÇÃO DE STENT',
+    'SAFENECTOMIA',
+    'SAFENECTOMIA BILATERAL',
+    'ESCLEROTERAPIA DE VARIZES',
+    'FLEBECTOMIA',
+    'LIGADURA DE VEIAS PERFURANTES',
+    'TROMBECTOMIA',
+
+    // ============ ORTOPEDIA E TRAUMATOLOGIA ============
+    'ARTROPLASTIA DE QUADRIL',
+    'ARTROPLASTIA DE QUADRIL REVISÃO',
+    'ARTROPLASTIA DE JOELHO',
+    'ARTROPLASTIA DE JOELHO REVISÃO',
+    'PRÓTESE DE QUADRIL',
+    'PRÓTESE DE JOELHO',
+    'PRÓTESE DE OMBRO',
+    'PRÓTESE DE TORNOZELO',
+    'OSTEOSSÍNTESE DE FÊMUR',
+    'OSTEOSSÍNTESE DE FÊMUR COM PLACA',
+    'OSTEOSSÍNTESE DE FÊMUR COM HASTE',
+    'OSTEOSSÍNTESE DE FÊMUR COM HASTE INTRAMEDULAR',
+    'OSTEOSSÍNTESE DE TÍBIA',
+    'OSTEOSSÍNTESE DE TÍBIA COM PLACA',
+    'OSTEOSSÍNTESE DE TÍBIA COM HASTE INTRAMEDULAR',
+    'OSTEOSSÍNTESE DE ÚMERO',
+    'OSTEOSSÍNTESE DE ÚMERO COM PLACA',
+    'OSTEOSSÍNTESE DE RÁDIO',
+    'OSTEOSSÍNTESE DE RÁDIO DISTAL',
+    'OSTEOSSÍNTESE DE TORNOZELO',
+    'OSTEOSSÍNTESE DE CLAVÍCULA',
+    'OSTEOSSÍNTESE DE PUNHO',
+    'OSTEOSSÍNTESE DE MÃO',
+    'OSTEOSSÍNTESE DE PÉ',
+    'OSTEOSSÍNTESE DE PATELA',
+    'OSTEOSSÍNTESE DE COTOVELO',
+    'RECONSTRUÇÃO DE LCA',
+    'RECONSTRUÇÃO DE LCP',
+    'RECONSTRUÇÃO DE MENISCO',
+    'MENISCECTOMIA',
+    'ARTROSCOPIA',
+    'ARTROSCOPIA DE JOELHO',
+    'ARTROSCOPIA DE OMBRO',
+    'ARTROSCOPIA DE TORNOZELO',
+    'ARTROSCOPIA DE COTOVELO',
+    'ARTROSCOPIA DE PUNHO',
+    'CIRURGIA DE MANGUITO ROTADOR',
+    'TENODESE',
+    'TENORRAFIA',
+    'SUTURA DE TENDÃO',
+    'LIBERAÇÃO DE TÚNEL DO CARPO',
+    'CIRURGIA DE DUPUYTREN',
+    'AMPUTAÇÃO DE DEDO',
+    'AMPUTAÇÃO DE MEMBRO',
+    'RETIRADA DE MATERIAL DE SÍNTESE',
+    'RETIRADA DE FIOS DE KIRSCHNER',
+    'RETIRADA DE PLACA',
+    'RETIRADA DE PLACA E PARAFUSO',
+    'RETIRADA DE PARAFUSOS',
+    'RETIRADA DE FIO INTRAÓSSEO',
+    'RETIRADA DE PINO INTRAÓSSEO',
+    'RETIRADA DE FIXADOR EXTERNO',
+    'ENXERTO ÓSSEO',
+    'TENÓLISE',
+    'TENOPLASTIA',
+    'ENXERTO DE TENDÃO ÚNICO',
+    'TENORRAFIA EM TÚNEL ÓSTEO-FIBROSO',
+    'MANIPULAÇÃO ARTICULAR',
+    'RESSECÇÃO SIMPLES DE TUMOR ÓSSEO',
+    'RESSECÇÃO SIMPLES DE TUMOR DE PARTES MOLES',
+    'RETIRADA DE CORPO ESTRANHO INTRA-ARTICULAR',
+    'RETIRADA DE CORPO ESTRANHO INTRAÓSSEO',
+    'TRATAMENTO CIRÚRGICO DE FRATURA DA CLAVÍCULA',
+    'TRATAMENTO CIRÚRGICO DE LUXAÇÃO ACROMIOCLAVICULAR',
+    'TRATAMENTO CIRÚRGICO DE FRATURA-LUXAÇÃO ACROMIOCLAVICULAR',
+
+    // ============ OFTALMOLOGIA ============
+    'CIRURGIA DE CATARATA',
+    'FACECTOMIA',
+    'FACECTOMIA COM IMPLANTE DE LENTE',
+    'TRABECULECTOMIA',
+    'VITRECTOMIA',
+    'VITRECTOMIA POSTERIOR',
+    'RETINOPEXIA',
+    'CIRURGIA DE DESCOLAMENTO DE RETINA',
+    'CIRURGIA DE PTERÍGIO',
+    'CIRURGIA DE ESTRABISMO',
+    'BLEFAROPLASTIA',
+    'CORREÇÃO DE PTOSE PALPEBRAL',
+    'TRANSPLANTE DE CÓRNEA',
+    'CROSSLINKING DE CÓRNEA',
+
+    // ============ OTORRINOLARINGOLOGIA ============
+    'AMIGDALECTOMIA',
+    'ADENOIDECTOMIA',
+    'ADENOAMIGDALECTOMIA',
+    'TIMPANOPLASTIA',
+    'TIMPANOPLASTIA COM MASTOIDECTOMIA',
+    'SEPTOPLASTIA',
+    'RINOPLASTIA',
+    'RINOSSEPTOPLASTIA',
+    'SINUSECTOMIA',
+    'SINUSECTOMIA ENDOSCÓPICA',
+    'LARINGOSCOPIA',
+    'LARINGOSCOPIA COM MICROCIRURGIA',
+    'TRAQUEOSTOMIA',
+    'FECHAMENTO DE TRAQUEOSTOMIA',
+    'CIRURGIA DE CORDAS VOCAIS',
+
+    // ============ UROLOGIA ============
+    'PROSTATECTOMIA',
+    'PROSTATECTOMIA VIDEOLAPAROSCÓPICA',
+    'RTU DE PRÓSTATA',
+    'NEFRECTOMIA',
+    'NEFRECTOMIA VIDEOLAPAROSCÓPICA',
+    'NEFRECTOMIA RADICAL',
+    'LITÍASE RENAL',
+    'LITOTRIPSIA',
+    'URETEROLITOTRIPSIA',
+    'POSTECTOMIA',
+    'CIRCUNCISÃO',
+    'VASECTOMIA',
+    'CISTECTOMIA',
+    'CISTECTOMIA RADICAL',
+    'HERNIORRAFIA INGUINAL',
+    'ORQUIDOPEXIA',
+    'HIDROCELECTOMIA',
+    'VARICOCELECTOMIA',
+    'FRENULOPLASTIA',
+
+    // ============ CIRURGIA PLÁSTICA ============
+    'ABDOMINOPLASTIA',
+    'LIPOASPIRAÇÃO',
+    'LIPOASPIRAÇÃO ABDOMEN',
+    'LIPOASPIRAÇÃO MEMBROS',
+    'LIPOASPIRAÇÃO DORSO',
+    'LIPOASPIRAÇÃO DE PAPADA',
+    'RITIDOPLASTIA',
+    'OTOPLASTIA',
+    'MENTOPLASTIA',
+    'GINECOMASTIA',
+    'RECONSTRUÇÃO DE ORELHA',
+    'ENXERTO DE PELE',
+    'RETALHO CUTÂNEO',
+    'CORREÇÃO DE CICATRIZ',
+
+    // ============ BUCOMAXILOFACIAL ============
+    'EXODONTIA DE TERCEIRO MOLAR',
+    'EXODONTIA DE TERCEIRO MOLAR SUPERIOR',
+    'EXODONTIA DE TERCEIRO MOLAR INFERIOR',
+    'EXODONTIA DE SISO',
+    'EXODONTIA DE SISO BILATERAL',
+    'EXODONTIA DE SISO (4 DENTES)',
+    'EXODONTIA MÚLTIPLA',
+    'EXODONTIA SIMPLES',
+    'FRATURA DE MANDÍBULA',
+    'FRATURA DE MANDÍBULA COM PLACA',
+    'FRATURA DE MAXILA',
+    'FRATURA DE ZIGOMÁTICO',
+    'FRATURA DE ÓRBITA',
+    'FRATURA DE OSSOS NASAIS',
+    'CIRURGIA ORTOGNÁTICA',
+    'CIRURGIA ORTOGNÁTICA BIMAXILAR',
+    'ARTROPLASTIA DE ATM',
+    'RECONSTRUÇÃO DE MANDÍBULA',
+    'RECONSTRUÇÃO DE MAXILA',
+    'ENXERTO ÓSSEO ALVEOLAR',
+    'ENXERTO ÓSSEO AUTÓGENO',
+    'IMPLANTE DENTÁRIO',
+    'IMPLANTE DENTÁRIO UNITÁRIO',
+    'IMPLANTE DENTÁRIO MÚLTIPLO',
+    'LEVANTAMENTO DE SEIO MAXILAR',
+    'CISTO ODONTOGÊNICO',
+    'TUMOR ODONTOGÊNICO',
+    'OSTEONECROSE DOS MAXILARES',
+    'TRAUMATISMO DENTÁRIO',
+    'CIRURGIA DE FENDA LABIOPALATINA',
+    'SIALOENDOSCOPIA',
+    'CIRURGIA DE GLÂNDULAS SALIVARES',
+    'DRENAGEM DE ABCESSO BUCOMAXILOFACIAL',
+    'DRENAGEM DE ABCESSO ODONTOGÊNICO',
+    'BIÓPSIA DE CAVIDADE ORAL',
+    'BIÓPSIA DE GLÂNDULA SALIVAR',
+    'EXÉRESE DE LESÃO BUCOMAXILOFACIAL',
+
+    // ============ ENDOSCOPIA ============
+    'ENDOSCOPIA DIGESTIVA ALTA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM BIÓPSIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM CROMOSCOPIA',
+    'ENDOSCOPIA DIGESTIVA ALTA TERAPÊUTICA',
+    'ENDOSCOPIA DIGESTIVA ALTA DE URGÊNCIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM HEMOSTASIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM LIGADURA ELÁSTICA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM ESCLEROTERAPIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM DILATAÇÃO',
+    'ENDOSCOPIA DIGESTIVA ALTA COM RETIRADA DE CORPO ESTRANHO',
+    'ENDOSCOPIA DIGESTIVA ALTA COM GASTROSTOMIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM POLIPECTOMIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM MUCOSECTOMIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM DISSECÇÃO SUBMUCOSA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM ABLAÇÃO',
+    'ENDOSCOPIA DIGESTIVA ALTA COM ARGONIO',
+    'ENDOSCOPIA DIGESTIVA ALTA COM PRÓTESE',
+    'ENDOSCOPIA DIGESTIVA ALTA COM BALÃO INTRAGÁSTRICO',
+    'ENDOSCOPIA DIGESTIVA ALTA COM BANDAGEM ESOFÁGICA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM LIGADURA DE VARIZES',
+    'ENDOSCOPIA DIGESTIVA ALTA COM APLICAÇÃO DE CLIPE',
+    'ENDOSCOPIA DIGESTIVA ALTA COM TESTE DE UREASE',
+    'ENDOSCOPIA DIGESTIVA ALTA COM PHMETRIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM MANOMETRIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM ESOFAGOSCOPIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM DUODENOSCOPIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM JEJUNOSCOPIA',
+    'ENDOSCOPIA DIGESTIVA ALTA COM ENTEROSCOPIA',
+    'COLONOSCOPIA',
+    'COLONOSCOPIA COM BIÓPSIA',
+    'COLONOSCOPIA COM CROMOSCOPIA',
+    'COLONOSCOPIA COM POLIPECTOMIA',
+    'COLONOSCOPIA COM MUCOSECTOMIA',
+    'COLONOSCOPIA COM DISSECÇÃO SUBMUCOSA',
+    'COLONOSCOPIA COM HEMOSTASIA',
+    'COLONOSCOPIA COM DILATAÇÃO',
+    'COLONOSCOPIA COM RETIRADA DE CORPO ESTRANHO',
+    'COLONOSCOPIA COM TATUAGEM',
+    'COLONOSCOPIA COM ABLAÇÃO',
+    'COLONOSCOPIA COM ARGONIO',
+    'COLONOSCOPIA COM PRÓTESE',
+    'COLONOSCOPIA COM DESCOMPRESSÃO',
+    'COLONOSCOPIA COM DESVOLVULAÇÃO',
+    'COLONOSCOPIA TERAPÊUTICA',
+    'COLONOSCOPIA DE URGÊNCIA',
+    'COLONOSCOPIA COM COLOCAÇÃO DE CLIPE',
+    'COLONOSCOPIA COM LIGADURA ELÁSTICA',
+    'COLONOSCOPIA COM ESCLEROTERAPIA',
+    'RETOSSIGMOIDOSCOPIA',
+    'RETOSSIGMOIDOSCOPIA COM BIÓPSIA',
+    'RETOSSIGMOIDOSCOPIA COM POLIPECTOMIA',
+    'RETOSSIGMOIDOSCOPIA FLEXÍVEL',
+    'RETOSSIGMOIDOSCOPIA RÍGIDA',
+    'ANUSCOPIA',
+    'ANUSCOPIA COM BIÓPSIA',
+    'ANUSCOPIA COM LIGADURA ELÁSTICA',
+    'CPRE',
+    'CPRE COM PAPILOTOMIA',
+    'CPRE COM RETIRADA DE CÁLCULOS',
+    'CPRE COM COLOCAÇÃO DE PRÓTESE BILIAR',
+    'CPRE COM COLOCAÇÃO DE STENT',
+    'CPRE COM DILATAÇÃO DE ESTENOSE',
+    'CPRE COM ESFINCTEROTOMIA',
+    'CPRE COM BIÓPSIA',
+    'CPRE COM CITOLOGIA',
+    'CPRE COM DRENAGEM BILIAR',
+    'CPRE COM DRENAGEM PANCREÁTICA',
+    'CPRE COM LITOTRIPSIA',
+    'CPRE COM COLANGIOSCOPIA',
+    'CPRE COM PANCREATOSCOPIA',
+    'CPRE TERAPÊUTICA',
+    'CPRE DE URGÊNCIA',
+    'ENTEROSCOPIA',
+    'ENTEROSCOPIA COM BIÓPSIA',
+    'ENTEROSCOPIA COM POLIPECTOMIA',
+    'ENTEROSCOPIA COM HEMOSTASIA',
+    'ENTEROSCOPIA COM DILATAÇÃO',
+    'ENTEROSCOPIA COM RETIRADA DE CORPO ESTRANHO',
+    'ENTEROSCOPIA POR CÁPSULA',
+    'ENTEROSCOPIA DE DUPLO BALÃO',
+    'ENTEROSCOPIA DE MONO BALÃO',
+    'ENTEROSCOPIA INTRAOPERATÓRIA',
+    'ENTEROSCOPIA PROFUNDA',
+    'ENTEROSCOPIA RETRÓGRADA',
+    'ECOENDOSCOPIA ALTA',
+    'ECOENDOSCOPIA BAIXA',
+    'ECOENDOSCOPIA COM PUNÇÃO',
+    'ECOENDOSCOPIA COM BIÓPSIA',
+    'ECOENDOSCOPIA COM DOPPLER',
+    'ECOENDOSCOPIA COM ELASTOGRAFIA',
+    'ECOENDOSCOPIA COM CONTRASTE',
+    'ECOENDOSCOPIA TERAPÊUTICA',
+    'ECOENDOSCOPIA COM DRENAGEM',
+    'ECOENDOSCOPIA COM NEURÓLISE',
+    'ECOENDOSCOPIA COM ABLAÇÃO',
+    'ECOENDOSCOPIA COM TATUAGEM',
+    'BRONCOSCOPIA',
+    'BRONCOSCOPIA COM BIÓPSIA',
+    'BRONCOSCOPIA COM LAVADO BRONCOALVEOLAR',
+    'BRONCOSCOPIA COM ESCOVADO',
+    'BRONCOSCOPIA COM PUNÇÃO TRANSBRÔNQUICA',
+    'BRONCOSCOPIA COM RETIRADA DE CORPO ESTRANHO',
+    'BRONCOSCOPIA COM HEMOSTASIA',
+    'BRONCOSCOPIA COM DILATAÇÃO',
+    'BRONCOSCOPIA COM COLOCAÇÃO DE PRÓTESE',
+    'BRONCOSCOPIA COM COLOCAÇÃO DE STENT',
+    'BRONCOSCOPIA COM LASER',
+    'BRONCOSCOPIA COM ARGONIO',
+    'BRONCOSCOPIA COM CRIOTERAPIA',
+    'BRONCOSCOPIA COM BRAQUITERAPIA',
+    'BRONCOSCOPIA TERAPÊUTICA',
+    'BRONCOSCOPIA DE URGÊNCIA',
+    'BRONCOSCOPIA COM ULTRASSONOGRAFIA',
+    'BRONCOSCOPIA COM NAVEGAÇÃO ELETROMAGNÉTICA',
+    'BRONCOSCOPIA COM TERMOPLASTIA',
+    'BRONCOSCOPIA COM VÁLVULA ENDOBRÔNQUICA',
+    'LARINGOSCOPIA COM BIÓPSIA',
+    'LARINGOSCOPIA COM EXÉRESE DE LESÃO',
+    'LARINGOSCOPIA COM MICROCIRURGIA',
+    'LARINGOSCOPIA COM LASER',
+    'LARINGOSCOPIA DIAGNÓSTICA',
+    'LARINGOSCOPIA TERAPÊUTICA',
+    'NASOFIBROLARINGOSCOPIA',
+    'NASOFIBROLARINGOSCOPIA COM BIÓPSIA',
+    'NASOFIBROLARINGOSCOPIA COM EXÉRESE',
+    'ESOFAGOSCOPIA',
+    'ESOFAGOSCOPIA COM BIÓPSIA',
+    'ESOFAGOSCOPIA COM DILATAÇÃO',
+    'ESOFAGOSCOPIA COM HEMOSTASIA',
+    'ESOFAGOSCOPIA COM RETIRADA DE CE',
+    'ESOFAGOSCOPIA COM LIGADURA DE VARIZES',
+    'ESOFAGOSCOPIA COM COLOCAÇÃO DE PRÓTESE',
+    'ESOFAGOSCOPIA COM COLOCAÇÃO DE STENT',
+    'ESOFAGOSCOPIA COM ABLAÇÃO',
+    'ESOFAGOSCOPIA COM MUCOSECTOMIA',
+    'ESOFAGOSCOPIA COM DISSECÇÃO SUBMUCOSA',
+    'GASTROSCOPIA',
+    'GASTROSCOPIA COM BIÓPSIA',
+    'GASTROSCOPIA COM TESTE DE UREASE',
+    'GASTROSCOPIA COM HEMOSTASIA',
+    'GASTROSCOPIA COM POLIPECTOMIA',
+    'GASTROSCOPIA COM MUCOSECTOMIA',
+    'GASTROSCOPIA COM DISSECÇÃO SUBMUCOSA',
+    'GASTROSCOPIA COM DILATAÇÃO',
+    'GASTROSCOPIA COM RETIRADA DE CE',
+    'GASTROSCOPIA COM GASTROSTOMIA',
+    'GASTROSCOPIA COM BALÃO INTRAGÁSTRICO',
+    'GASTROSCOPIA COM LIGADURA ELÁSTICA',
+    'GASTROSCOPIA COM ESCLEROTERAPIA',
+    'GASTROSCOPIA COM APLICAÇÃO DE CLIPE',
+    'GASTROSCOPIA COM ABLAÇÃO',
+    'GASTROSCOPIA COM ARGONIO',
+    'GASTROSCOPIA COM CROMOSCOPIA',
+    'GASTROSCOPIA TERAPÊUTICA',
+    'GASTROSCOPIA DE URGÊNCIA',
+    'DUODENOSCOPIA',
+    'DUODENOSCOPIA COM BIÓPSIA',
+    'DUODENOSCOPIA COM HEMOSTASIA',
+    'DUODENOSCOPIA COM POLIPECTOMIA',
+    'DUODENOSCOPIA COM DILATAÇÃO',
+    'DUODENOSCOPIA COM RETIRADA DE CE',
+    'JEJUNOSCOPIA',
+    'JEJUNOSCOPIA COM BIÓPSIA',
+    'JEJUNOSCOPIA COM HEMOSTASIA',
+    'JEJUNOSCOPIA COM POLIPECTOMIA',
+    'JEJUNOSCOPIA COM DILATAÇÃO',
+    'ILEOSCOPIA',
+    'ILEOSCOPIA COM BIÓPSIA',
+    'ILEOSCOPIA COM HEMOSTASIA',
+    'ILEOSCOPIA COM POLIPECTOMIA',
+    'ILEOSCOPIA COM DILATAÇÃO',
+    'CÁPSULA ENDOSCÓPICA',
+    'CÁPSULA ENDOSCÓPICA DE INTESTINO DELGADO',
+    'CÁPSULA ENDOSCÓPICA DE CÓLON',
+    'CÁPSULA ENDOSCÓPICA DE ESÔFAGO',
+    'CÁPSULA ENDOSCÓPICA DE ESTÔMAGO',
+    'ENDOSCOPIA COM LASER',
+    'ENDOSCOPIA COM ARGÔNIO PLASMA',
+    'ENDOSCOPIA COM CRIOTERAPIA',
+    'ENDOSCOPIA COM RADIOFREQUÊNCIA',
+    'ENDOSCOPIA COM FOTOCOAGULAÇÃO',
+    'ENDOSCOPIA COM ELETROCOAGULAÇÃO',
+    'ENDOSCOPIA COM INJEÇÃO DE ADRENALINA',
+    'ENDOSCOPIA COM INJEÇÃO DE ETANOLAMINA',
+    'ENDOSCOPIA COM INJEÇÃO DE CIANOACRILATO',
+    'ENDOSCOPIA COM INJEÇÃO DE TROMBINA',
+    'ENDOSCOPIA PEDIÁTRICA',
+    'ENDOSCOPIA DIGESTIVA ALTA PEDIÁTRICA',
+    'COLONOSCOPIA PEDIÁTRICA',
+    'ENDOSCOPIA DE URGÊNCIA PEDIÁTRICA',
+    'ENDOSCOPIA TERAPÊUTICA PEDIÁTRICA',
+    'ENDOSCOPIA COM SEDAÇÃO',
+    'ENDOSCOPIA COM ANESTESIA GERAL',
+    'ENDOSCOPIA AMBULATORIAL',
+    'ENDOSCOPIA DE CONTROLE',
+    'ENDOSCOPIA DE SEGUIMENTO',
+    'ENDOSCOPIA DE REVISÃO',
+    'ENDOSCOPIA DE URGÊNCIA',
+    'ENDOSCOPIA DE EMERGÊNCIA',
+    'ENDOSCOPIA COM CORPO ESTRANHO',
+    'ENDOSCOPIA COM HEMORRAGIA DIGESTIVA',
+    'ENDOSCOPIA COM HEMORRAGIA DIGESTIVA ALTA',
+    'ENDOSCOPIA COM HEMORRAGIA DIGESTIVA BAIXA',
+    'ENDOSCOPIA COM SANGRAMENTO ATIVO',
+    'ENDOSCOPIA COM SANGRAMENTO RECENTE',
+    'ENDOSCOPIA COM PROFILAXIA DE HEMORRAGIA',
+    'ENDOSCOPIA COM TRATAMENTO DE FÍSTULA',
+    'ENDOSCOPIA COM TRATAMENTO DE PERFURAÇÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE DEISCÊNCIA',
+    'ENDOSCOPIA COM TRATAMENTO DE ESTENOSE',
+    'ENDOSCOPIA COM TRATAMENTO DE OBSTRUÇÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE COMPRESSÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE INVAGINAÇÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE VOLVO',
+    'ENDOSCOPIA COM TRATAMENTO DE PROLAPSO',
+    'ENDOSCOPIA COM TRATAMENTO DE FÍSTULA TRAQUEOESOFÁGICA',
+    'ENDOSCOPIA COM TRATAMENTO DE FÍSTULA BRONCOPLEURAL',
+    'ENDOSCOPIA COM TRATAMENTO DE PNEUMOTÓRAX',
+    'ENDOSCOPIA COM TRATAMENTO DE EMPIEMA',
+    'ENDOSCOPIA COM TRATAMENTO DE ABCESSO',
+    'ENDOSCOPIA COM TRATAMENTO DE PSEUDOCISTO',
+    'ENDOSCOPIA COM TRATAMENTO DE NECROSE',
+    'ENDOSCOPIA COM TRATAMENTO DE TUMOR',
+    'ENDOSCOPIA COM TRATAMENTO DE PÓLIPO',
+    'ENDOSCOPIA COM TRATAMENTO DE LESÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE ÚLCERA',
+    'ENDOSCOPIA COM TRATAMENTO DE EROSÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE INFLAMAÇÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE INFECÇÃO',
+    'ENDOSCOPIA COM TRATAMENTO DE ISQUEMIA',
+    'ENDOSCOPIA COM TRATAMENTO DE TROMBOSE',
+    'ENDOSCOPIA COM TRATAMENTO DE EMBOLIA'
 ];
 
 // ========== FIREBASE ==========
