@@ -282,7 +282,7 @@
                         <option value="Interno">Interno (Hospital)</option>
                         <option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option>
                         <option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option>
-                        <option value="Transferência">Mutirão</option>
+                        <option value="Mutirão">Mutirão</option>
                         <option value="Urgência/Emergência">Urgência/Emergência</option>
                     </select>
                 </div>
@@ -1133,7 +1133,7 @@ function updateList(){
         let sc='pending';if(s.status==='em_andamento')sc='ongoing';if(s.status==='concluida')sc='completed';if(s.status==='cancelada')sc='cancelled';
         const it=s.date===TODAY,dd=it?'HOJE':new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR');
         const ci=s.cancelReason?`<div class="cancel-reason">❌ Motivo: ${s.cancelReason}</div>`:'';
-        const origemMap={Interno:'🏥 Interno','CR - Bucomaxilofacial':'🦷 CR Bucomaxilo','Solicitação Externa':'📋 Solic. Externa',Mutirão:'🚑 Transferência','Urgência/Emergência':'🚨 Urgência/Emergência'};
+        const origemMap={Interno:'🏥 Interno','CR - Bucomaxilofacial':'🦷 CR Bucomaxilo','Solicitação Externa':'📋 Solic. Externa',Mutirão:'🚑 Mutirão','Urgência/Emergência':'🚨 Urgência/Emergência'};
         const doctorTitle = getDoctorTitle(s.doctor);
         const anesthetistTitle = getDoctorTitle(s.anesthetist);
         return `<div class="surgery-item ${sc}"><div class="surgery-header"><span class="surgery-type">🔪 ${s.type.replace(/\n/g,'<br>🔪 ')}</span><span class="surgery-date-badge ${it?'today':'upcoming'}">📅 ${dd}</span></div><div class="surgery-details">${s.origem?`🏥 Origem: ${origemMap[s.origem]||s.origem}<br>`:''}👤 Paciente: ${s.patient}${s.age?` (${s.age} anos)`:''}${s.prontuario?`<br>📋 Prontuário: ${s.prontuario}`:''}<br>🏥 ${s.room||'Sala não definida'} | ⏰ ${s.time||'Horário não definido'}<br>👨‍⚕️ ${doctorTitle} ${s.doctor||'Não informado'} ${s.specialty?`(${s.specialty})`:''}<br>💉 ${anesthetistTitle} ${s.anesthetist||'-'}<br>🔄 Instrumentista(s): ${s.circulante||'-'}</div>${ci}<div class="action-btns">${it&&s.status==='pendente'?`<button class="btn-sm btn-sm-start" onclick="startSurgery('${s.id}')">▶ Iniciar</button>`:''}<button class="btn-sm btn-sm-edit" onclick="editSurgery('${s.id}')">✏️ Editar</button>${it&&s.status==='em_andamento'?`<button class="btn-sm btn-sm-finish" onclick="finishSurgery('${s.id}')">⏹ Finalizar</button>`:''}${s.status==='pendente'?`<button class="btn-sm btn-sm-cancel" onclick="openCancelModal('${s.id}')">❌ Cancelar</button>`:''}<button class="btn-sm btn-sm-delete" onclick="deleteSurgery('${s.id}')">🗑️ Excluir</button></div></div>`
