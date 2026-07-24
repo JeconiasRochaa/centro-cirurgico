@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRPI - Solicitação de Cirurgia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ECG Background */
+        .ecg-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.06;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .ecg-bg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ecg-path {
+            fill: none;
+            stroke: #c8a94a;
+            stroke-width: 2;
+            animation: ecgMove 4s linear infinite;
+        }
+
+        .ecg-path:nth-child(2) { animation-delay: 1s; stroke-width: 1.5; opacity: 0.6; }
+        .ecg-path:nth-child(3) { animation-delay: 2s; stroke-width: 1; opacity: 0.4; }
+        .ecg-path:nth-child(4) { animation-delay: 3s; stroke-width: 1.5; opacity: 0.5; }
+
+        @keyframes ecgMove {
+            from { stroke-dashoffset: 2000; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Página */
+        .clinica-page {
+            background: linear-gradient(135deg, #06224a 0%, #0a2f5c 50%, #051a38 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .clinica-container { 
+            max-width: 600px; 
+            width: 100%; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .clinica-header { 
+            text-align: center; 
+            margin-bottom: 24px; 
+        }
+
+        .clinica-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(200, 169, 74, 0.3);
+        }
+
+        .clinica-card h2 { 
+            font-size: 18px; 
+            color: #06224a; 
+            text-align: center; 
+            margin-bottom: 8px; 
+        }
+
+        /* Nome do hospital */
+        .hospital-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hospital-subtitle {
+            font-size: 12px;
+            color: #c8a94a;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin: 4px 0 0;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #c8a94a;
+            box-shadow: 0 0 20px rgba(200, 169, 74, 0.3);
+            overflow: hidden;
+            font-size: 28px;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .logo-circle:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10%;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .setor-badge {
+            display: inline-block;
+            background: #c8a94a;
+            color: #06224a;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(200, 169, 74, 0.3);
+        }
+
+        .form-group { margin-bottom: 16px; }
+        label { 
+            display: block; 
+            font-size: 12px; 
+            font-weight: 600; 
+            color: #475569; 
+            margin-bottom: 4px; 
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #1e293b;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #c8a94a;
+            box-shadow: 0 0 0 3px rgba(200, 169, 74, 0.15);
+        }
+        textarea { resize: vertical; min-height: 60px; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #c8a94a, #a68a2e);
+            color: #06224a;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(200, 169, 74, 0.4);
+        }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .feedback-message { 
+            text-align: center; 
+            margin-top: 16px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            display: none; 
+        }
+        .feedback-message.success { 
+            background: #d1fae5; 
+            color: #065f46; 
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .feedback-message.error { 
+            background: #fee2e2; 
+            color: #991b1b; 
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .idade-calculada {
+            display: inline-block;
+            margin-left: 8px;
+            font-weight: 700;
+            color: #c8a94a;
+            font-size: 12px;
+        }
+
+        .divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c8a94a, transparent);
+            margin: 12px auto;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+        }
+        .footer-text span { color: #c8a94a; }
+    </style>
+</head>
+<body class="clinica-page">
+    <!-- ECG Background Animado -->
+    <div class="ecg-bg">
+        <svg viewBox="0 0 2000 2000" preserveAspectRatio="none">
+            <path class="ecg-path" d="M0,200 L300,200 L350,200 L370,120 L390,280 L410,200 L430,120 L450,280 L470,200 L700,200 L1000,200 L1050,200 L1070,120 L1090,280 L1110,200 L1300,200"/>
+            <path class="ecg-path" d="M0,600 L300,600 L350,600 L370,520 L390,680 L410,600 L430,520 L450,680 L470,600 L700,600 L1000,600 L1050,600 L1070,520 L1090,680 L1110,600 L1300,600"/>
+            <path class="ecg-path" d="M0,1000 L300,1000 L350,1000 L370,920 L390,1080 L410,1000 L430,920 L450,1080 L470,1000 L700,1000 L1000,1000 L1050,1000 L1070,920 L1090,1080 L1110,1000 L1300,1000"/>
+            <path class="ecg-path" d="M0,1400 L300,1400 L350,1400 L370,1320 L390,1480 L410,1400 L430,1320 L450,1480 L470,1400 L700,1400 L1000,1400 L1050,1400 L1070,1320 L1090,1480 L1110,1400 L1300,1400"/>
+            <path class="ecg-path" d="M500,200 L500,1800" stroke-width="1" opacity="0.3"/>
+            <path class="ecg-path" d="M800,100 L800,1900" stroke-width="1" opacity="0.2"/>
+        </svg>
+    </div>
+
+    <div class="clinica-container">
+        <div class="clinica-header">
+            <div class="logos">
+                <div class="logo-circle" id="hospitalLogo">🏥</div>
+                <div class="logo-circle" id="govLogo">🏛️</div>
+            </div>
+            <h1 class="hospital-name">Hospital Regional de Palmeira dos Índios</h1>
+            <p class="hospital-subtitle">HRPI • Centro Cirúrgico</p>
+            <div class="divider"></div>
+            <div class="setor-badge" id="setorNome">Setor</div>
+        </div>
+
+        <div class="clinica-card">
+            <h2>📋 Nova Solicitação de Cirurgia</h2>
+            <p style="text-align:center;color:#64748b;font-size:13px;margin-bottom:24px;">Preencha os dados do paciente e do procedimento</p>
+
+            <form id="clinicaForm">
+                <div class="form-group">
+                    <label>👤 Nome do Paciente *</label>
+                    <input type="text" id="patient" placeholder="Nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label>🎂 Data de Nascimento *</label>
+                    <input type="date" id="birthDate" required onchange="calculateAgeUI()">
+                    <span class="idade-calculada" id="calculatedAge"></span>
+                </div>
+                <input type="hidden" id="age">
+                <div class="form-group">
+                    <label>👨‍⚕️ Médico Responsável *</label>
+                    <input type="text" id="doctor" placeholder="Nome do médico" required>
+                </div>
+                <div class="form-group">
+                    <label>🔬 Especialidade</label>
+                    <select id="specialty">
+                        <option value="">Selecione (opcional)</option>
+                        <option>Cirurgia Geral</option><option>Ortopedia</option>
+                        <option>Ginecologia</option><option>Urologia</option>
+                        <option>Neurocirurgia</option><option>Oftalmologia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>🔪 Procedimento(s) *</label>
+                    <textarea id="surgeryType" placeholder="Digite o nome do procedimento..." required rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>🩸 Reserva de Sangue</label>
+                    <select id="reservaSangue"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                </div>
+                <div class="form-group">
+                    <label>🛏️ Necessidade de UTI</label>
+                    <select id="necessidadeUTI"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                </div>
+                <div class="form-group">
+                    <label>📝 Observações</label>
+                    <textarea id="observacoes" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">📨 Enviar Solicitação</button>
+                <div class="feedback-message" id="feedback"></div>
+            </form>
+        </div>
+
+        <div class="footer-text">© 2026 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios</div>
+    </div>
+
+    <script>
+        const DB_URL = "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com";
+        const urlParams = new URLSearchParams(window.location.search);
+        const setorSolicitante = urlParams.get('setor') || '';
+
+        const setorDisplayMap = {
+            'Clinica Medica I': 'Clínica Médica I', 'Clinica Medica II': 'Clínica Médica II',
+            'Clinica Cirurgica': 'Clínica Cirúrgica', 'Pediatria': 'Pediatria',
+            'Oncologia I': 'Oncologia I', 'Oncologia II': 'Oncologia II',
+            'Emergencia': 'Emergência', 'UTI I': 'UTI I', 'UTI II': 'UTI II', 'Outros': 'Outros'
+        };
+
+        if (!setorSolicitante || !setorDisplayMap[setorSolicitante]) {
+            document.body.innerHTML = '<div style="text-align:center;padding:40px;color:red;"><h2>⚠️ Setor não identificado</h2></div>';
+        } else {
+            document.getElementById('setorNome').textContent = setorDisplayMap[setorSolicitante];
+        }
+
+        // Carregar logos
+        fetch(DB_URL + "/settings/logo.json").then(r => r.json()).then(data => {
+            if (data) document.getElementById('hospitalLogo').innerHTML = `<img src="${data}" alt="Logo">`;
+        }).catch(() => {});
+        fetch(DB_URL + "/settings/govLogo.json").then(r => r.json()).then(data => {
+            if (data) document.getElementById('govLogo').innerHTML = `<img src="${data}" alt="Logo">`;
+        }).catch(() => {});
+
+        window.calculateAgeUI = function() {
+            const birthDate = document.getElementById('birthDate').value;
+            const display = document.getElementById('calculatedAge');
+            const hidden = document.getElementById('age');
+            if (!birthDate) { display.textContent = ''; hidden.value = ''; return; }
+            const today = new Date();
+            const birth = new Date(birthDate + 'T00:00:00');
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+            display.textContent = `(${age >= 0 ? age : 0} anos)`;
+            hidden.value = age >= 0 ? age : 0;
+        };
+
+        document.getElementById('clinicaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+            const fb = document.getElementById('feedback');
+            
+            try {
+                const data = {
+                    setorSolicitante: setorSolicitante,
+                    dataSolicitacao: new Date().toISOString(),
+                    status: 'Solicitação Enviada',
+                    paciente: document.getElementById('patient').value.toUpperCase(),
+                    birthDate: document.getElementById('birthDate').value,
+                    age: document.getElementById('age').value,
+                    medico: document.getElementById('doctor').value.toUpperCase(),
+                    especialidade: document.getElementById('specialty').value,
+                    procedimento: document.getElementById('surgeryType').value.toUpperCase(),
+                    reservaSangue: document.getElementById('reservaSangue').value,
+                    necessidadeUTI: document.getElementById('necessidadeUTI').value,
+                    observacoes: document.getElementById('observacoes').value
+                };
+
+                const resp = await fetch(DB_URL + "/solicitacoes.json", { method: 'POST', body: JSON.stringify(data) });
+
+                if (resp.ok) {
+                    fb.className = 'feedback-message success';
+                    fb.textContent = '✅ Solicitação enviada com sucesso!';
+                    document.getElementById('clinicaForm').reset();
+                } else {
+                    throw new Error('Erro');
+                }
+            } catch (error) {
+                fb.className = 'feedback-message error';
+                fb.textContent = '❌ Erro ao enviar. Tente novamente.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📨 Enviar Solicitação';
+            }
+        });
+    </script>
+</body>
+</html>
