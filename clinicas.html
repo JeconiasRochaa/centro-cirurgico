@@ -52,7 +52,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             position: relative;
             z-index: 1;
@@ -162,8 +162,18 @@
             margin-bottom: 24px;
         }
 
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
         .form-group {
             margin-bottom: 16px;
+        }
+
+        .form-group-relativa {
+            position: relative;
         }
 
         label {
@@ -172,6 +182,10 @@
             font-weight: 600;
             color: #475569;
             margin-bottom: 4px;
+        }
+
+        label .required {
+            color: #ef4444;
         }
 
         input, select, textarea {
@@ -195,6 +209,53 @@
         textarea {
             resize: vertical;
             min-height: 60px;
+        }
+
+        /* AUTOCOMPLETE */
+        .suggestions-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 2px;
+        }
+
+        .suggestions-box.show {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .suggestion-item:hover {
+            background: #eff6ff;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item .codigo {
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 11px;
+            white-space: nowrap;
         }
 
         .btn-submit {
@@ -282,6 +343,46 @@
             color: #1e40af;
             text-align: center;
         }
+
+        .selected-procedures {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .procedure-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #3b82f6;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .procedure-tag .remove-tag {
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            opacity: 0.8;
+            transition: 0.2s;
+        }
+
+        .procedure-tag .remove-tag:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -317,66 +418,93 @@
             </div>
 
             <form id="clinicaForm">
+                <!-- DADOS DO PACIENTE -->
                 <div class="form-group">
-                    <label>👤 Nome do Paciente *</label>
+                    <label>👤 Nome do Paciente <span class="required">*</span></label>
                     <input type="text" id="patient" placeholder="Nome completo" required>
                 </div>
 
-                <div class="form-group">
-                    <label>🎂 Data de Nascimento *</label>
-                    <input type="date" id="birthDate" required onchange="calculateAgeUI()">
-                    <span class="idade-calculada" id="calculatedAge"></span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🎂 Data de Nascimento <span class="required">*</span></label>
+                        <input type="date" id="birthDate" required onchange="calculateAgeUI()">
+                        <span class="idade-calculada" id="calculatedAge"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>📋 Prontuário <span class="required">*</span></label>
+                        <input type="text" id="prontuario" placeholder="Nº do prontuário" required>
+                    </div>
                 </div>
                 <input type="hidden" id="age">
 
+                <!-- ORIGEM DO PACIENTE -->
                 <div class="form-group">
-                    <label>📋 Prontuário</label>
-                    <input type="text" id="prontuario" placeholder="Nº do prontuário">
-                </div>
-
-                <div class="form-group">
-                    <label>👨‍⚕️ Médico Responsável *</label>
-                    <input type="text" id="doctor" placeholder="Nome do médico" required>
-                </div>
-
-                <div class="form-group">
-                    <label>🔬 Especialidade</label>
-                    <select id="specialty">
-                        <option value="">Selecione (opcional)</option>
-                        <option>Cirurgia Geral</option>
-                        <option>Ortopedia</option>
-                        <option>Ginecologia</option>
-                        <option>Urologia</option>
-                        <option>Neurocirurgia</option>
-                        <option>Oftalmologia</option>
-                        <option>Otorrinolaringologia</option>
-                        <option>Cirurgia Plástica</option>
-                        <option>Coloproctologia</option>
-                        <option>Bucomaxilofacial</option>
-                        <option>Obstetrícia</option>
-                        <option>Outra</option>
+                    <label>🏥 Origem do Paciente <span class="required">*</span></label>
+                    <select id="origem" required>
+                        <option value="">Selecione a origem</option>
+                        <option value="Interno">Interno (Hospital)</option>
+                        <option value="Eletivo">Eletivo</option>
+                        <option value="Urgência/Emergência">Urgência/Emergência</option>
+                        <option value="Transferência">Transferência</option>
+                        <option value="Mutirão">Mutirão</option>
+                        <option value="Solicitação Externa">Solicitação Externa</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>🔪 Procedimento(s) *</label>
-                    <textarea id="surgeryType" placeholder="Descreva o(s) procedimento(s)..." required rows="3"></textarea>
+                <!-- DADOS DO MÉDICO -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>👨‍⚕️ Médico Responsável <span class="required">*</span></label>
+                        <input type="text" id="doctor" placeholder="Nome do médico" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🔬 Especialidade</label>
+                        <select id="specialty">
+                            <option value="">Selecione (opcional)</option>
+                            <option>Cirurgia Geral</option>
+                            <option>Ortopedia</option>
+                            <option>Ginecologia</option>
+                            <option>Urologia</option>
+                            <option>Neurocirurgia</option>
+                            <option>Oftalmologia</option>
+                            <option>Otorrinolaringologia</option>
+                            <option>Cirurgia Plástica</option>
+                            <option>Coloproctologia</option>
+                            <option>Bucomaxilofacial</option>
+                            <option>Obstetrícia</option>
+                            <option>Outra</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>🩸 Reserva de Sangue</label>
-                    <select id="reservaSangue">
-                        <option value="Não">Não</option>
-                        <option value="Sim">Sim</option>
-                    </select>
+                <!-- PROCEDIMENTOS COM AUTOCOMPLETE -->
+                <div class="form-group form-group-relativa">
+                    <label>🔪 Procedimento(s) <span class="required">*</span></label>
+                    <input type="text" id="surgeryTypeInput" placeholder="Digite para buscar procedimentos..." autocomplete="off">
+                    <div class="suggestions-box" id="suggestionsBox"></div>
+                    <div class="selected-procedures" id="selectedProcedures" style="display:none;">
+                        <label style="font-size:10px;color:#64748b;">📋 Selecionados:</label>
+                        <div id="proceduresList" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;"></div>
+                    </div>
+                    <input type="hidden" id="surgeryType" required>
                 </div>
 
-                <div class="form-group">
-                    <label>🏨 Necessidade de UTI</label>
-                    <select id="necessidadeUTI">
-                        <option value="Não">Não</option>
-                        <option value="Sim">Sim</option>
-                    </select>
+                <!-- SANGUE E UTI -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🩸 Reserva de Sangue</label>
+                        <select id="reservaSangue">
+                            <option value="Não">Não</option>
+                            <option value="Sim">Sim</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>🏨 Necessidade de UTI</label>
+                        <select id="necessidadeUTI">
+                            <option value="Não">Não</option>
+                            <option value="Sim">Sim</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -411,7 +539,6 @@
             'Outros': 'Outros'
         };
 
-        // Verificar setor
         if (!setorSolicitante || !setorDisplayMap[setorSolicitante]) {
             document.body.innerHTML = '<div style="text-align:center;padding:40px;color:white;"><h2>⚠️ Setor não identificado</h2><p style="color:#b0c4de;">Acesse pelo portal de clínicas.</p></div>';
         } else {
@@ -432,6 +559,129 @@
                 if (data) document.getElementById('govLogo').innerHTML = `<img src="${data}" alt="Logo Governo">`;
             })
             .catch(() => {});
+
+        // ============ BANCO DE PROCEDIMENTOS ============
+        const PROCEDIMENTOS = [
+            {codigo:"APEN-01", nome:"APENDICECTOMIA", especialidade:"Cirurgia Geral"},
+            {codigo:"APEN-02", nome:"APENDICECTOMIA VIDEOLAPAROSCÓPICA", especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-01", nome:"COLECISTECTOMIA", especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-02", nome:"COLECISTECTOMIA VIDEOLAPAROSCÓPICA", especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-01", nome:"HERNIOPLASTIA INGUINAL", especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-02", nome:"HERNIOPLASTIA UMBILICAL", especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-03", nome:"HERNIOPLASTIA EPIGÁSTRICA", especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-04", nome:"HERNIOPLASTIA INCISIONAL", especialidade:"Cirurgia Geral"},
+            {codigo:"LAPA-01", nome:"LAPAROTOMIA EXPLORADORA", especialidade:"Cirurgia Geral"},
+            {codigo:"TRAQ-01", nome:"TRAQUEOSTOMIA", especialidade:"Cirurgia Geral"},
+            {codigo:"DREN-01", nome:"DRENAGEM DE ABCESSO", especialidade:"Cirurgia Geral"},
+            {codigo:"CESA-01", nome:"CESARIANA", especialidade:"Obstetrícia"},
+            {codigo:"HIST-01", nome:"HISTERECTOMIA TOTAL", especialidade:"Ginecologia"},
+            {codigo:"HIST-02", nome:"HISTERECTOMIA VIDEOLAPAROSCÓPICA", especialidade:"Ginecologia"},
+            {codigo:"CURA-01", nome:"CURETAGEM UTERINA", especialidade:"Ginecologia"},
+            {codigo:"LAQU-01", nome:"LAQUEADURA TUBÁRIA", especialidade:"Ginecologia"},
+            {codigo:"MAST-01", nome:"MASTECTOMIA", especialidade:"Cirurgia Plástica"},
+            {codigo:"ARTJ-01", nome:"ARTROPLASTIA DE JOELHO", especialidade:"Ortopedia"},
+            {codigo:"ARTQ-01", nome:"ARTROPLASTIA DE QUADRIL", especialidade:"Ortopedia"},
+            {codigo:"OSTF-01", nome:"OSTEOSSÍNTESE DE FÊMUR", especialidade:"Ortopedia"},
+            {codigo:"FACE-01", nome:"FACECTOMIA COM IMPLANTE DE LENTE", especialidade:"Oftalmologia"},
+            {codigo:"CATA-01", nome:"CIRURGIA DE CATARATA", especialidade:"Oftalmologia"},
+            {codigo:"AMIG-01", nome:"AMIGDALECTOMIA", especialidade:"Otorrinolaringologia"},
+            {codigo:"SEPT-01", nome:"SEPTOPLASTIA", especialidade:"Otorrinolaringologia"},
+            {codigo:"PROS-01", nome:"PROSTATECTOMIA", especialidade:"Urologia"},
+            {codigo:"NEFR-01", nome:"NEFRECTOMIA", especialidade:"Urologia"},
+            {codigo:"RTUP-01", nome:"RTU DE PRÓSTATA", especialidade:"Urologia"},
+            {codigo:"EXOD-01", nome:"EXODONTIA DE TERCEIRO MOLAR", especialidade:"Bucomaxilofacial"},
+            {codigo:"COLP-01", nome:"COLONOSCOPIA", especialidade:"Coloproctologia"},
+            {codigo:"ENDO-01", nome:"ENDOSCOPIA DIGESTIVA ALTA", especialidade:"Gastroenterologia"},
+            {codigo:"CRAN-01", nome:"CRANIOTOMIA", especialidade:"Neurocirurgia"}
+        ];
+
+        // ============ AUTOCOMPLETE ============
+        let procedimentosSelecionados = [];
+
+        const procInput = document.getElementById('surgeryTypeInput');
+        const suggestionsBox = document.getElementById('suggestionsBox');
+        const proceduresList = document.getElementById('proceduresList');
+        const selectedProceduresDiv = document.getElementById('selectedProcedures');
+        const surgeryTypeHidden = document.getElementById('surgeryType');
+
+        if (procInput) {
+            procInput.addEventListener('input', function() {
+                const valor = this.value.trim().toUpperCase();
+                
+                if (valor.length < 2) {
+                    suggestionsBox.classList.remove('show');
+                    return;
+                }
+
+                const sugestoes = PROCEDIMENTOS.filter(p => 
+                    (p.nome.includes(valor) || p.codigo.includes(valor)) && 
+                    !procedimentosSelecionados.find(ps => ps.codigo === p.codigo)
+                );
+
+                if (sugestoes.length > 0) {
+                    suggestionsBox.innerHTML = sugestoes.map(p => `
+                        <div class="suggestion-item" onclick="adicionarProcedimento('${p.nome.replace(/'/g, "\\'")}', '${p.especialidade.replace(/'/g, "\\'")}', '${p.codigo}')">
+                            <span class="codigo">${p.codigo}</span>
+                            <span>${p.nome}</span>
+                        </div>
+                    `).join('');
+                    suggestionsBox.classList.add('show');
+                } else {
+                    suggestionsBox.innerHTML = '<div class="suggestion-item" style="color:#94a3b8;">📭 Nenhum encontrado ou já adicionado</div>';
+                    suggestionsBox.classList.add('show');
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!procInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                    suggestionsBox.classList.remove('show');
+                }
+            });
+
+            procInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const first = suggestionsBox.querySelector('.suggestion-item');
+                    if (first && suggestionsBox.classList.contains('show')) {
+                        first.click();
+                    }
+                }
+            });
+        }
+
+        window.adicionarProcedimento = function(nome, especialidade, codigo) {
+            procedimentosSelecionados.push({ nome, especialidade, codigo });
+            atualizarProcedimentosVisuais();
+            procInput.value = '';
+            suggestionsBox.classList.remove('show');
+            procInput.focus();
+        };
+
+        window.removerProcedimento = function(codigo) {
+            procedimentosSelecionados = procedimentosSelecionados.filter(p => p.codigo !== codigo);
+            atualizarProcedimentosVisuais();
+        };
+
+        function atualizarProcedimentosVisuais() {
+            if (procedimentosSelecionados.length === 0) {
+                selectedProceduresDiv.style.display = 'none';
+                proceduresList.innerHTML = '';
+                surgeryTypeHidden.value = '';
+            } else {
+                selectedProceduresDiv.style.display = 'block';
+                proceduresList.innerHTML = procedimentosSelecionados.map(p => `
+                    <span class="procedure-tag">
+                        <strong>${p.codigo}</strong> - ${p.nome}
+                        <span class="remove-tag" onclick="removerProcedimento('${p.codigo}')" title="Remover">✕</span>
+                    </span>
+                `).join('');
+                surgeryTypeHidden.value = procedimentosSelecionados.map(p => `${p.codigo} - ${p.nome}`).join('\n');
+                
+                if (procedimentosSelecionados.length === 1) {
+                    document.getElementById('specialty').value = procedimentosSelecionados[0].especialidade;
+                }
+            }
+        }
 
         // ============ CALCULAR IDADE ============
         window.calculateAgeUI = function() {
@@ -455,15 +705,21 @@
             hidden.value = age >= 0 ? age : 0;
         };
 
-        // ============ ENVIAR FORMULÁRIO (SALVA DIRETO COMO CIRURGIA) ============
+        // ============ ENVIAR FORMULÁRIO ============
         document.getElementById('clinicaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const btn = document.getElementById('submitBtn');
             const fb = document.getElementById('feedback');
             
-            // Esconder mensagens anteriores
             fb.className = 'feedback-message';
+            
+            if (!surgeryTypeHidden.value.trim()) {
+                fb.className = 'feedback-message error';
+                fb.textContent = '⚠️ Adicione pelo menos um procedimento!';
+                fb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
             
             btn.disabled = true;
             btn.textContent = '⏳ Registrando...';
@@ -471,19 +727,16 @@
             try {
                 const sangue = document.getElementById('reservaSangue').value;
                 const uti = document.getElementById('necessidadeUTI').value;
-                
-                // Gerar ID único
                 const cirurgiaId = 'CLI-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
                 
-                // Criar objeto da cirurgia
                 const cirurgia = {
                     id: cirurgiaId,
-                    origem: 'Eletivo',
+                    origem: document.getElementById('origem').value,
                     patient: document.getElementById('patient').value.trim().toUpperCase(),
                     birthDate: document.getElementById('birthDate').value,
                     age: document.getElementById('age').value,
                     prontuario: document.getElementById('prontuario').value.trim(),
-                    type: document.getElementById('surgeryType').value.trim().toUpperCase(),
+                    type: surgeryTypeHidden.value,
                     date: new Date().toISOString().split('T')[0],
                     time: '',
                     specialty: document.getElementById('specialty').value,
@@ -500,48 +753,37 @@
                     dataSolicitacao: new Date().toISOString()
                 };
 
-                console.log('📤 Enviando cirurgia diretamente para o Firebase...');
-                console.log('Dados:', cirurgia);
+                console.log('📤 Enviando cirurgia:', cirurgia);
 
-                // Salvar DIRETO no nó "surgeries" do Firebase
                 const resp = await fetch(`${DB_URL}/surgeries/${cirurgiaId}.json`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(cirurgia)
                 });
 
-                if (!resp.ok) {
-                    throw new Error('Erro na resposta do servidor: ' + resp.status);
-                }
+                if (!resp.ok) throw new Error('Erro: ' + resp.status);
 
-                const resposta = await resp.json();
-                console.log('✅ Resposta do Firebase:', resposta);
-
-                // Sucesso!
                 fb.className = 'feedback-message success';
-                fb.textContent = '✅ Cirurgia registrada com sucesso! Já está visível no painel TV.';
+                fb.textContent = '✅ Cirurgia registrada! Já está no painel TV.';
                 
-                // Limpar formulário
                 document.getElementById('clinicaForm').reset();
                 document.getElementById('calculatedAge').textContent = '';
                 document.getElementById('age').value = '';
+                procedimentosSelecionados = [];
+                atualizarProcedimentosVisuais();
 
             } catch (error) {
-                console.error('❌ Erro ao registrar cirurgia:', error);
+                console.error('❌ Erro:', error);
                 fb.className = 'feedback-message error';
-                fb.textContent = '❌ Erro ao registrar. Verifique sua conexão e tente novamente.';
+                fb.textContent = '❌ Erro ao registrar. Verifique sua conexão.';
             } finally {
                 btn.disabled = false;
                 btn.textContent = '📨 Registrar Cirurgia';
-                
-                // Rolar para ver a mensagem
                 fb.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
 
         console.log('🚀 Formulário de Registro de Cirurgias (Clínicas) carregado!');
-        console.log('📋 Setor:', setorDisplayMap[setorSolicitante] || setorSolicitante);
-        console.log('💡 As cirurgias registradas aqui aparecem DIRETO no Painel TV!');
     </script>
 </body>
 </html>
