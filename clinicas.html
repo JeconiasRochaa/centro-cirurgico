@@ -7,32 +7,18 @@
     <style>
         /* ECG Background */
         .ecg-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.06;
-            z-index: 0;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.06; z-index: 0; pointer-events: none;
         }
-
-        .ecg-bg svg {
-            width: 100%;
-            height: 100%;
-        }
-
+        .ecg-bg svg { width: 100%; height: 100%; }
         .ecg-path {
-            fill: none;
-            stroke: #c8a94a;
-            stroke-width: 2;
-            animation: ecgMove 4s linear infinite;
+            fill: none; stroke: #c8a94a;
+            stroke-width: 2; animation: ecgMove 4s linear infinite;
         }
-
         .ecg-path:nth-child(2) { animation-delay: 1s; stroke-width: 1.5; opacity: 0.6; }
         .ecg-path:nth-child(3) { animation-delay: 2s; stroke-width: 1; opacity: 0.4; }
         .ecg-path:nth-child(4) { animation-delay: 3s; stroke-width: 1.5; opacity: 0.5; }
-
         @keyframes ecgMove {
             from { stroke-dashoffset: 2000; }
             to { stroke-dashoffset: 0; }
@@ -44,349 +30,179 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #06224a 0%, #0a2f5c 50%, #051a38 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; position: relative;
         }
 
         .container {
-            max-width: 650px;
-            width: 100%;
-            position: relative;
-            z-index: 1;
+            max-width: 750px; width: 100%;
+            position: relative; z-index: 1;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 12px;
-        }
-
+        .header { text-align: center; margin-bottom: 24px; }
+        .logos { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 12px; }
         .logo-circle {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #c8a94a;
-            box-shadow: 0 0 20px rgba(200, 169, 74, 0.3);
-            overflow: hidden;
-            font-size: 28px;
+            width: 70px; height: 70px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #c8a94a; box-shadow: 0 0 20px rgba(200,169,74,0.3);
+            overflow: hidden; font-size: 28px;
             animation: logoFloat 3s ease-in-out infinite;
         }
-
-        .logo-circle:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        .logo-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 10%;
-        }
-
+        .logo-circle:nth-child(2) { animation-delay: 0.5s; }
+        .logo-circle img { width: 100%; height: 100%; object-fit: contain; padding: 10%; }
         @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}
         }
 
         .hospital-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0;
+            font-size: 20px; font-weight: 700; color: #fff;
+            text-transform: uppercase; letter-spacing: 1px;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-
         .hospital-subtitle {
-            font-size: 12px;
-            color: #c8a94a;
-            font-weight: 600;
-            letter-spacing: 2px;
-            margin: 4px 0 0;
+            font-size: 12px; color: #c8a94a; font-weight: 600;
+            letter-spacing: 2px; margin: 4px 0 0;
         }
-
         .divider {
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #c8a94a, transparent);
+            width: 80px; height: 2px;
+            background: linear-gradient(90deg,transparent,#c8a94a,transparent);
             margin: 12px auto;
         }
-
         .setor-badge {
-            display: inline-block;
-            background: #c8a94a;
-            color: #06224a;
-            padding: 8px 24px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 700;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(200, 169, 74, 0.3);
+            display: inline-block; background: #c8a94a; color: #06224a;
+            padding: 8px 24px; border-radius: 20px;
+            font-size: 14px; font-weight: 700; margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(200,169,74,0.3);
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px 24px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            border-radius: 16px; padding: 30px 24px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            border: 1px solid rgba(200, 169, 74, 0.3);
+            border: 1px solid rgba(200,169,74,0.3);
+            margin-bottom: 20px;
         }
+        .card h2 { font-size: 18px; color: #06224a; text-align: center; margin-bottom: 8px; }
+        .card .subtitle { font-size: 13px; color: #64748b; text-align: center; margin-bottom: 24px; }
 
-        .card h2 {
-            font-size: 18px;
-            color: #06224a;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .card .subtitle {
-            font-size: 13px;
-            color: #64748b;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group-relativa {
-            position: relative;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 4px;
-        }
-
-        label .required {
-            color: #ef4444;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group-relativa { position: relative; }
+        label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+        label .required { color: #ef4444; }
 
         input, select, textarea {
-            width: 100%;
-            padding: 10px 12px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #1e293b;
-            transition: 0.3s;
+            width: 100%; padding: 10px 12px; background: #f8fafc;
+            border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 13px; color: #1e293b; transition: 0.3s;
             font-family: inherit;
         }
-
         input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #c8a94a;
-            box-shadow: 0 0 0 3px rgba(200, 169, 74, 0.15);
+            outline: none; border-color: #c8a94a;
+            box-shadow: 0 0 0 3px rgba(200,169,74,0.15);
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
+        textarea { resize: vertical; min-height: 60px; }
 
         /* AUTOCOMPLETE */
         .suggestions-box {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #fff;
-            border: 2px solid #3b82f6;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 100;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-top: 2px;
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: #fff; border: 2px solid #3b82f6;
+            border-radius: 8px; max-height: 200px; overflow-y: auto;
+            z-index: 100; display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-top: 2px;
         }
-
-        .suggestions-box.show {
-            display: block;
-        }
-
+        .suggestions-box.show { display: block; }
         .suggestion-item {
-            padding: 10px 14px;
-            cursor: pointer;
-            font-size: 12px;
-            border-bottom: 1px solid #e2e8f0;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 10px 14px; cursor: pointer; font-size: 12px;
+            border-bottom: 1px solid #e2e8f0; transition: 0.2s;
+            display: flex; align-items: center; gap: 8px;
         }
-
-        .suggestion-item:hover {
-            background: #eff6ff;
-        }
-
-        .suggestion-item:last-child {
-            border-bottom: none;
-        }
-
-        .suggestion-item .codigo {
-            color: #3b82f6;
-            font-weight: 700;
-            font-size: 11px;
-            white-space: nowrap;
-        }
+        .suggestion-item:hover { background: #eff6ff; }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item .codigo { color: #3b82f6; font-weight: 700; font-size: 11px; white-space: nowrap; }
+        .suggestion-item .manual { color: #10b981; font-weight: 700; font-style: italic; }
 
         .btn-submit {
-            width: 100%;
-            padding: 12px;
+            width: 100%; padding: 12px;
             background: linear-gradient(135deg, #c8a94a, #a68a2e);
-            color: #06224a;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #06224a; border: none; border-radius: 8px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            transition: 0.3s; margin-top: 8px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(200, 169, 74, 0.4);
-        }
-
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(200,169,74,0.4); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .feedback-message {
-            text-align: center;
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            display: none;
+            text-align: center; margin-top: 16px; padding: 12px;
+            border-radius: 8px; font-weight: 600; display: none;
         }
-
-        .feedback-message.success {
-            background: #d1fae5;
-            color: #065f46;
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .feedback-message.error {
-            background: #fee2e2;
-            color: #991b1b;
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
+        .feedback-message.success { background: #d1fae5; color: #065f46; display: block; animation: fadeIn 0.5s ease; }
+        .feedback-message.error { background: #fee2e2; color: #991b1b; display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .idade-calculada {
-            display: inline-block;
-            margin-left: 8px;
-            font-weight: 700;
-            color: #c8a94a;
-            font-size: 12px;
+            display: inline-block; margin-left: 8px;
+            font-weight: 700; color: #c8a94a; font-size: 12px;
         }
-
         .footer-text {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 11px;
-            color: rgba(255,255,255,0.6);
-            letter-spacing: 1px;
+            text-align: center; margin-top: 20px;
+            font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 1px;
         }
-
-        .footer-text span {
-            color: #c8a94a;
-        }
+        .footer-text span { color: #c8a94a; }
 
         .info-box {
-            background: #eff6ff;
-            border: 1px solid #93c5fd;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            color: #1e40af;
-            text-align: center;
+            background: #eff6ff; border: 1px solid #93c5fd;
+            border-radius: 8px; padding: 12px; margin-bottom: 20px;
+            font-size: 12px; color: #1e40af; text-align: center;
         }
-
         .selected-procedures {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
+            background: #f8fafc; border: 2px solid #e2e8f0;
+            border-radius: 8px; padding: 10px; margin-top: 10px;
         }
-
         .procedure-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #3b82f6;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #3b82f6; color: #fff;
+            padding: 5px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 600;
             animation: fadeIn 0.3s ease;
         }
-
         .procedure-tag .remove-tag {
-            cursor: pointer;
-            font-size: 14px;
-            line-height: 1;
-            opacity: 0.8;
-            transition: 0.2s;
+            cursor: pointer; font-size: 14px; line-height: 1;
+            opacity: 0.8; transition: 0.2s;
         }
+        .procedure-tag .remove-tag:hover { opacity: 1; transform: scale(1.2); }
 
-        .procedure-tag .remove-tag:hover {
-            opacity: 1;
-            transform: scale(1.2);
+        /* BOTÃO VISUALIZAR */
+        .btn-visualizar {
+            width: 100%; padding: 10px;
+            background: transparent; border: 2px solid #3b82f6;
+            color: #3b82f6; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; margin-bottom: 15px;
         }
+        .btn-visualizar:hover { background: #eff6ff; }
+
+        /* TABELA DE CIRURGIAS DO SETOR */
+        .cirurgias-table {
+            width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px;
+        }
+        .cirurgias-table th {
+            background: #06224a; color: #fff; padding: 8px 6px;
+            text-align: left; font-weight: 600; font-size: 10px;
+        }
+        .cirurgias-table td { padding: 8px 6px; border-bottom: 1px solid #e2e8f0; }
+        .cirurgias-table tr:hover { background: #f8fafc; }
 
         @media (max-width: 500px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- ECG Background Animado -->
     <div class="ecg-bg">
         <svg viewBox="0 0 2000 2000" preserveAspectRatio="none">
             <path class="ecg-path" d="M0,200 L300,200 L350,200 L370,120 L390,280 L410,200 L430,120 L450,280 L470,200 L700,200 L1000,200 L1050,200 L1070,120 L1090,280 L1110,200 L1300,200"/>
@@ -408,17 +224,17 @@
             <div class="setor-badge" id="setorNome">Setor</div>
         </div>
 
+        <!-- CARD: REGISTRAR -->
         <div class="card">
             <h2>📋 Registrar Cirurgia</h2>
-            <p class="subtitle">A cirurgia será registrada diretamente no centro cirúrgico</p>
+            <p class="subtitle">A cirurgia aparecerá imediatamente no painel da TV</p>
 
             <div class="info-box">
-                ⚠️ A cirurgia aparecerá <strong>imediatamente</strong> no painel da TV com status "Aguardando".<br>
-                O centro cirúrgico ajustará a sala e horário posteriormente.
+                ⚠️ <strong>Digite 2+ letras</strong> para buscar procedimentos.<br>
+                Se não encontrar, <strong>digite o nome completo e pressione Enter</strong> para adicionar manualmente.
             </div>
 
             <form id="clinicaForm">
-                <!-- DADOS DO PACIENTE -->
                 <div class="form-group">
                     <label>👤 Nome do Paciente <span class="required">*</span></label>
                     <input type="text" id="patient" placeholder="Nome completo" required>
@@ -437,7 +253,6 @@
                 </div>
                 <input type="hidden" id="age">
 
-                <!-- ORIGEM DO PACIENTE -->
                 <div class="form-group">
                     <label>🏥 Origem do Paciente <span class="required">*</span></label>
                     <select id="origem" required>
@@ -451,7 +266,6 @@
                     </select>
                 </div>
 
-                <!-- DADOS DO MÉDICO -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>👨‍⚕️ Médico Responsável <span class="required">*</span></label>
@@ -461,26 +275,20 @@
                         <label>🔬 Especialidade</label>
                         <select id="specialty">
                             <option value="">Selecione (opcional)</option>
-                            <option>Cirurgia Geral</option>
-                            <option>Ortopedia</option>
-                            <option>Ginecologia</option>
-                            <option>Urologia</option>
-                            <option>Neurocirurgia</option>
-                            <option>Oftalmologia</option>
-                            <option>Otorrinolaringologia</option>
-                            <option>Cirurgia Plástica</option>
-                            <option>Coloproctologia</option>
-                            <option>Bucomaxilofacial</option>
-                            <option>Obstetrícia</option>
-                            <option>Outra</option>
+                            <option>Cirurgia Geral</option><option>Ortopedia</option>
+                            <option>Ginecologia</option><option>Urologia</option>
+                            <option>Neurocirurgia</option><option>Oftalmologia</option>
+                            <option>Otorrinolaringologia</option><option>Cirurgia Plástica</option>
+                            <option>Coloproctologia</option><option>Bucomaxilofacial</option>
+                            <option>Obstetrícia</option><option>Outra</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- PROCEDIMENTOS COM AUTOCOMPLETE -->
+                <!-- PROCEDIMENTOS COM AUTOCOMPLETE + LIVRE -->
                 <div class="form-group form-group-relativa">
                     <label>🔪 Procedimento(s) <span class="required">*</span></label>
-                    <input type="text" id="surgeryTypeInput" placeholder="Digite para buscar procedimentos..." autocomplete="off">
+                    <input type="text" id="surgeryTypeInput" placeholder="Digite para buscar ou escreva um novo..." autocomplete="off">
                     <div class="suggestions-box" id="suggestionsBox"></div>
                     <div class="selected-procedures" id="selectedProcedures" style="display:none;">
                         <label style="font-size:10px;color:#64748b;">📋 Selecionados:</label>
@@ -489,20 +297,17 @@
                     <input type="hidden" id="surgeryType" required>
                 </div>
 
-                <!-- SANGUE E UTI -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>🩸 Reserva de Sangue</label>
                         <select id="reservaSangue">
-                            <option value="Não">Não</option>
-                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option><option value="Sim">Sim</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>🏨 Necessidade de UTI</label>
                         <select id="necessidadeUTI">
-                            <option value="Não">Não</option>
-                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option><option value="Sim">Sim</option>
                         </select>
                     </div>
                 </div>
@@ -517,6 +322,16 @@
             </form>
         </div>
 
+        <!-- CARD: CIRURGIAS DO SETOR -->
+        <div class="card">
+            <button class="btn-visualizar" onclick="carregarCirurgiasSetor()">
+                👁️ Visualizar Cirurgias Registradas por Este Setor
+            </button>
+            <div id="cirurgiasSetorContainer">
+                <p style="text-align:center;color:#64748b;font-size:12px;">Clique no botão acima para visualizar</p>
+            </div>
+        </div>
+
         <div class="footer-text">© 2026 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios</div>
     </div>
 
@@ -527,77 +342,186 @@
         const setorSolicitante = urlParams.get('setor') || '';
 
         const setorDisplayMap = {
-            'Clinica Medica I': 'Clínica Médica I',
-            'Clinica Medica II': 'Clínica Médica II',
-            'Clinica Cirurgica': 'Clínica Cirúrgica',
-            'Pediatria': 'Pediatria',
-            'Oncologia I': 'Oncologia I',
-            'Oncologia II': 'Oncologia II',
-            'Emergencia': 'Emergência',
-            'UTI I': 'UTI I',
-            'UTI II': 'UTI II',
-            'Outros': 'Outros'
+            'Clinica Medica I': 'Clínica Médica I', 'Clinica Medica II': 'Clínica Médica II',
+            'Clinica Cirurgica': 'Clínica Cirúrgica', 'Pediatria': 'Pediatria',
+            'Oncologia I': 'Oncologia I', 'Oncologia II': 'Oncologia II',
+            'Emergencia': 'Emergência', 'UTI I': 'UTI I', 'UTI II': 'UTI II', 'Outros': 'Outros'
         };
 
         if (!setorSolicitante || !setorDisplayMap[setorSolicitante]) {
-            document.body.innerHTML = '<div style="text-align:center;padding:40px;color:white;"><h2>⚠️ Setor não identificado</h2><p style="color:#b0c4de;">Acesse pelo portal de clínicas.</p></div>';
+            document.body.innerHTML = '<div style="text-align:center;padding:40px;color:white;"><h2>⚠️ Setor não identificado</h2></div>';
         } else {
             document.getElementById('setorNome').textContent = setorDisplayMap[setorSolicitante];
         }
 
-        // ============ CARREGAR LOGOS ============
-        fetch(DB_URL + "/settings/logo.json")
-            .then(r => r.json())
-            .then(data => {
-                if (data) document.getElementById('hospitalLogo').innerHTML = `<img src="${data}" alt="Logo HRPI">`;
-            })
-            .catch(() => {});
+        // Logos
+        fetch(DB_URL + "/settings/logo.json").then(r=>r.json()).then(d=>{if(d)document.getElementById('hospitalLogo').innerHTML=`<img src="${d}" alt="Logo">`}).catch(()=>{});
+        fetch(DB_URL + "/settings/govLogo.json").then(r=>r.json()).then(d=>{if(d)document.getElementById('govLogo').innerHTML=`<img src="${d}" alt="Logo">`}).catch(()=>{});
 
-        fetch(DB_URL + "/settings/govLogo.json")
-            .then(r => r.json())
-            .then(data => {
-                if (data) document.getElementById('govLogo').innerHTML = `<img src="${data}" alt="Logo Governo">`;
-            })
-            .catch(() => {});
-
-        // ============ BANCO DE PROCEDIMENTOS ============
+        // ============ TODOS OS PROCEDIMENTOS ============
         const PROCEDIMENTOS = [
-            {codigo:"APEN-01", nome:"APENDICECTOMIA", especialidade:"Cirurgia Geral"},
-            {codigo:"APEN-02", nome:"APENDICECTOMIA VIDEOLAPAROSCÓPICA", especialidade:"Cirurgia Geral"},
-            {codigo:"COLE-01", nome:"COLECISTECTOMIA", especialidade:"Cirurgia Geral"},
-            {codigo:"COLE-02", nome:"COLECISTECTOMIA VIDEOLAPAROSCÓPICA", especialidade:"Cirurgia Geral"},
-            {codigo:"HERN-01", nome:"HERNIOPLASTIA INGUINAL", especialidade:"Cirurgia Geral"},
-            {codigo:"HERN-02", nome:"HERNIOPLASTIA UMBILICAL", especialidade:"Cirurgia Geral"},
-            {codigo:"HERN-03", nome:"HERNIOPLASTIA EPIGÁSTRICA", especialidade:"Cirurgia Geral"},
-            {codigo:"HERN-04", nome:"HERNIOPLASTIA INCISIONAL", especialidade:"Cirurgia Geral"},
-            {codigo:"LAPA-01", nome:"LAPAROTOMIA EXPLORADORA", especialidade:"Cirurgia Geral"},
-            {codigo:"TRAQ-01", nome:"TRAQUEOSTOMIA", especialidade:"Cirurgia Geral"},
-            {codigo:"DREN-01", nome:"DRENAGEM DE ABCESSO", especialidade:"Cirurgia Geral"},
-            {codigo:"CESA-01", nome:"CESARIANA", especialidade:"Obstetrícia"},
-            {codigo:"HIST-01", nome:"HISTERECTOMIA TOTAL", especialidade:"Ginecologia"},
-            {codigo:"HIST-02", nome:"HISTERECTOMIA VIDEOLAPAROSCÓPICA", especialidade:"Ginecologia"},
-            {codigo:"CURA-01", nome:"CURETAGEM UTERINA", especialidade:"Ginecologia"},
-            {codigo:"LAQU-01", nome:"LAQUEADURA TUBÁRIA", especialidade:"Ginecologia"},
-            {codigo:"MAST-01", nome:"MASTECTOMIA", especialidade:"Cirurgia Plástica"},
-            {codigo:"ARTJ-01", nome:"ARTROPLASTIA DE JOELHO", especialidade:"Ortopedia"},
-            {codigo:"ARTQ-01", nome:"ARTROPLASTIA DE QUADRIL", especialidade:"Ortopedia"},
-            {codigo:"OSTF-01", nome:"OSTEOSSÍNTESE DE FÊMUR", especialidade:"Ortopedia"},
-            {codigo:"FACE-01", nome:"FACECTOMIA COM IMPLANTE DE LENTE", especialidade:"Oftalmologia"},
-            {codigo:"CATA-01", nome:"CIRURGIA DE CATARATA", especialidade:"Oftalmologia"},
-            {codigo:"AMIG-01", nome:"AMIGDALECTOMIA", especialidade:"Otorrinolaringologia"},
-            {codigo:"SEPT-01", nome:"SEPTOPLASTIA", especialidade:"Otorrinolaringologia"},
-            {codigo:"PROS-01", nome:"PROSTATECTOMIA", especialidade:"Urologia"},
-            {codigo:"NEFR-01", nome:"NEFRECTOMIA", especialidade:"Urologia"},
-            {codigo:"RTUP-01", nome:"RTU DE PRÓSTATA", especialidade:"Urologia"},
-            {codigo:"EXOD-01", nome:"EXODONTIA DE TERCEIRO MOLAR", especialidade:"Bucomaxilofacial"},
-            {codigo:"COLP-01", nome:"COLONOSCOPIA", especialidade:"Coloproctologia"},
-            {codigo:"ENDO-01", nome:"ENDOSCOPIA DIGESTIVA ALTA", especialidade:"Gastroenterologia"},
-            {codigo:"CRAN-01", nome:"CRANIOTOMIA", especialidade:"Neurocirurgia"}
+            // CIRURGIA GERAL
+            {codigo:"CURA-01",nome:"CURATIVO GRAU II COM DEBRIDAMENTO",especialidade:"Cirurgia Geral"},
+            {codigo:"CURA-02",nome:"CURATIVO GRAU II SEM DEBRIDAMENTO",especialidade:"Cirurgia Geral"},
+            {codigo:"GAST-01",nome:"GASTROSTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"APEN-01",nome:"APENDICECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"APEN-02",nome:"APENDICECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Cirurgia Geral"},
+            {codigo:"DREN-01",nome:"DRENAGEM DE ABCESSO ÂNU-RETAL",especialidade:"Cirurgia Geral"},
+            {codigo:"ENTE-01",nome:"ENTERECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"ENTE-02",nome:"ENTEROANASTOMOSE",especialidade:"Cirurgia Geral"},
+            {codigo:"PROL-01",nome:"TRATAMENTO CIRÚRGICO DE PROLAPSO ANAL",especialidade:"Cirurgia Geral"},
+            {codigo:"MARS-01",nome:"MARSUPIALIZAÇÃO DE ABCESSO",especialidade:"Cirurgia Geral"},
+            {codigo:"MARS-02",nome:"MARSUPIALIZAÇÃO DE CISTO",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-01",nome:"HERNIOPLASTIA EPIGÁSTRICA",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-02",nome:"HERNIOPLASTIA INGUINAL",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-03",nome:"HERNIOPLASTIA INGUINAL UNILATERAL",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-04",nome:"HERNIOPLASTIA INGUINAL VIDEOLAPAROSCÓPICA",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-05",nome:"HERNIOPLASTIA CRURAL UNILATERAL",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-06",nome:"HERNIOPLASTIA UMBILICAL",especialidade:"Cirurgia Geral"},
+            {codigo:"HERN-07",nome:"HERNIOPLASTIA INCISIONAL",especialidade:"Cirurgia Geral"},
+            {codigo:"LAPA-01",nome:"LAPAROTOMIA EXPLORADORA",especialidade:"Cirurgia Geral"},
+            {codigo:"LAPA-02",nome:"LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA DRENAGEM",especialidade:"Cirurgia Geral"},
+            {codigo:"LAPA-03",nome:"LAPAROTOMIA VIDEOLAPAROSCÓPICA PARA BIÓPSIA",especialidade:"Cirurgia Geral"},
+            {codigo:"CIST-01",nome:"CISTOSTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"OOFR-01",nome:"OOFRECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"OOFR-02",nome:"OOFOROPLASTIA",especialidade:"Cirurgia Geral"},
+            {codigo:"SALP-01",nome:"SALPINGECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"SALP-02",nome:"SALPINGECTOMIA UNILATERAL",especialidade:"Cirurgia Geral"},
+            {codigo:"SALP-03",nome:"SALPINGECTOMIA BILATERAL",especialidade:"Cirurgia Geral"},
+            {codigo:"DREN-02",nome:"DRENAGEM DE ABCESSO DE MAMA",especialidade:"Cirurgia Geral"},
+            {codigo:"TRAQ-01",nome:"TRAQUEOSTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"TRAQ-02",nome:"TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEAL",especialidade:"Cirurgia Geral"},
+            {codigo:"TRAQ-03",nome:"TRAQUEOSTOMIA COM COLOCAÇÃO DE ÓRTESE TRAQUEOBRÔNQUICA",especialidade:"Cirurgia Geral"},
+            {codigo:"TORA-01",nome:"TORACOSTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"TORA-02",nome:"TORACOSTOMIA COM DRENAGEM PLEURAL FECHADA",especialidade:"Cirurgia Geral"},
+            {codigo:"TORA-03",nome:"TORACOCENTESE",especialidade:"Cirurgia Geral"},
+            {codigo:"DREN-03",nome:"DRENAGEM DE PLEURA",especialidade:"Cirurgia Geral"},
+            {codigo:"DREN-04",nome:"DRENAGEM DE HEMATOMA PRÉ-PERITONEAL",especialidade:"Cirurgia Geral"},
+            {codigo:"DREN-05",nome:"DRENAGEM DE ABCESSO PRÉ-PERITONEAL",especialidade:"Cirurgia Geral"},
+            {codigo:"DEBR-01",nome:"DEBRIDAMENTO DE ÚLCERA",especialidade:"Cirurgia Geral"},
+            {codigo:"DEBR-02",nome:"DEBRIDAMENTO DE TECIDOS DESVITALIZADOS",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-01",nome:"COLECISTECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-02",nome:"COLECISTECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-03",nome:"COLECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-04",nome:"COLECTOMIA DIREITA",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-05",nome:"COLECTOMIA ESQUERDA",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-06",nome:"COLECTOMIA TOTAL",especialidade:"Cirurgia Geral"},
+            {codigo:"COLE-07",nome:"COLECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Cirurgia Geral"},
+            {codigo:"GAST-02",nome:"GASTRECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"GAST-03",nome:"GASTRECTOMIA PARCIAL",especialidade:"Cirurgia Geral"},
+            {codigo:"GAST-04",nome:"GASTRECTOMIA TOTAL",especialidade:"Cirurgia Geral"},
+            {codigo:"GAST-05",nome:"GASTRECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Cirurgia Geral"},
+            {codigo:"BARI-01",nome:"BYPASS GÁSTRICO",especialidade:"Cirurgia Geral"},
+            {codigo:"BARI-02",nome:"SLEEVE GÁSTRICO",especialidade:"Cirurgia Geral"},
+            {codigo:"BARI-03",nome:"CIRURGIA BARIÁTRICA",especialidade:"Cirurgia Geral"},
+            {codigo:"ESPL-01",nome:"ESPLENECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"ESPL-02",nome:"ESPLENECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Cirurgia Geral"},
+            {codigo:"HEMO-01",nome:"HEMORROIDECTOMIA",especialidade:"Cirurgia Geral"},
+            {codigo:"FIST-01",nome:"FISTULECTOMIA ANAL",especialidade:"Cirurgia Geral"},
+            {codigo:"FIST-02",nome:"FISTULECTOMIA PERIANAL",especialidade:"Cirurgia Geral"},
+            {codigo:"ESFI-01",nome:"ESFINCTEROPLASTIA ANAL",especialidade:"Cirurgia Geral"},
+            {codigo:"FIST-03",nome:"TRATAMENTO CIRÚRGICO DE FÍSTULA RETOVAGINAL",especialidade:"Cirurgia Geral"},
+            // GINECOLOGIA E OBSTETRÍCIA
+            {codigo:"CESA-01",nome:"CESARIANA",especialidade:"Obstetrícia"},
+            {codigo:"HIST-01",nome:"HISTERECTOMIA",especialidade:"Ginecologia"},
+            {codigo:"HIST-02",nome:"HISTERECTOMIA TOTAL",especialidade:"Ginecologia"},
+            {codigo:"HIST-03",nome:"HISTERECTOMIA TOTAL VIDEOLAPAROSCÓPICA",especialidade:"Ginecologia"},
+            {codigo:"HIST-04",nome:"HISTERECTOMIA PARCIAL",especialidade:"Ginecologia"},
+            {codigo:"HIST-05",nome:"HISTERECTOMIA PARCIAL VIDEOLAPAROSCÓPICA",especialidade:"Ginecologia"},
+            {codigo:"HIST-06",nome:"HISTERECTOMIA RADICAL",especialidade:"Ginecologia"},
+            {codigo:"MIOM-01",nome:"MIOMECTOMIA",especialidade:"Ginecologia"},
+            {codigo:"MIOM-02",nome:"MIOMECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Ginecologia"},
+            {codigo:"MAST-01",nome:"MASTECTOMIA",especialidade:"Cirurgia Plástica"},
+            {codigo:"MAST-02",nome:"MASTECTOMIA COM RECONSTRUÇÃO",especialidade:"Cirurgia Plástica"},
+            {codigo:"QUAD-01",nome:"QUADRANTECTOMIA",especialidade:"Cirurgia Plástica"},
+            {codigo:"SETO-01",nome:"SETORECTOMIA",especialidade:"Cirurgia Plástica"},
+            {codigo:"RECO-01",nome:"RECONSTRUÇÃO MAMÁRIA",especialidade:"Cirurgia Plástica"},
+            {codigo:"MAST-03",nome:"MASTOPEXIA",especialidade:"Cirurgia Plástica"},
+            {codigo:"MAMO-01",nome:"MAMOPLASTIA DE AUMENTO",especialidade:"Cirurgia Plástica"},
+            {codigo:"MAMO-02",nome:"MAMOPLASTIA REDUTORA",especialidade:"Cirurgia Plástica"},
+            {codigo:"LAQU-01",nome:"LAQUEADURA TUBÁRIA",especialidade:"Ginecologia"},
+            {codigo:"CAUT-01",nome:"CAUTERIZAÇÃO TUBÁRIA",especialidade:"Ginecologia"},
+            {codigo:"CURA-03",nome:"CURETAGEM UTERINA",especialidade:"Ginecologia"},
+            {codigo:"HIST-07",nome:"HISTEROSCOPIA CIRÚRGICA",especialidade:"Ginecologia"},
+            {codigo:"COLP-01",nome:"COLPOPERINEOPLASTIA",especialidade:"Ginecologia"},
+            {codigo:"COLP-02",nome:"COLPORRAFIA ANTERIOR",especialidade:"Ginecologia"},
+            {codigo:"COLP-03",nome:"COLPORRAFIA POSTERIOR",especialidade:"Ginecologia"},
+            {codigo:"PERI-01",nome:"PERINEOPLASTIA",especialidade:"Ginecologia"},
+            {codigo:"ENDO-01",nome:"TRATAMENTO DE ENDOMETRIOSE",especialidade:"Ginecologia"},
+            // NEUROCIRURGIA
+            {codigo:"CRAN-01",nome:"CRANIOTOMIA",especialidade:"Neurocirurgia"},
+            {codigo:"CRAN-02",nome:"CRANIOTOMIA PARA TUMOR CEREBRAL",especialidade:"Neurocirurgia"},
+            {codigo:"CRAN-03",nome:"CRANIOTOMIA DESCOMPRESSIVA",especialidade:"Neurocirurgia"},
+            {codigo:"ANEU-01",nome:"ANEURISMA CEREBRAL",especialidade:"Neurocirurgia"},
+            {codigo:"ANEU-02",nome:"CLIPAGEM DE ANEURISMA",especialidade:"Neurocirurgia"},
+            {codigo:"DREN-06",nome:"DRENAGEM DE HEMATOMA SUBDURAL",especialidade:"Neurocirurgia"},
+            {codigo:"DREN-07",nome:"DRENAGEM DE HEMATOMA EXTRADURAL",especialidade:"Neurocirurgia"},
+            {codigo:"HERN-08",nome:"HÉRNIA DE DISCO",especialidade:"Neurocirurgia"},
+            {codigo:"HERN-09",nome:"HÉRNIA DE DISCO CERVICAL",especialidade:"Neurocirurgia"},
+            {codigo:"HERN-10",nome:"HÉRNIA DE DISCO LOMBAR",especialidade:"Neurocirurgia"},
+            {codigo:"HERN-11",nome:"HÉRNIA DE DISCO TORÁCICA",especialidade:"Neurocirurgia"},
+            {codigo:"COLU-01",nome:"CIRURGIA DE COLUNA",especialidade:"Neurocirurgia"},
+            {codigo:"ARTR-01",nome:"ARTRODESE DE COLUNA CERVICAL",especialidade:"Neurocirurgia"},
+            {codigo:"ARTR-02",nome:"ARTRODESE DE COLUNA LOMBAR",especialidade:"Neurocirurgia"},
+            {codigo:"ARTR-03",nome:"ARTRODESE DE COLUNA TORÁCICA",especialidade:"Neurocirurgia"},
+            {codigo:"DESCOMP-01",nome:"DESCOMPRESSÃO MEDULAR",especialidade:"Neurocirurgia"},
+            {codigo:"LAMI-01",nome:"LAMINECTOMIA",especialidade:"Neurocirurgia"},
+            {codigo:"FORA-01",nome:"FORAMINOTOMIA",especialidade:"Neurocirurgia"},
+            {codigo:"VERT-01",nome:"VERTEBROPLASTIA",especialidade:"Neurocirurgia"},
+            {codigo:"CIFO-01",nome:"CIFOPLASTIA",especialidade:"Neurocirurgia"},
+            // ORTOPEDIA
+            {codigo:"ARTQ-01",nome:"ARTROPLASTIA DE QUADRIL",especialidade:"Ortopedia"},
+            {codigo:"ARTQ-02",nome:"ARTROPLASTIA DE QUADRIL REVISÃO",especialidade:"Ortopedia"},
+            {codigo:"ARTJ-01",nome:"ARTROPLASTIA DE JOELHO",especialidade:"Ortopedia"},
+            {codigo:"ARTJ-02",nome:"ARTROPLASTIA DE JOELHO REVISÃO",especialidade:"Ortopedia"},
+            {codigo:"PROT-01",nome:"PRÓTESE DE QUADRIL",especialidade:"Ortopedia"},
+            {codigo:"PROT-02",nome:"PRÓTESE DE JOELHO",especialidade:"Ortopedia"},
+            {codigo:"PROT-03",nome:"PRÓTESE DE OMBRO",especialidade:"Ortopedia"},
+            {codigo:"PROT-04",nome:"PRÓTESE DE TORNOZELO",especialidade:"Ortopedia"},
+            {codigo:"OSTF-01",nome:"OSTEOSSÍNTESE DE FÊMUR",especialidade:"Ortopedia"},
+            {codigo:"OSTF-02",nome:"OSTEOSSÍNTESE DE FÊMUR COM PLACA",especialidade:"Ortopedia"},
+            {codigo:"OSTF-03",nome:"OSTEOSSÍNTESE DE FÊMUR COM HASTE",especialidade:"Ortopedia"},
+            {codigo:"OSTF-04",nome:"OSTEOSSÍNTESE DE FÊMUR COM HASTE INTRAMEDULAR",especialidade:"Ortopedia"},
+            {codigo:"OSTT-01",nome:"OSTEOSSÍNTESE DE TÍBIA",especialidade:"Ortopedia"},
+            {codigo:"OSTT-02",nome:"OSTEOSSÍNTESE DE TÍBIA COM PLACA",especialidade:"Ortopedia"},
+            {codigo:"OSTT-03",nome:"OSTEOSSÍNTESE DE TÍBIA COM HASTE INTRAMEDULAR",especialidade:"Ortopedia"},
+            {codigo:"OSTU-01",nome:"OSTEOSSÍNTESE DE ÚMERO",especialidade:"Ortopedia"},
+            {codigo:"OSTU-02",nome:"OSTEOSSÍNTESE DE ÚMERO COM PLACA",especialidade:"Ortopedia"},
+            {codigo:"OSTR-01",nome:"OSTEOSSÍNTESE DE RÁDIO",especialidade:"Ortopedia"},
+            {codigo:"OSTR-02",nome:"OSTEOSSÍNTESE DE RÁDIO DISTAL",especialidade:"Ortopedia"},
+            {codigo:"OSTT-04",nome:"OSTEOSSÍNTESE DE TORNOZELO",especialidade:"Ortopedia"},
+            {codigo:"OSTC-01",nome:"OSTEOSSÍNTESE DE CLAVÍCULA",especialidade:"Ortopedia"},
+            {codigo:"ARTS-01",nome:"ARTROSCOPIA",especialidade:"Ortopedia"},
+            {codigo:"ARTS-02",nome:"ARTROSCOPIA DE JOELHO",especialidade:"Ortopedia"},
+            {codigo:"ARTS-03",nome:"ARTROSCOPIA DE OMBRO",especialidade:"Ortopedia"},
+            {codigo:"LCA-01",nome:"RECONSTRUÇÃO DE LCA",especialidade:"Ortopedia"},
+            // OFTALMOLOGIA
+            {codigo:"CATA-01",nome:"CIRURGIA DE CATARATA",especialidade:"Oftalmologia"},
+            {codigo:"FACE-01",nome:"FACECTOMIA",especialidade:"Oftalmologia"},
+            {codigo:"FACE-02",nome:"FACECTOMIA COM IMPLANTE DE LENTE",especialidade:"Oftalmologia"},
+            // OTORRINO
+            {codigo:"AMIG-01",nome:"AMIGDALECTOMIA",especialidade:"Otorrinolaringologia"},
+            {codigo:"ADEN-01",nome:"ADENOIDECTOMIA",especialidade:"Otorrinolaringologia"},
+            {codigo:"ADEN-02",nome:"ADENOAMIGDALECTOMIA",especialidade:"Otorrinolaringologia"},
+            {codigo:"SEPT-01",nome:"SEPTOPLASTIA",especialidade:"Otorrinolaringologia"},
+            // UROLOGIA
+            {codigo:"PROS-01",nome:"PROSTATECTOMIA",especialidade:"Urologia"},
+            {codigo:"PROS-02",nome:"PROSTATECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Urologia"},
+            {codigo:"RTUP-01",nome:"RTU DE PRÓSTATA",especialidade:"Urologia"},
+            {codigo:"NEFR-01",nome:"NEFRECTOMIA",especialidade:"Urologia"},
+            {codigo:"NEFR-02",nome:"NEFRECTOMIA VIDEOLAPAROSCÓPICA",especialidade:"Urologia"},
+            {codigo:"POST-01",nome:"POSTECTOMIA",especialidade:"Urologia"},
+            {codigo:"CIRC-01",nome:"CIRCUNCISÃO",especialidade:"Urologia"},
+            // ENDOSCOPIA
+            {codigo:"EDAS-01",nome:"ENDOSCOPIA DIGESTIVA ALTA",especialidade:"Gastroenterologia"},
+            {codigo:"EDAS-02",nome:"ENDOSCOPIA DIGESTIVA ALTA COM BIÓPSIA",especialidade:"Gastroenterologia"},
+            {codigo:"COLO-01",nome:"COLONOSCOPIA",especialidade:"Coloproctologia"},
+            {codigo:"COLO-02",nome:"COLONOSCOPIA COM BIÓPSIA",especialidade:"Coloproctologia"},
+            {codigo:"BRON-01",nome:"BRONCOSCOPIA",especialidade:"Pneumologia"},
         ];
 
-        // ============ AUTOCOMPLETE ============
+        // ============ AUTOCOMPLETE + ADIÇÃO LIVRE ============
         let procedimentosSelecionados = [];
-
         const procInput = document.getElementById('surgeryTypeInput');
         const suggestionsBox = document.getElementById('suggestionsBox');
         const proceduresList = document.getElementById('proceduresList');
@@ -607,29 +531,28 @@
         if (procInput) {
             procInput.addEventListener('input', function() {
                 const valor = this.value.trim().toUpperCase();
-                
-                if (valor.length < 2) {
-                    suggestionsBox.classList.remove('show');
-                    return;
-                }
+                if (valor.length < 2) { suggestionsBox.classList.remove('show'); return; }
 
                 const sugestoes = PROCEDIMENTOS.filter(p => 
                     (p.nome.includes(valor) || p.codigo.includes(valor)) && 
                     !procedimentosSelecionados.find(ps => ps.codigo === p.codigo)
                 );
 
+                let html = '';
                 if (sugestoes.length > 0) {
-                    suggestionsBox.innerHTML = sugestoes.map(p => `
-                        <div class="suggestion-item" onclick="adicionarProcedimento('${p.nome.replace(/'/g, "\\'")}', '${p.especialidade.replace(/'/g, "\\'")}', '${p.codigo}')">
-                            <span class="codigo">${p.codigo}</span>
-                            <span>${p.nome}</span>
+                    html += sugestoes.map(p => `
+                        <div class="suggestion-item" onclick="adicionarProcedimento('${p.nome.replace(/'/g,"\\'")}','${p.especialidade.replace(/'/g,"\\'")}','${p.codigo}')">
+                            <span class="codigo">${p.codigo}</span><span>${p.nome}</span>
                         </div>
                     `).join('');
-                    suggestionsBox.classList.add('show');
-                } else {
-                    suggestionsBox.innerHTML = '<div class="suggestion-item" style="color:#94a3b8;">📭 Nenhum encontrado ou já adicionado</div>';
-                    suggestionsBox.classList.add('show');
                 }
+                // Opção de adicionar manualmente
+                html += `<div class="suggestion-item" onclick="adicionarManual('${valor}')">
+                    <span class="manual">✍️</span><span>Adicionar: <strong>"${valor}"</strong> (manual)</span>
+                </div>`;
+                
+                suggestionsBox.innerHTML = html;
+                suggestionsBox.classList.add('show');
             });
 
             document.addEventListener('click', function(e) {
@@ -642,16 +565,24 @@
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     const first = suggestionsBox.querySelector('.suggestion-item');
-                    if (first && suggestionsBox.classList.contains('show')) {
-                        first.click();
-                    }
+                    if (first && suggestionsBox.classList.contains('show')) first.click();
+                    else if (this.value.trim()) adicionarManual(this.value.trim().toUpperCase());
                 }
             });
         }
 
         window.adicionarProcedimento = function(nome, especialidade, codigo) {
             procedimentosSelecionados.push({ nome, especialidade, codigo });
-            atualizarProcedimentosVisuais();
+            atualizarProcVisuais();
+            procInput.value = '';
+            suggestionsBox.classList.remove('show');
+            procInput.focus();
+        };
+
+        window.adicionarManual = function(nome) {
+            if (!nome) return;
+            procedimentosSelecionados.push({ nome, especialidade: '', codigo: 'MANUAL-' + Date.now().toString(36) });
+            atualizarProcVisuais();
             procInput.value = '';
             suggestionsBox.classList.remove('show');
             procInput.focus();
@@ -659,10 +590,10 @@
 
         window.removerProcedimento = function(codigo) {
             procedimentosSelecionados = procedimentosSelecionados.filter(p => p.codigo !== codigo);
-            atualizarProcedimentosVisuais();
+            atualizarProcVisuais();
         };
 
-        function atualizarProcedimentosVisuais() {
+        function atualizarProcVisuais() {
             if (procedimentosSelecionados.length === 0) {
                 selectedProceduresDiv.style.display = 'none';
                 proceduresList.innerHTML = '';
@@ -672,118 +603,86 @@
                 proceduresList.innerHTML = procedimentosSelecionados.map(p => `
                     <span class="procedure-tag">
                         <strong>${p.codigo}</strong> - ${p.nome}
-                        <span class="remove-tag" onclick="removerProcedimento('${p.codigo}')" title="Remover">✕</span>
+                        <span class="remove-tag" onclick="removerProcedimento('${p.codigo}')">✕</span>
                     </span>
                 `).join('');
                 surgeryTypeHidden.value = procedimentosSelecionados.map(p => `${p.codigo} - ${p.nome}`).join('\n');
-                
-                if (procedimentosSelecionados.length === 1) {
+                if (procedimentosSelecionados.length === 1 && procedimentosSelecionados[0].especialidade) {
                     document.getElementById('specialty').value = procedimentosSelecionados[0].especialidade;
                 }
             }
         }
 
-        // ============ CALCULAR IDADE ============
+        // ============ IDADE ============
         window.calculateAgeUI = function() {
-            const birthDate = document.getElementById('birthDate').value;
-            const display = document.getElementById('calculatedAge');
-            const hidden = document.getElementById('age');
-            
-            if (!birthDate) {
-                display.textContent = '';
-                hidden.value = '';
-                return;
-            }
-            
-            const today = new Date();
-            const birth = new Date(birthDate + 'T00:00:00');
-            let age = today.getFullYear() - birth.getFullYear();
-            const m = today.getMonth() - birth.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-            
-            display.textContent = `(${age >= 0 ? age : 0} anos)`;
-            hidden.value = age >= 0 ? age : 0;
+            const bd = document.getElementById('birthDate').value;
+            if (!bd) { document.getElementById('calculatedAge').textContent=''; document.getElementById('age').value=''; return; }
+            const hoje = new Date(), nasc = new Date(bd+'T00:00:00');
+            let idade = hoje.getFullYear()-nasc.getFullYear();
+            const m = hoje.getMonth()-nasc.getMonth();
+            if(m<0||(m===0&&hoje.getDate()<nasc.getDate())) idade--;
+            document.getElementById('calculatedAge').textContent=`(${idade>=0?idade:0} anos)`;
+            document.getElementById('age').value=idade>=0?idade:0;
         };
 
-        // ============ ENVIAR FORMULÁRIO ============
+        // ============ ENVIO ============
         document.getElementById('clinicaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const btn = document.getElementById('submitBtn');
-            const fb = document.getElementById('feedback');
-            
-            fb.className = 'feedback-message';
-            
-            if (!surgeryTypeHidden.value.trim()) {
-                fb.className = 'feedback-message error';
-                fb.textContent = '⚠️ Adicione pelo menos um procedimento!';
-                fb.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-            
-            btn.disabled = true;
-            btn.textContent = '⏳ Registrando...';
-            
-            try {
-                const sangue = document.getElementById('reservaSangue').value;
-                const uti = document.getElementById('necessidadeUTI').value;
-                const cirurgiaId = 'CLI-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
-                
-                const cirurgia = {
-                    id: cirurgiaId,
-                    origem: document.getElementById('origem').value,
-                    patient: document.getElementById('patient').value.trim().toUpperCase(),
-                    birthDate: document.getElementById('birthDate').value,
-                    age: document.getElementById('age').value,
-                    prontuario: document.getElementById('prontuario').value.trim(),
-                    type: surgeryTypeHidden.value,
-                    date: new Date().toISOString().split('T')[0],
-                    time: '',
-                    specialty: document.getElementById('specialty').value,
-                    doctor: document.getElementById('doctor').value.trim().toUpperCase(),
-                    anesthetist: '',
-                    circulante: '',
-                    room: 'A Definir',
-                    necessitaSangue: sangue === 'Sim' ? 'sim' : 'nao',
-                    necessitaUTI: uti === 'Sim' ? 'sim' : 'nao',
-                    status: 'pendente',
-                    setorSolicitante: setorSolicitante,
-                    clinicaOrigem: setorDisplayMap[setorSolicitante] || setorSolicitante,
-                    observacoes: document.getElementById('observacoes').value.trim(),
-                    dataSolicitacao: new Date().toISOString()
-                };
-
-                console.log('📤 Enviando cirurgia:', cirurgia);
-
-                const resp = await fetch(`${DB_URL}/surgeries/${cirurgiaId}.json`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(cirurgia)
-                });
-
-                if (!resp.ok) throw new Error('Erro: ' + resp.status);
-
-                fb.className = 'feedback-message success';
-                fb.textContent = '✅ Cirurgia registrada! Já está no painel TV.';
-                
-                document.getElementById('clinicaForm').reset();
-                document.getElementById('calculatedAge').textContent = '';
-                document.getElementById('age').value = '';
-                procedimentosSelecionados = [];
-                atualizarProcedimentosVisuais();
-
-            } catch (error) {
-                console.error('❌ Erro:', error);
-                fb.className = 'feedback-message error';
-                fb.textContent = '❌ Erro ao registrar. Verifique sua conexão.';
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '📨 Registrar Cirurgia';
-                fb.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            const btn=document.getElementById('submitBtn'), fb=document.getElementById('feedback');
+            fb.className='feedback-message';
+            if(!surgeryTypeHidden.value.trim()){fb.className='feedback-message error';fb.textContent='⚠️ Adicione pelo menos um procedimento!';return;}
+            btn.disabled=true;btn.textContent='⏳ Registrando...';
+            try{
+                const sangue=document.getElementById('reservaSangue').value, uti=document.getElementById('necessidadeUTI').value;
+                const id='CLI-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);
+                const c={id,origem:document.getElementById('origem').value,patient:document.getElementById('patient').value.trim().toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,prontuario:document.getElementById('prontuario').value.trim(),type:surgeryTypeHidden.value,date:new Date().toISOString().split('T')[0],time:'',specialty:document.getElementById('specialty').value,doctor:document.getElementById('doctor').value.trim().toUpperCase(),anesthetist:'',circulante:'',room:'A Definir',necessitaSangue:sangue==='Sim'?'sim':'nao',necessitaUTI:uti==='Sim'?'sim':'nao',status:'pendente',setorSolicitante,clinicaOrigem:setorDisplayMap[setorSolicitante]||setorSolicitante,observacoes:document.getElementById('observacoes').value.trim(),dataSolicitacao:new Date().toISOString()};
+                const resp=await fetch(`${DB_URL}/surgeries/${id}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(c)});
+                if(!resp.ok)throw new Error('Erro '+resp.status);
+                fb.className='feedback-message success';fb.textContent='✅ Cirurgia registrada! Já está no painel TV.';
+                document.getElementById('clinicaForm').reset();document.getElementById('calculatedAge').textContent='';document.getElementById('age').value='';procedimentosSelecionados=[];atualizarProcVisuais();
+            }catch(err){console.error(err);fb.className='feedback-message error';fb.textContent='❌ Erro ao registrar.';}
+            finally{btn.disabled=false;btn.textContent='📨 Registrar Cirurgia';}
         });
 
-        console.log('🚀 Formulário de Registro de Cirurgias (Clínicas) carregado!');
+        // ============ VISUALIZAR CIRURGIAS DO SETOR ============
+        window.carregarCirurgiasSetor = async function() {
+            const container = document.getElementById('cirurgiasSetorContainer');
+            container.innerHTML = '<p style="text-align:center;">⏳ Carregando...</p>';
+            try {
+                const resp = await fetch(`${DB_URL}/surgeries.json`);
+                const data = await resp.json();
+                const cirurgias = data ? Object.values(data).filter(c => c.setorSolicitante === setorSolicitante || c.clinicaOrigem === setorDisplayMap[setorSolicitante]) : [];
+                
+                if (!cirurgias.length) {
+                    container.innerHTML = '<p style="text-align:center;color:#64748b;">📭 Nenhuma cirurgia registrada por este setor</p>';
+                    return;
+                }
+                
+                cirurgias.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+                
+                container.innerHTML = `
+                    <p style="font-size:12px;color:#64748b;margin-bottom:8px;">📋 ${cirurgias.length} cirurgia(s) encontrada(s)</p>
+                    <div style="overflow-x:auto;">
+                        <table class="cirurgias-table">
+                            <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Médico</th><th>Status</th></tr></thead>
+                            <tbody>${cirurgias.map(c => `
+                                <tr>
+                                    <td>${c.date?new Date(c.date+'T00:00:00').toLocaleDateString('pt-BR'):'-'}</td>
+                                    <td><strong>${c.patient||'-'}</strong></td>
+                                    <td>${(c.type||'-').substring(0,40)}</td>
+                                    <td>${c.doctor||'-'}</td>
+                                    <td>${c.status==='pendente'?'⏳ Aguardando':c.status==='em_andamento'?'⚙️ Em Andamento':c.status==='concluida'?'✅ Finalizada':'❌ Cancelada'}</td>
+                                </tr>
+                            `).join('')}</tbody>
+                        </table>
+                    </div>
+                `;
+            } catch(err) {
+                container.innerHTML = '<p style="text-align:center;color:red;">❌ Erro ao carregar</p>';
+            }
+        };
+
+        console.log('🚀 Clínicas carregado! ✍️ Adição manual disponível');
     </script>
 </body>
 </html>
