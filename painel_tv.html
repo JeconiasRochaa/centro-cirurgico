@@ -157,16 +157,24 @@
         thead th {
             background: var(--bg-tertiary); padding: clamp(8px, 1.5vh, 14px) clamp(2px, 0.5vw, 6px);
             text-align: center; color: var(--gold);
-            font-size: clamp(13px, 1.5vw, 15px); letter-spacing: 1px;
+            font-size: clamp(12px, 1.4vw, 14px); letter-spacing: 1px;
             text-transform: uppercase; border-bottom: 2px solid var(--gold);
             white-space: nowrap; font-weight: 700;
         }
-        thead th:nth-child(1){width:5%} thead th:nth-child(2){width:6%}
-        thead th:nth-child(3){width:11%} thead th:nth-child(4){width:4%}
-        thead th:nth-child(5){width:8%} thead th:nth-child(6){width:16%}
-        thead th:nth-child(7){width:12%} thead th:nth-child(8){width:7%}
-        thead th:nth-child(9){width:9%} thead th:nth-child(10){width:8%}
-        thead th:nth-child(11){width:9%}
+        
+        /* NOVAS LARGURAS DAS COLUNAS - 12 colunas */
+        thead th:nth-child(1){width:4%}   /* Sala */
+        thead th:nth-child(2){width:5%}   /* Horário */
+        thead th:nth-child(3){width:10%}  /* Paciente */
+        thead th:nth-child(4){width:3%}   /* Idade */
+        thead th:nth-child(5){width:7%}   /* Origem */
+        thead th:nth-child(6){width:15%}  /* Procedimento */
+        thead th:nth-child(7){width:12%}  /* Médico */
+        thead th:nth-child(8){width:7%}   /* Anestesista */
+        thead th:nth-child(9){width:7%}   /* Instrum. */
+        thead th:nth-child(10){width:6%}  /* 🩸 Sangue */
+        thead th:nth-child(11){width:6%}  /* 🏥 UTI */
+        thead th:nth-child(12){width:8%}  /* Status */
 
         tbody tr { background: rgba(255,255,255,0.035); transition: all 0.3s; }
         tbody tr:hover { background: rgba(255,255,255,0.07); }
@@ -215,6 +223,17 @@
             background: rgba(239,68,68,0.18); padding: 1px 5px;
             border-radius: 6px; display: inline-block; margin-top: 2px; cursor: help;
         }
+        
+        /* BADGES DE SANGUE E UTI */
+        .blood-badge, .icu-badge {
+            display: inline-block; padding: 3px 8px; border-radius: 12px;
+            font-size: clamp(9px, 1vw, 11px); font-weight: 600;
+        }
+        .blood-yes { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; }
+        .blood-no { background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #6ee7b7; }
+        .icu-yes { background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fcd34d; }
+        .icu-no { background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #6ee7b7; }
+
         .cell-content { display: block; line-height: 1.3; }
         .empty-state {
             text-align: center; padding: clamp(30px, 5vh, 60px) 20px;
@@ -278,20 +297,29 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Sala</th><th>Horário</th><th>Paciente</th><th>Idade</th>
-                            <th>Origem</th><th>Procedimento</th><th>Médico</th>
-                            <th>Especialid.</th><th>Anestesista</th><th>Instrum.</th><th>Status</th>
+                            <th>Sala</th>
+                            <th>Horário</th>
+                            <th>Paciente</th>
+                            <th>Idade</th>
+                            <th>Origem</th>
+                            <th>Procedimento</th>
+                            <th>Médico</th>
+                            <th>Anestesista</th>
+                            <th>Instrum.</th>
+                            <th>🩸 Sangue</th>
+                            <th>🏥 UTI</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="surgeriesTableBody">
-                        <tr><td colspan="11"><div class="empty-state">CONECTANDO AO SERVIDOR...</div></td></tr>
+                        <tr><td colspan="12"><div class="empty-state">CONECTANDO AO SERVIDOR...</div></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="footer">
-            <span>© 2026 HRPI</span><span>Painel Cirúrgico v9.0</span>
+            <span>© 2026 HRPI</span><span>Painel Cirúrgico v10.0</span>
             <span id="updateTime">Atualizado: --:--:--</span>
         </div>
     </div>
@@ -324,23 +352,15 @@
             'Urgência/Emergência': '🚨 Urg/Emerg'
         };
 
-        // ========== DETECTAR Dr./Dra. ==========
         function getDoctorTitle(name) {
             if (!name) return 'Dr.';
             const cleanName = name.replace(/^(dr\.?|dra\.?)\s*/i, '').trim();
             const femaleNames = [
-                'MARIA', 'ANA', 'JULIA', 'JÚLIA', 'BEATRIZ', 'CAMILA', 'CAROLINA', 'CRISTINA',
-                'DANIELA', 'FERNANDA', 'GABRIELA', 'HELENA', 'ISABELA', 'JOANA', 'LARISSA',
-                'LAURA', 'LETÍCIA', 'LUCIANA', 'MARCIA', 'MÁRCIA', 'MARINA', 'NATALIA', 'NATÁLIA',
-                'PATRICIA', 'PATRÍCIA', 'PAULA', 'RAFAELA', 'RENATA', 'ROBERTA', 'SANDRA',
-                'SARA', 'SOFIA', 'TATIANA', 'VANESSA', 'VERA', 'VIVIANE', 'ALINE', 'AMANDA',
-                'ANDREIA', 'ANDREZA', 'ANGELA', 'ÂNGELA', 'BIANCA', 'BRUNA', 'CARLA', 'CARMEM',
-                'CLARA', 'CLAUDIA', 'CLÁUDIA', 'DEBORA', 'DÉBORA', 'ELIANA', 'ELISA', 'FABIANA',
-                'FLAVIA', 'FLÁVIA', 'GISELE', 'GIOVANA', 'INGRID', 'IRENE', 'JULIANA', 'KARINA',
-                'KATIA', 'KÁTIA', 'LIGIA', 'LÍGIA', 'LILIAN', 'LORENA', 'LUANA', 'LUCIA', 'LÚCIA',
-                'MANUELA', 'MICHELE', 'MONICA', 'MÔNICA', 'NADIA', 'NÁDIA', 'PRISCILA', 'RAQUEL',
-                'REGINA', 'ROSANA', 'SABRINA', 'SAMANTA', 'SILVIA', 'SÍLVIA', 'SIMONE', 'SUELI',
-                'TANIA', 'TÂNIA', 'TEREZA', 'VALERIA', 'VALÉRIA', 'VANDA', 'VERONICA', 'VERÔNICA'
+                'MARIA', 'ANA', 'JULIA', 'BEATRIZ', 'CAMILA', 'CAROLINA', 'CRISTINA',
+                'DANIELA', 'FERNANDA', 'GABRIELA', 'HELENA', 'ISABELA', 'JOANA',
+                'LAURA', 'LETÍCIA', 'LUCIANA', 'MARCIA', 'MARINA', 'NATALIA',
+                'PATRICIA', 'PAULA', 'RAFAELA', 'RENATA', 'ROBERTA', 'SANDRA',
+                'SARA', 'SOFIA', 'TATIANA', 'VANESSA', 'VERA', 'VIVIANE'
             ];
             const firstName = cleanName.split(' ')[0].toUpperCase();
             if (femaleNames.includes(firstName)) return 'Dra.';
@@ -393,14 +413,14 @@
             document.getElementById('waiting').textContent=String(t.filter(s=>s.status==='pendente').length).padStart(2,'0');
             document.getElementById('cancelled').textContent=String(t.filter(s=>s.status==='cancelada').length).padStart(2,'0');
             const b=document.getElementById('surgeriesTableBody');
-            if(!t.length){b.innerHTML='<tr><td colspan="11"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
+            if(!t.length){b.innerHTML='<tr><td colspan="12"><div class="empty-state">NENHUM PROCEDIMENTO AGENDADO PARA HOJE</div></td></tr>'}
             else{
                 const statusOrder = { 'em_andamento': 1, 'pendente': 2, 'concluida': 3, 'cancelada': 4 };
                 b.innerHTML=t.sort((a,b)=>{
                     const sa = statusOrder[a.status] || 5;
                     const sb = statusOrder[b.status] || 5;
                     if (sa !== sb) return sa - sb;
-                    return a.time.localeCompare(b.time);
+                    return (a.time||'').localeCompare(b.time||'');
                 }).map(s=>{
                     let sh='',rc='';
                     if(s.status==='pendente')sh=`<span class="status-badge status-waiting">⏳ Aguardando</span>`;
@@ -412,7 +432,29 @@
                     const origemCurta = origemMap[s.origem] || s.origem || '-';
                     const doctorTitle = getDoctorTitle(s.doctor);
                     const anesthetistTitle = getDoctorTitle(s.anesthetist);
-                    return `<tr class="${rc}"><td><strong>${s.room||'-'}</strong></td><td>${s.time||'-'}</td><td><span class="cell-content">${s.patient||'-'}</span></td><td>${s.age||'-'}</td><td>${origemCurta}</td><td><span class="cell-content">${pr}${mh}</span></td><td><span class="cell-content">${doctorTitle} ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td><td>${s.specialty||'-'}</td><td><span class="cell-content">${anesthetistTitle} ${s.anesthetist||'-'}</span></td><td>${s.circulante||'-'}</td><td>${sh}</td></tr>`
+                    
+                    // Badges de sangue e UTI
+                    const bloodBadge = s.bloodReserve === 'Sim' 
+                        ? '<span class="blood-badge blood-yes">🩸 Sim</span>' 
+                        : '<span class="blood-badge blood-no">✅ Não</span>';
+                    const icuBadge = s.needsICU === 'Sim' 
+                        ? '<span class="icu-badge icu-yes">🏥 Sim</span>' 
+                        : '<span class="icu-badge icu-no">✅ Não</span>';
+                    
+                    return `<tr class="${rc}">
+                        <td><strong>${s.room||'-'}</strong></td>
+                        <td>${s.time||'-'}</td>
+                        <td><span class="cell-content">${s.patient||'-'}</span></td>
+                        <td>${s.age||'-'}</td>
+                        <td>${origemCurta}</td>
+                        <td><span class="cell-content">${pr}${mh}</span></td>
+                        <td><span class="cell-content">${doctorTitle} ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td>
+                        <td><span class="cell-content">${anesthetistTitle} ${s.anesthetist||'-'}</span></td>
+                        <td>${s.circulante||'-'}</td>
+                        <td>${bloodBadge}</td>
+                        <td>${icuBadge}</td>
+                        <td>${sh}</td>
+                    </tr>`
                 }).join('')
             }
             document.getElementById('updateTime').textContent=`Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`
