@@ -4,636 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRPI - Sistema de Gestão Cirúrgica</title>
-    <style>
-        :root {
-            --bg-primary: #06224a;
-            --bg-secondary: #051a38;
-            --gold: #c8a94a;
-            --text-light: #ffffff;
-            --text-muted: #b0c4de;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg-primary);
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* ECG Background */
-        .ecg-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.06;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .ecg-bg svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .ecg-path {
-            fill: none;
-            stroke: var(--gold);
-            stroke-width: 2;
-            stroke-dasharray: 2000;
-            animation: ecgMove 4s linear infinite;
-        }
-
-        .ecg-path:nth-child(2) { animation-delay: 1s; }
-        .ecg-path:nth-child(3) { animation-delay: 2s; }
-        .ecg-path:nth-child(4) { animation-delay: 3s; }
-
-        @keyframes ecgMove {
-            from { stroke-dashoffset: 2000; }
-            to { stroke-dashoffset: 0; }
-        }
-
-        /* Container Principal */
-        .main-container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: clamp(20px, 4vw, 40px) clamp(15px, 3vw, 20px);
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        /* Header Section */
-        .header-section {
-            margin-bottom: clamp(30px, 6vw, 60px);
-        }
-
-        .logos-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: clamp(12px, 2.5vw, 25px);
-            margin-bottom: clamp(15px, 3vw, 30px);
-        }
-
-        .logo-circle {
-            width: clamp(60px, 10vw, 100px);
-            height: clamp(60px, 10vw, 100px);
-            background: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid var(--gold);
-            box-shadow: 0 0 35px rgba(200, 169, 74, 0.35);
-            font-size: clamp(26px, 4.5vw, 42px);
-            overflow: hidden;
-            animation: logoFloat 3s ease-in-out infinite;
-            transition: all 0.3s;
-        }
-
-        .logo-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 15%;
-        }
-
-        .logo-circle:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .hospital-name {
-            font-size: clamp(20px, 4vw, 38px);
-            font-weight: 700;
-            color: var(--text-light);
-            letter-spacing: clamp(1px, 0.3vw, 3px);
-            text-transform: uppercase;
-            text-shadow: 0 4px 25px rgba(0,0,0,0.4);
-            margin-bottom: clamp(6px, 1vw, 10px);
-            padding: 0 10px;
-            line-height: 1.2;
-        }
-
-        .hospital-subtitle {
-            font-size: clamp(11px, 1.8vw, 17px);
-            color: var(--gold);
-            letter-spacing: clamp(2px, 0.6vw, 6px);
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        .divider {
-            width: clamp(150px, 25vw, 250px);
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: clamp(15px, 2.5vw, 25px) auto;
-        }
-
-        .system-title {
-            font-size: clamp(12px, 2vw, 18px);
-            color: var(--text-muted);
-            letter-spacing: clamp(2px, 0.4vw, 4px);
-            font-weight: 400;
-            text-transform: uppercase;
-        }
-
-        /* Cards Container */
-        .cards-container {
-            display: flex;
-            gap: clamp(20px, 4vw, 40px);
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0 10px;
-        }
-
-        .option-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 2px solid rgba(200, 169, 74, 0.25);
-            border-radius: clamp(16px, 3vw, 28px);
-            padding: clamp(30px, 5vw, 55px) clamp(25px, 4vw, 45px);
-            width: clamp(280px, 35vw, 340px);
-            max-width: 400px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            display: block;
-            flex: 1 1 300px;
-        }
-
-        .option-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(200, 169, 74, 0.15) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .option-card:hover::before {
-            opacity: 1;
-        }
-
-        .option-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-10px);
-            box-shadow: 0 25px 60px rgba(200, 169, 74, 0.25);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .card-icon {
-            font-size: clamp(50px, 9vw, 90px);
-            margin-bottom: clamp(15px, 2.5vw, 25px);
-            display: block;
-            position: relative;
-            z-index: 1;
-            animation: iconPulse 2s ease-in-out infinite;
-        }
-
-        .option-card:nth-child(2) .card-icon {
-            animation-delay: 0.3s;
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        .card-title {
-            font-size: clamp(20px, 3vw, 30px);
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: clamp(10px, 1.5vw, 15px);
-            letter-spacing: clamp(1px, 0.2vw, 2px);
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-desc {
-            font-size: clamp(12px, 1.5vw, 15px);
-            color: var(--text-muted);
-            line-height: 1.7;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-badge {
-            display: inline-block;
-            background: var(--gold);
-            color: var(--bg-primary);
-            padding: clamp(6px, 0.8vw, 8px) clamp(14px, 2vw, 20px);
-            border-radius: 25px;
-            font-size: clamp(10px, 1.2vw, 12px);
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: clamp(15px, 2vw, 22px);
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Footer */
-        .footer {
-            position: fixed;
-            bottom: clamp(10px, 2vh, 25px);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: clamp(9px, 1.2vw, 12px);
-            letter-spacing: 2px;
-            z-index: 1;
-            padding: 0 15px;
-            width: 100%;
-        }
-
-        .footer span {
-            color: var(--gold);
-            font-weight: 600;
-        }
-
-        /* ============ RESPONSIVO ============ */
-
-        /* Tablet */
-        @media (max-width: 1024px) {
-            .cards-container {
-                gap: 20px;
-            }
-
-            .option-card {
-                flex: 1 1 280px;
-                padding: 35px 30px;
-            }
-        }
-
-        /* Mobile Grande */
-        @media (max-width: 768px) {
-            .hospital-name {
-                font-size: clamp(18px, 5vw, 28px);
-            }
-
-            .hospital-subtitle {
-                font-size: clamp(10px, 2.5vw, 14px);
-            }
-
-            .cards-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-
-            .option-card {
-                width: 100%;
-                max-width: 380px;
-                flex: none;
-                padding: 35px 30px;
-            }
-
-            .card-icon {
-                font-size: 60px;
-            }
-
-            .card-title {
-                font-size: 22px;
-            }
-        }
-
-        /* Mobile Pequeno */
-        @media (max-width: 480px) {
-            .logos-row {
-                gap: 10px;
-            }
-
-            .logo-circle {
-                width: 55px;
-                height: 55px;
-                font-size: 24px;
-            }
-
-            .hospital-name {
-                font-size: 16px;
-            }
-
-            .hospital-subtitle {
-                font-size: 9px;
-                letter-spacing: 2px;
-            }
-
-            .system-title {
-                font-size: 10px;
-                letter-spacing: 2px;
-            }
-
-            .option-card {
-                padding: 25px 20px;
-                border-radius: 16px;
-            }
-
-            .card-icon {
-                font-size: 45px;
-                margin-bottom: 12px;
-            }
-
-            .card-title {
-                font-size: 18px;
-            }
-
-            .card-desc {
-                font-size: 11px;
-            }
-
-            .card-badge {
-                font-size: 9px;
-                padding: 5px 12px;
-            }
-
-            .footer {
-                font-size: 8px;
-                letter-spacing: 1px;
-            }
-        }
-
-        /* Mobile Muito Pequeno */
-        @media (max-width: 350px) {
-            .logos-row {
-                gap: 8px;
-            }
-
-            .logo-circle {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-                border-width: 2px;
-            }
-
-            .hospital-name {
-                font-size: 14px;
-            }
-
-            .option-card {
-                padding: 20px 15px;
-            }
-
-            .card-icon {
-                font-size: 38px;
-            }
-
-            .card-title {
-                font-size: 16px;
-            }
-        }
-
-        /* Orientação Paisagem em Mobile */
-        @media (max-height: 500px) and (orientation: landscape) {
-            body {
-                justify-content: flex-start;
-                padding-top: 20px;
-            }
-
-            .header-section {
-                margin-bottom: 20px;
-            }
-
-            .logos-row {
-                margin-bottom: 10px;
-            }
-
-            .logo-circle {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-            }
-
-            .hospital-name {
-                font-size: 16px;
-            }
-
-            .hospital-subtitle {
-                font-size: 10px;
-            }
-
-            .divider {
-                margin: 10px auto;
-            }
-
-            .cards-container {
-                flex-direction: row;
-                gap: 15px;
-            }
-
-            .option-card {
-                padding: 20px 15px;
-                flex: 1 1 200px;
-            }
-
-            .card-icon {
-                font-size: 35px;
-                margin-bottom: 8px;
-            }
-
-            .card-title {
-                font-size: 16px;
-                margin-bottom: 5px;
-            }
-
-            .card-desc {
-                font-size: 10px;
-            }
-
-            .card-badge {
-                font-size: 8px;
-                padding: 4px 10px;
-                margin-top: 8px;
-            }
-
-            .footer {
-                position: relative;
-                bottom: auto;
-                margin-top: 15px;
-                font-size: 8px;
-            }
-        }
-
-        /* Telas Grandes (Full HD+) */
-        @media (min-width: 1920px) {
-            .logo-circle {
-                width: 120px;
-                height: 120px;
-                font-size: 50px;
-            }
-
-            .hospital-name {
-                font-size: 44px;
-            }
-
-            .hospital-subtitle {
-                font-size: 20px;
-            }
-
-            .option-card {
-                padding: 65px 55px;
-                width: 380px;
-            }
-
-            .card-icon {
-                font-size: 100px;
-            }
-
-            .card-title {
-                font-size: 34px;
-            }
-
-            .card-desc {
-                font-size: 17px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <!-- ECG Background -->
-    <div class="ecg-bg">
-        <svg viewBox="0 0 2000 2000" preserveAspectRatio="none">
-            <path class="ecg-path" d="M0,200 L300,200 L350,200 L370,120 L390,280 L410,200 L430,120 L450,280 L470,200 L700,200"/>
-            <path class="ecg-path" d="M0,600 L300,600 L350,600 L370,520 L390,680 L410,600 L430,520 L450,680 L470,600 L700,600"/>
-            <path class="ecg-path" d="M0,1000 L300,1000 L350,1000 L370,920 L390,1080 L410,1000 L430,920 L450,1080 L470,1000 L700,1000"/>
-            <path class="ecg-path" d="M0,1400 L300,1400 L350,1400 L370,1320 L390,1480 L410,1400 L430,1320 L450,1480 L470,1400 L700,1400"/>
-            <path class="ecg-path" d="M0,1800 L300,1800 L350,1800 L370,1720 L390,1880 L410,1800 L430,1720 L450,1880 L470,1800 L700,1800"/>
-        </svg>
-    </div>
+<body class="index-page">
+    <div id="authButton" style="position:fixed;top:15px;right:15px;z-index:1000;"></div>
 
-    <!-- Conteúdo Principal -->
-    <div class="main-container">
-        <!-- Header -->
-        <div class="header-section">
-            <div class="logos-row">
-                <div class="logo-circle" id="hospitalLogo">
-                    <span style="font-size: inherit;">🏥</span>
-                </div>
-                <div class="logo-circle" id="govLogo">
-                    <span style="font-size: inherit;">🏛️</span>
-                </div>
-            </div>
-            <h1 class="hospital-name">Hospital Regional de Palmeira dos Índios</h1>
-            <p class="hospital-subtitle">HRPI • Centro Cirúrgico</p>
-            <div class="divider"></div>
-            <p class="system-title">Sistema de Gestão Cirúrgica</p>
+    <div class="index-container">
+        <div class="index-logos">
+            <div class="index-logo" id="hospitalLogo">🏥</div>
+            <div class="index-logo" id="govLogo">🏛️</div>
         </div>
+        <h1 class="index-title">Hospital Regional de Palmeira dos Índios</h1>
+        <p class="index-subtitle">HRPI • Centro Cirúrgico</p>
+        <div class="index-divider"></div>
+        <p style="color:#b0c4de;letter-spacing:3px;">Sistema de Gestão Cirúrgica</p>
 
-        <!-- Cards -->
-        <div class="cards-container">
-            <a class="option-card" href="painel_tv.html" target="_blank">
-                <span class="card-icon">📺</span>
-                <h2 class="card-title">Painel TV</h2>
-                <p class="card-desc">
-                    Exibição em tempo real para monitores e televisores.
-                    Acompanhe todas as cirurgias do dia.
-                </p>
-                <span class="card-badge">Visualização</span>
+        <div class="index-cards">
+            <a class="index-card" href="painel_tv.html" target="_blank">
+                <div class="index-card-icon">📺</div>
+                <h2 class="index-card-title">Painel TV</h2>
+                <p class="index-card-desc">Exibição em tempo real para monitores.</p>
+                <span class="index-card-badge">Visualização</span>
             </a>
 
-            <a class="option-card" href="registro_cirurgias.html" target="_blank">
-                <span class="card-icon">💻</span>
-                <h2 class="card-title">Registro</h2>
-                <p class="card-desc">
-                    Gerenciamento completo das cirurgias.
-                    Agende, inicie, finalize e gere relatórios.
-                </p>
-                <span class="card-badge">Administração</span>
+            <a class="index-card" href="login.html">
+                <div class="index-card-icon">💻</div>
+                <h2 class="index-card-title">Acesso ao Sistema</h2>
+                <p class="index-card-desc">Registro de cirurgias e dashboard administrativo.</p>
+                <span class="index-card-badge">Login</span>
+            </a>
+
+            <a class="index-card" href="portal_clinicas.html">
+                <div class="index-card-icon">📋</div>
+                <h2 class="index-card-title">Solicitar Cirurgia</h2>
+                <p class="index-card-desc">Formulário para clínicas solicitarem cirurgias eletivas.</p>
+                <span class="index-card-badge">Clínicas</span>
             </a>
         </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        © 2026 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios • Todos os direitos reservados
-    </div>
+    <div class="index-footer">© 2026 <span>HRPI</span> • Hospital Regional de Palmeira dos Índios</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBiuJsJ-Wt2L6NB0WFlalLLFGcgLWJ49w8",
-            authDomain: "centro-cirurgico-eaf76.firebaseapp.com",
-            databaseURL: "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com",
-            projectId: "centro-cirurgico-eaf76",
-            storageBucket: "centro-cirurgico-eaf76.firebasestorage.app",
-            messagingSenderId: "620414910337",
-            appId: "1:620414910337:web:4592fa24f0d8f41d673280"
+    <script>
+        // Verificar sessão
+        const session = JSON.parse(sessionStorage.getItem('hrpi_session') || 'null');
+        const authBtn = document.getElementById('authButton');
+        
+        if (session) {
+            authBtn.innerHTML = `
+                <span style="color:#fff;margin-right:8px;">👤 ${session.name}</span>
+                <a href="#" onclick="logout()" style="background:#ef4444;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;">Sair</a>
+                <a href="dashboard.html" style="background:#c8a94a;color:#06224a;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;margin-left:8px;">⚙️ Administração</a>
+            `;
+        } else {
+            authBtn.innerHTML = `<a href="login.html" style="background:#c8a94a;color:#06224a;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;">🔐 Login</a>`;
+        }
+        
+        window.logout = function() {
+            sessionStorage.removeItem('hrpi_session');
+            window.location.href = 'index.html';
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // Carregar logo do hospital
-        const logoRef = ref(db, 'settings/logo');
-        onValue(logoRef, (snapshot) => {
-            const logoData = snapshot.val();
-            if (logoData) {
-                document.getElementById('hospitalLogo').innerHTML = `<img src="${logoData}" alt="Logo HRPI" style="width:100%;height:100%;object-fit:contain;padding:15%;">`;
-            }
-        });
-
-        // Carregar logo do governo
-        const govLogoRef = ref(db, 'settings/govLogo');
-        onValue(govLogoRef, (snapshot) => {
-            const logoData = snapshot.val();
-            if (logoData) {
-                document.getElementById('govLogo').innerHTML = `<img src="${logoData}" alt="Logo Governo" style="width:100%;height:100%;object-fit:contain;padding:15%;">`;
-            }
-        });
-
-        // Animação suave ao carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.option-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, 300 + (index * 200));
-            });
-        });
-
-        // Efeito de clique nos cards
-        document.querySelectorAll('.option-card').forEach(card => {
-            card.addEventListener('mousedown', function() {
-                this.style.transform = 'scale(0.95)';
-            });
-            card.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(-10px)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
+        // Carregar logos
+        const DB_URL = "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com";
+        fetch(DB_URL + "/settings/logo.json").then(r => r.json()).then(data => {
+            if (data) document.getElementById('hospitalLogo').innerHTML = `<img src="${data}" alt="Logo">`;
+        }).catch(() => {});
+        fetch(DB_URL + "/settings/govLogo.json").then(r => r.json()).then(data => {
+            if (data) document.getElementById('govLogo').innerHTML = `<img src="${data}" alt="Logo">`;
+        }).catch(() => {});
     </script>
 </body>
 </html>
