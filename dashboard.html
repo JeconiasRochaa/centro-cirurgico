@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <link rel="icon" type="image/svg+xml" href="image/favicon.svg?v=4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExaGestão - Gestão de Centro Cirúrgico</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #f3f6fb;
+            --bg-card: #ffffff;
+            --bg-input: #f3f6fb;
+            --text-primary: #1b2430;
+            --text-secondary: #7c8797;
+            --text-muted: #a6afbc;
+            --border: #e6eaf2;
+            --gold: #2f6fed;
+            --blue: #2f6fed;
+            --green: #16a34a;
+            --red: #e5484d;
+            --orange: #f59e0b;
+            --purple: #7c5cfc;
+            --bg-dark: #0b2340;
+            --navy-active: #1b4f9c;
+            --sidebar-bg: #0b2340;
+            --sidebar-text: rgba(255,255,255,0.65);
+            --sidebar-hover: rgba(47,111,237,0.12);
+            --sidebar-active: var(--navy-active);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #081a30;
+            --bg-card: #0f2847;
+            --bg-input: #16345c;
+            --text-primary: #f3f6fb;
+            --text-secondary: #b9c4d6;
+            --text-muted: #8ca3c7;
+            --border: #234066;
+            --sidebar-bg: #081a30;
+            --sidebar-text: rgba(255,255,255,0.6);
+            --sidebar-hover: rgba(47,111,237,0.1);
+            --sidebar-active: var(--navy-active);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        /* ============ SIDEBAR ============ */
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: var(--sidebar-bg);
+            color: #fff;
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(47,111,237,0.25);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo {
+            width: 42px;
+            height: 42px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+        .sidebar-logo img { width: 100%; height: 100%; object-fit: contain; padding: 8%; }
+
+        .sidebar-brand-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #2f6fed, #8fb2f7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-brand-sub {
+            font-size: 10px;
+            color: #a6afbc;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 15px 12px;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #7c8797;
+            padding: 15px 12px 8px;
+            font-weight: 700;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            color: var(--sidebar-text);
+            transition: all 0.25s;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-item:hover {
+            background: var(--sidebar-hover);
+            color: #fff;
+        }
+        .sidebar-item.active {
+            background: var(--sidebar-active);
+            color: #fff;
+            font-weight: 600;
+            border-left-color: var(--blue);
+        }
+        .sidebar-item .icon { font-size: 17px; width: 22px; text-align: center; flex-shrink: 0; }
+        .sidebar-item .badge {
+            background: var(--red);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .sidebar-footer {
+            padding: 15px;
+            border-top: 1px solid rgba(47,111,237,0.2);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: #fff; font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-info strong { font-size: 12px; color: #fff; display: block; }
+        .user-info span { font-size: 10px; color: var(--gold); }
+
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .topbar {
+            background: var(--bg-card);
+            padding: 0 30px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .breadcrumb {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .breadcrumb span { color: var(--gold); font-weight: 600; }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-topbar {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 12px;
+            transition: 0.25s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-topbar:hover { border-color: var(--blue); color: var(--blue); }
+        .btn-topbar.primary {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #fff;
+            font-weight: 600;
+        }
+        .btn-topbar.primary:hover { background: #2456c4; }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--green);
+            font-weight: 600;
+        }
+        .system-status .dot {
+            width: 7px; height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulseDot 2s infinite;
+        }
+        .system-status.offline { color: var(--red); }
+        .system-status.offline .dot { background: var(--red); animation: none; }
+        @keyframes pulseDot {
+            0%,100%{opacity:1} 50%{opacity:0.5}
+        }
+
+        .content-area { padding: 25px 30px; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        /* ============ TELA INICIAL (boas-vindas) ============ */
+        .welcome-screen {
+            min-height: calc(100vh - 64px - 50px);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 40px 20px;
+        }
+        .welcome-logo {
+            width: clamp(130px, 20vw, 190px); height: clamp(130px, 20vw, 190px);
+            background: var(--bg-card); border: 3px solid var(--blue);
+            border-radius: 40px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: clamp(56px, 8vw, 84px); color: var(--blue);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 26px; overflow: hidden;
+        }
+        .welcome-logo img { width: 100%; height: 100%; object-fit: contain; padding: 12%; }
+        .welcome-screen h1 { font-size: 32px; font-weight: 800; color: var(--text-primary); }
+        .welcome-screen p { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+        .welcome-greeting { font-size: 15px !important; color: var(--blue) !important; font-weight: 600; margin-top: 18px !important; }
+        .welcome-date { font-size: 12px; color: var(--text-muted); margin-top: 6px; text-transform: capitalize; }
+
+        /* ============ STATS CARDS ============ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--stat-color, var(--blue));
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+        .stat-icon {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* ============ OPERAÇÃO ATUAL (SALAS) ============ */
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .room-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--border);
+            transition: all 0.3s;
+        }
+        .room-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .room-card.ongoing { border-left-color: var(--blue); }
+        .room-card.preparing { border-left-color: #7c5cfc; }
+        .room-card.waiting { border-left-color: var(--orange); }
+        .room-card.available { border-left-color: var(--green); }
+        .room-card.cancelled { border-left-color: var(--red); }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .room-number { font-weight: 700; font-size: 14px; }
+        .room-status {
+            font-size: 9px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .status-ongoing { background: #eaf1fe; color: #2f6fed; }
+        .status-preparing { background: #f1eefe; color: #7c5cfc; }
+        .status-waiting { background: #fef6e7; color: #f59e0b; }
+        .status-available { background: #e9f9ef; color: #16a34a; }
+        .status-cancelled { background: #fceaea; color: #e5484d; }
+
+        .room-info { font-size: 11px; color: var(--text-muted); line-height: 1.7; }
+        .room-info strong { color: var(--text-secondary); }
+
+        .room-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .room-progress-bar {
+            height: 100%;
+            background: var(--blue);
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+        .room-progress-bar.orange { background: var(--orange); }
+        .room-progress-bar.green { background: var(--green); }
+
+        /* ============ CHARTS ============ */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+        .chart-card h3 {
+            font-size: 13px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .chart-container { position: relative; height: 220px; }
+
+        /* ============ TABLES ============ */
+        .table-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        thead th {
+            background: var(--bg-input);
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            color: var(--text-muted);
+        }
+        tbody td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
+        tbody tr:hover { background: var(--bg-input); }
+
+        .badge-status { padding: 4px 10px; border-radius: 12px; font-size: 9px; font-weight: 700; white-space: nowrap; letter-spacing: 0.5px; }
+        .badge-success { background: #e9f9ef; color: #16a34a; }
+        .badge-warning { background: #fef6e7; color: #f59e0b; }
+        .badge-danger { background: #fceaea; color: #e5484d; }
+        .badge-info { background: #eaf1fe; color: #2f6fed; }
+        .badge-purple { background: #f1eefe; color: #7c5cfc; }
+        .badge-teal { background: #e5f9f8; color: #0fb5b0; }
+        .badge-gray { background: #eef1f6; color: #7c8797; }
+
+        /* ============ SEARCH ============ */
+        .search-bar { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .search-bar input, .search-bar select {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: 0.25s;
+        }
+        .search-bar input:focus, .search-bar select:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(47,111,237,0.1);
+        }
+
+        /* ============ ALERTS ============ */
+        .alerts-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .alert-item {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 12px 16px;
+            border-left: 3px solid var(--orange);
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+        .alert-item.red { border-left-color: var(--red); background: #fceaea; }
+        .alert-item.orange { border-left-color: var(--orange); background: #fef6e7; }
+        .alert-item.blue { border-left-color: var(--blue); background: #eaf1fe; }
+        .alert-item.purple { border-left-color: var(--purple); background: #f1eefe; }
+
+        /* ============ MODAL ============ */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 200;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 28px;
+            max-width: 520px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            color: var(--text-primary);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+        }
+        .modal h3 { margin-bottom: 20px; font-size: 16px; }
+        .modal .btn-close { float: right; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: var(--text-secondary); letter-spacing: 0.5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 14px;
+            border: 1px solid var(--border); border-radius: 8px;
+            font-size: 13px; background: var(--bg-input); color: var(--text-primary);
+        }
+
+        .btn { padding: 11px 20px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.25s; width: 100%; color: #fff; }
+        .btn-primary { background: var(--blue); }
+        .btn-primary:hover { background: #2456c4; }
+
+        .btn-sm {
+            padding: 5px 10px; border: none; border-radius: 6px;
+            font-size: 10px; font-weight: 600; cursor: pointer;
+            margin: 1px; color: #fff; transition: 0.2s;
+        }
+        .btn-sm:hover { opacity: 0.85; }
+        .btn-sm-primary { background: var(--blue); }
+        .btn-sm-danger { background: var(--red); }
+        .btn-sm-success { background: var(--green); }
+
+        .menu-toggle {
+            display: none;
+            background: none; border: none;
+            font-size: 22px; cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .empty-state { text-align: center; padding: 30px; color: var(--text-muted); font-size: 12px; }
+
+        .theme-fab {
+            position: fixed;
+            bottom: 22px; right: 22px;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            color: #fff;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            font-size: 19px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 200;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .theme-fab:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.3); }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .menu-toggle { display: block; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .content-area { padding: 15px; }
+            .theme-fab { bottom: 16px; right: 16px; width: 44px; height: 44px; font-size: 17px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo" id="sidebarLogo"><i class="fa-solid fa-hospital" style="color:#0b2340;"></i></div>
+            <div>
+                <div class="sidebar-brand-name">ExaGestão</div>
+                <div class="sidebar-brand-sub">HRPI • Centro Cirúrgico</div>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="sidebar-nav-label">Operação</div>
+            <div class="sidebar-item active" onclick="switchTab('inicial')" data-tab="inicial">
+                <span class="icon"><i class="fa-solid fa-house"></i></span> Inicial
+            </div>
+            <div class="sidebar-item" onclick="switchTab('overview')" data-tab="overview">
+                <span class="icon"><i class="fa-solid fa-chart-line"></i></span> Visão Geral
+            </div>
+            <div class="sidebar-item" onclick="switchTab('surgeries')" data-tab="surgeries">
+                <span class="icon"><i class="fa-solid fa-kit-medical"></i></span> Cirurgias
+            </div>
+            <div class="sidebar-item" onclick="switchTab('cancelled')" data-tab="cancelled">
+                <span class="icon"><i class="fa-solid fa-ban"></i></span> Canceladas
+            </div>
+            <div class="sidebar-item" onclick="window.open('painel_tv.html','_blank')">
+                <span class="icon"><i class="fa-solid fa-tv"></i></span> Painel TV
+            </div>
+            <div class="sidebar-item" onclick="window.open('painel_espera.html','_blank')">
+                <span class="icon"><i class="fa-solid fa-heart-pulse"></i></span> Sala de Espera
+            </div>
+            <div class="sidebar-item" onclick="window.open('portal_clinicas.html','_blank')">
+                <span class="icon"><i class="fa-solid fa-file-medical"></i></span> Portal das Clínicas
+            </div>
+            <div class="sidebar-item" onclick="switchTab('prontuarios')" data-tab="prontuarios">
+                <span class="icon"><i class="fa-solid fa-notes-medical"></i></span> Prontuários
+            </div>
+
+            <div class="sidebar-nav-label">Gestão</div>
+            <div class="sidebar-item" onclick="switchTab('reports')" data-tab="reports">
+                <span class="icon"><i class="fa-solid fa-file-lines"></i></span> Relatórios
+            </div>
+            <div class="sidebar-item" onclick="switchTab('audit')" data-tab="audit">
+                <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span> Auditoria
+            </div>
+            <div class="sidebar-item" id="navConfiguracoes" onclick="switchTab('configuracoes')" data-tab="configuracoes" style="display:none;">
+                <span class="icon"><i class="fa-solid fa-gear"></i></span> Configurações
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <div class="user-info">
+                    <strong id="userNameDisplay">Administrador</strong>
+                    <span id="userRole">Admin</span>
+                </div>
+                <button class="btn-topbar" onclick="logout()" title="Sair" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:6px 10px;"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                <div class="breadcrumb">Centro Cirúrgico / <span id="breadcrumbCurrent">Visão Geral</span></div>
+            </div>
+            <div class="topbar-actions">
+                <div class="system-status" id="systemStatus"><div class="dot"></div> Conectando...</div>
+                <a href="painel_tv.html" target="_blank" class="btn-topbar"><i class="fa-solid fa-tv"></i> Painel TV</a>
+                <a href="registro_cirurgias.html" class="btn-topbar primary"><i class="fa-solid fa-plus"></i> Nova Cirurgia</a>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- VISÃO GERAL -->
+            <!-- INICIAL -->
+            <div class="tab-content active" id="tab-inicial">
+                <div class="welcome-screen">
+                    <div class="welcome-logo" id="welcomeLogo"><i class="fa-solid fa-hospital"></i></div>
+                    <h1 id="welcomeSystemName">ExaGestão</h1>
+                    <p id="welcomeHospitalName">Hospital Regional de Palmeira dos Índios</p>
+                    <p class="welcome-greeting" id="welcomeGreeting">Bem-vindo(a) de volta.</p>
+                    <div class="welcome-date" id="welcomeDate"></div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-overview">
+                <h1 class="page-title">Visão Geral</h1>
+                <p class="page-subtitle">Acompanhamento do Centro Cirúrgico</p>
+
+                <div class="stats-grid" id="overviewStats"></div>
+
+                <div class="alerts-area" id="alertsArea"></div>
+
+                <div class="section-title"><i class="fa-solid fa-calendar-day"></i> Cirurgias de Hoje</div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Horário</th><th>Sala</th><th>Paciente</th><th>Procedimento</th><th>Médico</th><th>Origem</th><th>Status</th></tr></thead>
+                        <tbody id="upcomingTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="section-title"><i class="fa-solid fa-hospital"></i> Situação das Salas</div>
+                <div class="rooms-grid" id="roomsGrid"></div>
+
+                <div class="section-title"><i class="fa-solid fa-clipboard-list"></i> Recursos Pendentes</div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Cirurgia</th><th>Recurso</th><th>Status</th></tr></thead>
+                        <tbody id="resourcesPendingBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="section-title"><i class="fa-solid fa-chart-column"></i> Análises e Indicadores</div>
+                <div class="charts-grid">
+                    <div class="chart-card"><h3><i class="fa-solid fa-clock"></i> Cirurgias por Horário</h3><div class="chart-container"><canvas id="hourlyChart"></canvas></div></div>
+                    <div class="chart-card"><h3><i class="fa-solid fa-microscope"></i> Cirurgias por Especialidade</h3><div class="chart-container"><canvas id="specialtyChart"></canvas></div></div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card"><h3><i class="fa-solid fa-chart-bar"></i> Cirurgias por Origem</h3><div class="chart-container"><canvas id="originChart"></canvas></div></div>
+                    <div class="chart-card"><h3><i class="fa-solid fa-calendar-days"></i> Comparativo Mensal</h3><div class="chart-container"><canvas id="monthlyChart"></canvas></div></div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card"><h3><i class="fa-solid fa-arrow-trend-down"></i> Taxa de Cancelamento</h3><div class="chart-container"><canvas id="cancellationRateChart"></canvas></div></div>
+                    <div class="chart-card"><h3><i class="fa-solid fa-chart-line"></i> Últimos 15 dias</h3><div class="chart-container"><canvas id="dailyChart"></canvas></div></div>
+                </div>
+            </div>
+
+            <!-- CIRURGIAS -->
+            <div class="tab-content" id="tab-surgeries">
+                <h1 class="page-title">Cirurgias</h1>
+                <p class="page-subtitle">Programação e acompanhamento cirúrgico</p>
+                <div class="table-card">
+                    <div class="search-bar">
+                        <input type="text" id="searchSurgery" placeholder="Buscar paciente, médico..." oninput="filtrarCirurgias()">
+                        <select id="filterStatus" onchange="filtrarCirurgias()">
+                            <option value="all">Todos os status</option>
+                            <option value="pendente">Aguardando</option>
+                            <option value="em_preparacao">Em Preparação</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="recuperacao">Recuperação</option>
+                            <option value="concluida">Finalizada</option>
+                            <option value="suspensa">Suspensa</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                        <input type="date" id="filterDate" onchange="filtrarCirurgias()">
+                    </div>
+                    <table>
+                        <thead><tr><th>Data</th><th>Paciente</th><th>Prontuário</th><th>Procedimento</th><th>Médico</th><th>Sala</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody id="surgeriesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CANCELADAS -->
+            <div class="tab-content" id="tab-cancelled">
+                <h1 class="page-title">Cirurgias Canceladas</h1>
+                <p class="page-subtitle">Histórico de cancelamentos</p>
+                <div class="table-card">
+                    <div class="search-bar">
+                        <input type="text" id="searchCancelled" placeholder="Buscar..." oninput="filtrarCanceladas()">
+                        <input type="date" id="filterCancelledDate" onchange="filtrarCanceladas()">
+                    </div>
+                    <table>
+                        <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Médico</th><th>Motivo</th></tr></thead>
+                        <tbody id="cancelledTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- RELATÓRIOS -->
+            <div class="tab-content" id="tab-reports">
+                <h1 class="page-title">Relatórios</h1>
+                <p class="page-subtitle">Geração de documentos e análises</p>
+                <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+                    <div class="stat-card" onclick="gerarRelatorio('hoje')" style="cursor:pointer;--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div><div class="stat-value" style="font-size:16px;">Diário</div><div class="stat-label">Hoje</div></div>
+                    <div class="stat-card" onclick="gerarRelatorio('semana')" style="cursor:pointer;--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div><div class="stat-value" style="font-size:16px;">Semanal</div><div class="stat-label">Segunda a domingo</div></div>
+                    <div class="stat-card" onclick="gerarRelatorio('mes')" style="cursor:pointer;--stat-color:#16a34a;"><div class="stat-icon"><i class="fa-solid fa-chart-bar"></i></div><div class="stat-value" style="font-size:16px;">Mensal</div><div class="stat-label">Mês atual</div></div>
+                    <div class="stat-card" onclick="abrirModal('modalPersonalizado')" style="cursor:pointer;--stat-color:#7c5cfc;"><div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div><div class="stat-value" style="font-size:16px;">Personalizado</div><div class="stat-label">Escolha período</div></div>
+                    <div class="stat-card" onclick="abrirModal('modalEspecialidade')" style="cursor:pointer;--stat-color:#0fb5b0;"><div class="stat-icon"><i class="fa-solid fa-microscope"></i></div><div class="stat-value" style="font-size:16px;">Especialidade</div><div class="stat-label">Filtro</div></div>
+                    <div class="stat-card" onclick="gerarRelatorio('cancelled')" style="cursor:pointer;--stat-color:#e5484d;"><div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-value" style="font-size:16px;">Canceladas</div><div class="stat-label">Com motivo</div></div>
+                    <div class="stat-card" onclick="gerarRelatorio('geral')" style="cursor:pointer;--stat-color:#a6afbc;"><div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div><div class="stat-value" style="font-size:16px;">Geral</div><div class="stat-label">Todas</div></div>
+                </div>
+            </div>
+
+            <!-- AUDITORIA -->
+            <div class="tab-content" id="tab-audit">
+                <h1 class="page-title">Auditoria</h1>
+                <p class="page-subtitle">Registro de atividades do sistema</p>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhes</th></tr></thead>
+                        <tbody id="auditTableBody"><tr><td colspan="4" class="empty-state">Carregando...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PRONTUÁRIOS -->
+            <div class="tab-content" id="tab-prontuarios">
+                <h1 class="page-title">Prontuários</h1>
+                <p class="page-subtitle">Cadastro interno completo do paciente — busque um existente ou crie um novo</p>
+                <div class="card" style="margin-bottom:20px;">
+                    <div style="display:flex;gap:10px;align-items:center;">
+                        <div class="search-bar" style="margin-bottom:0;flex:1;">
+                            <input type="text" id="prontuarioSearch" placeholder="Buscar por nome do paciente ou número de prontuário..." oninput="buscarPacientes()">
+                        </div>
+                        <button class="btn btn-primary btn-compact" onclick="abrirNovoPaciente()"><i class="fa-solid fa-user-plus"></i> Novo Paciente</button>
+                    </div>
+                </div>
+                <div id="prontuarioResultados"></div>
+                <div id="prontuarioFicha" style="display:none;"></div>
+            </div>
+
+            <!-- CONFIGURAÇÕES -->
+            <div class="tab-content" id="tab-configuracoes">
+                <h1 class="page-title">Configurações</h1>
+                <p class="page-subtitle">Identidade do sistema e gestão de usuários</p>
+
+                <div class="card" style="margin-bottom:20px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <h2 style="margin-bottom:2px;"><i class="fa-solid fa-user-doctor"></i> Médicos e CRM</h2>
+                            <p class="subtitle" style="margin-bottom:0;">Cadastre os médicos para facilitar o preenchimento das cirurgias.</p>
+                        </div>
+                        <button class="btn btn-primary btn-compact" onclick="abrirModalMedico()"><i class="fa-solid fa-user-plus"></i> Cadastrar Médico</button>
+                    </div>
+                    <div class="table-card" style="margin-top:16px;">
+                        <table><thead><tr><th>Médico</th><th>CRM</th><th>Ações</th></tr></thead><tbody id="doctorsTableBody"><tr><td colspan="3" class="empty-state">Carregando...</td></tr></tbody></table>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom:20px;">
+                    <h2><i class="fa-solid fa-signature"></i> Identidade do Sistema</h2>
+                    <p class="subtitle">Nome do sistema, nome do hospital e logos usados em toda a aplicação e nos relatórios em PDF</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nome do Sistema</label>
+                            <input type="text" id="cfgSystemName" placeholder="Ex: ExaGestão">
+                        </div>
+                        <div class="form-group">
+                            <label>Nome do Hospital</label>
+                            <input type="text" id="cfgHospitalName" placeholder="Ex: Hospital Regional de Palmeira dos Índios">
+                        </div>
+                        <div class="form-group">
+                            <label>Logo do Sistema (sidebar e telas)</label>
+                            <input type="file" id="cfgLogoSistema" accept="image/*">
+                            <div id="cfgLogoSistemaPreview" style="margin-top:8px;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Logo dos Relatórios (PDF)</label>
+                            <input type="file" id="cfgLogoRelatorio" accept="image/*">
+                            <div id="cfgLogoRelatorioPreview" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-compact" onclick="salvarIdentidade()"><i class="fa-solid fa-floppy-disk"></i> Salvar Identidade</button>
+                </div>
+
+                <div class="card" style="margin-bottom:20px;">
+                    <h2><i class="fa-solid fa-tv"></i> Painéis Públicos</h2>
+                    <p class="subtitle">Controle a exibição de telas voltadas ao público</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border);">
+                        <div>
+                            <strong style="font-size:13px;">Painel da Sala de Espera</strong>
+                            <p style="font-size:11px;color:var(--text-muted);margin-top:2px;">Quando desativado, o painel exibe uma mensagem de indisponibilidade em vez do andamento das cirurgias.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="cfgSalaEsperaAtiva" checked onchange="salvarStatusSalaEspera()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <h2 style="margin-bottom:2px;"><i class="fa-solid fa-users-gear"></i> Usuários e Permissões</h2>
+                            <p class="subtitle" style="margin-bottom:0;">Administrador: acesso total. Diretor(a): acesso total, exceto Configurações. Centro Cirúrgico: apenas registro de cirurgias.</p>
+                        </div>
+                        <button class="btn btn-primary btn-compact" onclick="abrirModalUsuario()"><i class="fa-solid fa-user-plus"></i> Novo Usuário</button>
+                    </div>
+                    <div class="table-card" style="margin-top:16px;">
+                        <table>
+                            <thead><tr><th>Nome</th><th>Usuário</th><th>Papel</th><th>Status</th><th>Ações</th></tr></thead>
+                            <tbody id="usersTableBody"><tr><td colspan="5" class="empty-state">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE USUÁRIO -->
+    <div class="modal-overlay" id="modalMedico">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalMedico')"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="modalMedicoTitulo"><i class="fa-solid fa-user-doctor"></i> Cadastrar Médico</h3>
+            <form id="doctorForm">
+                <input type="hidden" id="doctorKey">
+                <div class="form-group"><label>Nome completo</label><input type="text" id="doctorName" required></div>
+                <div class="form-group"><label>CRM</label><input type="text" id="doctorCrm" placeholder="Ex: CRM-AL 12345" required></div>
+                <button type="submit" class="btn btn-primary btn-compact"><i class="fa-solid fa-floppy-disk"></i> Salvar Médico</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE USUÁRIO -->
+    <div class="modal-overlay" id="modalUsuario">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalUsuario')"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="modalUsuarioTitulo"><i class="fa-solid fa-user-plus"></i> Novo Usuário</h3>
+            <form id="userForm">
+                <input type="hidden" id="userOriginalUsername">
+                <div class="form-group"><label>Nome completo</label><input type="text" id="userNome" required></div>
+                <div class="form-group"><label>Usuário (login)</label><input type="text" id="userUsername" required></div>
+                <div class="form-group"><label>Senha</label><input type="text" id="userPassword" required></div>
+                <div class="form-group">
+                    <label>Papel</label>
+                    <select id="userRoleSelect">
+                        <option value="admin">Administrador — acesso total</option>
+                        <option value="diretor">Diretor(a) — acesso total, exceto Configurações</option>
+                        <option value="cirurgico">Centro Cirúrgico — apenas registro de cirurgias</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" id="userAtivo" checked style="width:auto;"> Usuário ativo</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-compact"><i class="fa-solid fa-floppy-disk"></i> Salvar Usuário</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAIS -->
+    <div class="modal-overlay" id="modalPersonalizado">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalPersonalizado')"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-clipboard-list"></i> Relatório Personalizado</h3>
+            <div class="form-group"><label>Data Inicial</label><input type="date" id="customStartDate"></div>
+            <div class="form-group"><label>Data Final</label><input type="date" id="customEndDate"></div>
+            <button class="btn btn-primary" onclick="gerarRelatorioPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modalEspecialidade">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalEspecialidade')"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-microscope"></i> Relatório por Especialidade</h3>
+            <div class="form-group"><label>Especialidade</label><select id="relEspecialidade"><option value="todas">Todas</option></select></div>
+            <div class="form-group"><label>Data Inicial</label><input type="date" id="relEspStartDate"></div>
+            <div class="form-group"><label>Data Final</label><input type="date" id="relEspEndDate"></div>
+            <button class="btn btn-primary" onclick="gerarRelatorioEspecialidade()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modalOrigem">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalOrigem')"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-chart-bar"></i> Relatório por Origem</h3>
+            <div class="form-group"><label>Origem</label><select id="relOrigem"><option value="todas">Todas</option></select></div>
+            <div class="form-group"><label>Data Inicial</label><input type="date" id="relOrigStartDate"></div>
+            <div class="form-group"><label>Data Final</label><input type="date" id="relOrigEndDate"></div>
+            <button class="btn btn-primary" onclick="gerarRelatorioOrigem()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-pen-to-square"></i> Editar Cirurgia</h3>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-group"><label>Paciente</label><input type="text" id="editPatient" required></div>
+                <div class="form-group"><label>Procedimento</label><input type="text" id="editType" required></div>
+                <div class="form-group"><label>Médico</label><input type="text" id="editDoctor"></div>
+                <div class="form-group"><label>Data</label><input type="date" id="editDate"></div>
+                <div class="form-group"><label>Horário</label><input type="time" id="editTime"></div>
+                <div class="form-group"><label>Sala</label><select id="editRoom"><option value="">Selecione</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option></select></div>
+                <div class="form-group"><label>Status</label><select id="editStatus">
+                    <option value="pendente">Aguardando</option>
+                    <option value="em_preparacao">Em Preparação</option>
+                    <option value="em_andamento">Em Andamento</option>
+                    <option value="recuperacao">Recuperação</option>
+                    <option value="concluida">Finalizada</option>
+                    <option value="suspensa">Suspensa</option>
+                    <option value="cancelada">Cancelada</option>
+                </select></div>
+                <div class="form-group"><label>Motivo Cancelamento</label><input type="text" id="editCancelReason"></div>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <button class="theme-fab" onclick="toggleTheme()" title="Alternar tema claro/escuro"><i class="fa-solid fa-circle-half-stroke"></i></button>
+
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

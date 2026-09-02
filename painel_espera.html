@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="icon" type="image/svg+xml" href="image/favicon.svg?v=4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Espera - Acompanhamento de Cirurgias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #eef3fb;
+            --card: #ffffff;
+            --border: #dbe4f3;
+            --text: #1b2430;
+            --text-muted: #64748b;
+            --brand: #2f6fed;
+            --brand-dark: #0b2340;
+
+            --waiting: #b45309;
+            --waiting-bg: #fef3e2;
+            --prep: #6d28d9;
+            --prep-bg: #f2ecfd;
+            --progress: #1d4ed8;
+            --progress-bg: #e7edfc;
+            --recovery: #0e7490;
+            --recovery-bg: #e3f4f6;
+            --done: #15803d;
+            --done-bg: #e8f6ec;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== CABEÇALHO ===== */
+        header {
+            background: var(--brand-dark);
+            padding: clamp(14px, 2.5vh, 26px) clamp(16px, 3vw, 40px);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+        }
+        .brand { display: flex; align-items: center; gap: 16px; }
+        .brand-logo {
+            width: clamp(48px, 5vw, 66px); height: clamp(48px, 5vw, 66px);
+            background: #fff; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: clamp(22px, 2.4vw, 30px); color: var(--brand-dark);
+            overflow: hidden; flex-shrink: 0;
+        }
+        .brand-logo img { width: 100%; height: 100%; object-fit: contain; padding: 10%; }
+        .brand-text h1 {
+            font-size: clamp(16px, 2vw, 24px); font-weight: 700; color: #fff;
+        }
+        .brand-text p {
+            font-size: clamp(11px, 1.2vw, 14px); color: #a9c0e0; margin-top: 2px;
+            letter-spacing: 1px; text-transform: uppercase; font-weight: 600;
+        }
+        .header-right { text-align: right; color: #fff; }
+        .live-clock { font-size: clamp(22px, 3vw, 36px); font-weight: 700; font-family: 'Courier New', monospace; }
+        .live-date { font-size: clamp(11px, 1.2vw, 14px); color: #a9c0e0; text-transform: capitalize; }
+
+        /* ===== FAIXA DE ORIENTAÇÃO ===== */
+        .info-strip {
+            background: #dceaff; color: var(--brand-dark);
+            text-align: center; padding: 10px 16px;
+            font-size: clamp(12px, 1.3vw, 15px); font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        /* ===== GRID DE PACIENTES ===== */
+        main { padding: clamp(16px, 3vh, 32px) clamp(16px, 3vw, 40px); }
+        .section-heading {
+            font-size: clamp(14px, 1.6vw, 18px); font-weight: 700; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1.5px; margin: 22px 0 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .section-heading:first-child { margin-top: 0; }
+
+        .patients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(clamp(240px, 22vw, 320px), 1fr));
+            gap: clamp(14px, 1.6vw, 22px);
+        }
+
+        .patient-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: clamp(16px, 1.8vw, 24px);
+            box-shadow: 0 4px 14px rgba(16,24,40,0.06);
+            border-top: 6px solid var(--brand);
+            transition: transform 0.2s;
+        }
+        .patient-card.st-waiting { border-top-color: var(--waiting); }
+        .patient-card.st-prep { border-top-color: var(--prep); }
+        .patient-card.st-progress { border-top-color: var(--progress); }
+        .patient-card.st-recovery { border-top-color: var(--recovery); }
+        .patient-card.st-done { border-top-color: var(--done); opacity: 0.85; }
+
+        .patient-name {
+            font-size: clamp(17px, 2vw, 23px); font-weight: 700; color: var(--text);
+            line-height: 1.25; margin-bottom: 10px; word-break: break-word;
+        }
+        .patient-meta {
+            display: flex; align-items: center; gap: 8px;
+            font-size: clamp(11px, 1.1vw, 13px); color: var(--text-muted); margin-bottom: 14px;
+        }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 20px;
+            font-size: clamp(13px, 1.4vw, 16px); font-weight: 700;
+        }
+        .status-pill.st-waiting { background: var(--waiting-bg); color: var(--waiting); }
+        .status-pill.st-prep { background: var(--prep-bg); color: var(--prep); }
+        .status-pill.st-progress { background: var(--progress-bg); color: var(--progress); }
+        .status-pill.st-recovery { background: var(--recovery-bg); color: var(--recovery); }
+        .status-pill.st-done { background: var(--done-bg); color: var(--done); }
+        .status-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+        .status-pill.st-progress .dot { animation: pulseDot 1.4s infinite; }
+        @keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .patient-time {
+            margin-top: 14px; font-size: clamp(11px, 1.1vw, 13px); color: var(--text-muted);
+            display: flex; justify-content: space-between; border-top: 1px dashed var(--border); padding-top: 10px;
+        }
+        .patient-time strong { color: var(--text); }
+
+        .empty-state {
+            text-align: center; padding: 60px 20px; color: var(--text-muted);
+            font-size: clamp(14px, 1.6vw, 18px);
+        }
+        .empty-state i { font-size: clamp(32px, 4vw, 48px); display: block; margin-bottom: 14px; color: var(--brand); opacity: 0.4; }
+
+        footer {
+            text-align: center; padding: 20px; color: var(--text-muted);
+            font-size: clamp(10px, 1.1vw, 13px);
+            border-top: 1px solid var(--border);
+            display: flex; flex-direction: column; gap: 4px; align-items: center;
+        }
+        .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--done); display: inline-block; margin-right: 6px; }
+        .conn-dot.offline { background: #b91c1c; }
+
+        @media (max-width: 600px) {
+            .patients-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <div class="brand-logo" id="brandLogo"><i class="fa-solid fa-hospital"></i></div>
+            <div class="brand-text">
+                <h1 id="hospitalName">Hospital Regional de Palmeira dos Índios</h1>
+                <p id="systemLabel">ExaGestão • Sala de Espera</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="live-clock" id="liveTime">00:00:00</div>
+            <div class="live-date" id="liveDate"></div>
+        </div>
+    </header>
+
+    <div class="info-strip">
+        <i class="fa-solid fa-circle-info"></i>
+        Este painel mostra apenas o andamento geral. Para informações detalhadas, procure a recepção do Centro Cirúrgico.
+    </div>
+
+    <main id="mainContent">
+        <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando informações...</div>
+    </main>
+
+    <footer>
+        <div><span class="conn-dot" id="connDot"></span><span id="connText">Atualizando em tempo real</span></div>
+        <div>Em caso de dúvidas, dirija-se à recepção.</div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuJsJ-Wt2L6NB0WFlalLLFGcgLWJ49w8",
+            authDomain: "centro-cirurgico-eaf76.firebaseapp.com",
+            databaseURL: "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com",
+            projectId: "centro-cirurgico-eaf76",
+            storageBucket: "centro-cirurgico-eaf76.firebasestorage.app",
+            messagingSenderId: "620414910337",
+            appId: "1:620414910337:web:4592fa24f0d8f41d673280"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        function getToday() {
+            const n = new Date();
+            return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+        }
+
+        // Configuração de cada status: rótulo amigável para a família (sem jargão clínico),
+        // ícone, e classe visual. Cancelada/Suspensa não aparecem aqui — essas informações
+        // devem ser passadas pessoalmente pela equipe, não expostas frias num painel público.
+        const STATUS_CONFIG = {
+            'pendente':      { label: 'Aguardando Início', icon: 'fa-hourglass-half', cls: 'waiting' },
+            'em_preparacao': { label: 'Em Preparação',     icon: 'fa-hand-holding-medical', cls: 'prep' },
+            'em_andamento':  { label: 'Em Cirurgia',       icon: 'fa-circle-play',    cls: 'progress' },
+            'recuperacao':   { label: 'Em Recuperação',    icon: 'fa-bed',            cls: 'recovery' },
+            'concluida':     { label: 'Cirurgia Concluída',icon: 'fa-circle-check',   cls: 'done' }
+        };
+        const ORDEM = { 'em_andamento': 1, 'em_preparacao': 2, 'recuperacao': 3, 'pendente': 4, 'concluida': 5 };
+
+        // Oculta o nome parcialmente por padrão de privacidade: mantém o primeiro
+        // nome completo (para a família reconhecer) e abrevia os demais.
+        function nomeParaExibicao(nomeCompleto) {
+            if (!nomeCompleto) return '-';
+            const partes = nomeCompleto.trim().split(/\s+/);
+            if (partes.length <= 1) return partes[0];
+            return partes[0] + ' ' + partes.slice(1).map(p => p.charAt(0) + '.').join(' ');
+        }
+
+        function tempoDecorrido(horaInicio) {
+            if (!horaInicio) return null;
+            const [h, m] = horaInicio.split(':').map(Number);
+            const inicio = new Date();
+            inicio.setHours(h, m, 0, 0);
+            const agora = new Date();
+            let diffMin = Math.floor((agora - inicio) / 60000);
+            if (diffMin < 0) diffMin += 24 * 60;
+            const horas = Math.floor(diffMin / 60);
+            const minutos = diffMin % 60;
+            return horas > 0 ? `${horas}h ${minutos}min` : `${minutos}min`;
+        }
+
+        function renderizar(surgeries) {
+            const hoje = getToday();
+            const doDia = surgeries.filter(s => s.date === hoje && STATUS_CONFIG[s.status]);
+
+            const ativos = doDia.filter(s => s.status !== 'concluida').sort((a,b) => (ORDEM[a.status]||9) - (ORDEM[b.status]||9));
+            const concluidos = doDia.filter(s => s.status === 'concluida');
+
+            const main = document.getElementById('mainContent');
+
+            if (!doDia.length) {
+                main.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar"></i>Nenhuma cirurgia em andamento no momento.</div>`;
+                return;
+            }
+
+            function cardHtml(s) {
+                const cfg = STATUS_CONFIG[s.status];
+                const decorrido = (s.status === 'em_andamento' || s.status === 'em_preparacao') ? tempoDecorrido(s.time) : null;
+                return `
+                    <div class="patient-card st-${cfg.cls}">
+                        <div class="patient-name">${nomeParaExibicao(s.patient)}</div>
+                        ${s.room ? `<div class="patient-meta"><i class="fa-solid fa-door-open"></i> ${s.room}</div>` : ''}
+                        <span class="status-pill st-${cfg.cls}"><span class="dot"></span><i class="fa-solid ${cfg.icon}"></i> ${cfg.label}</span>
+                        <div class="patient-time">
+                            <span>${s.time ? `Início: <strong>${s.time}</strong>` : ''}</span>
+                            ${decorrido ? `<span>Há <strong>${decorrido}</strong></span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let html = '';
+            if (ativos.length) {
+                html += `<div class="section-heading"><i class="fa-solid fa-heart-pulse"></i> Em Andamento Hoje</div>`;
+                html += `<div class="patients-grid">${ativos.map(cardHtml).join('')}</div>`;
+            }
+            if (concluidos.length) {
+                html += `<div class="section-heading"><i class="fa-solid fa-circle-check"></i> Concluídas Hoje</div>`;
+                html += `<div class="patients-grid">${concluidos.map(cardHtml).join('')}</div>`;
+            }
+            if (!ativos.length && !concluidos.length) {
+                html = `<div class="empty-state"><i class="fa-regular fa-calendar"></i>Nenhuma cirurgia em andamento no momento.</div>`;
+            }
+
+            main.innerHTML = html;
+        }
+
+        let ultimosDados = [];
+        let painelAtivo = true;
+
+        onValue(ref(db, 'settings/salaEsperaAtiva'), (snap) => {
+            painelAtivo = snap.val() !== false;
+            if (!painelAtivo) {
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Este painel está temporariamente indisponível.<br>
+                        Para informações sobre a cirurgia, procure a recepção.
+                    </div>`;
+            } else {
+                renderizar(ultimosDados);
+            }
+        });
+
+        onValue(ref(db, 'surgeries'), (snap) => {
+            const data = snap.val() || {};
+            ultimosDados = Object.values(data);
+            if (painelAtivo) renderizar(ultimosDados);
+        });
+
+        // Recalcula o tempo decorrido a cada minuto sem esperar uma mudança no Firebase
+        setInterval(() => { if (painelAtivo) renderizar(ultimosDados); }, 60000);
+
+        // Indicador de conexão (honesto, sem termos técnicos do Firebase)
+        onValue(ref(db, '.info/connected'), (snap) => {
+            const dot = document.getElementById('connDot');
+            const text = document.getElementById('connText');
+            if (snap.val() === true) {
+                dot.classList.remove('offline');
+                text.textContent = 'Atualizando em tempo real';
+            } else {
+                dot.classList.add('offline');
+                text.textContent = 'Conexão indisponível — informações podem estar desatualizadas';
+            }
+        });
+
+        // Identidade dinâmica (nome do sistema/hospital/logo, configurável em Configurações)
+        onValue(ref(db, 'settings/logo'), (sn) => { if (sn.val()) document.getElementById('brandLogo').innerHTML = `<img src="${sn.val()}" alt="Logo">`; });
+        onValue(ref(db, 'settings/hospitalName'), (sn) => { if (sn.val()) document.getElementById('hospitalName').textContent = sn.val(); });
+        onValue(ref(db, 'settings/systemName'), (sn) => {
+            const nome = sn.val() || 'ExaGestão';
+            document.getElementById('systemLabel').textContent = `${nome} • Sala de Espera`;
+            document.title = `${nome} - Sala de Espera`;
+        });
+
+        // Relógio
+        function atualizarRelogio() {
+            const agora = new Date();
+            document.getElementById('liveTime').textContent = agora.toLocaleTimeString('pt-BR');
+            document.getElementById('liveDate').textContent = agora.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+        }
+        atualizarRelogio();
+        setInterval(atualizarRelogio, 1000);
+    </script>
+</body>
+</html>

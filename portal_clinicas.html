@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="icon" type="image/svg+xml" href="image/favicon.svg?v=4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRPI - Portal das Clínicas</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .clinicas-container { max-width: 700px; width: 100%; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        .clinica-btn {
+            display: flex; align-items: center; justify-content: center;
+            background: #ffffff; border: 1px solid var(--border);
+            border-radius: 10px; padding: 14px 20px; color: #1b2430;
+            text-decoration: none; font-weight: 600; font-size: 13px;
+            transition: 0.2s; cursor: pointer; flex: 1 1 180px;
+            max-width: 200px; text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .clinica-btn:hover {
+            border-color: #2f6fed; color: #2f6fed;
+            transform: translateY(-2px); box-shadow: var(--shadow-md, 0 8px 24px rgba(16,24,40,.08));
+        }
+    </style>
+</head>
+<body class="index-page">
+    <div class="index-container">
+        <div class="index-logos">
+            <div class="index-logo" id="hospitalLogo"><i class="fa-solid fa-hospital" style="color:#0b2340;"></i></div>
+            <div class="index-logo" id="govLogo"><i class="fa-solid fa-landmark" style="color:#0b2340;"></i></div>
+        </div>
+        <h1 class="index-title">Hospital Regional de Palmeira dos Índios</h1>
+        <p class="index-subtitle">HRPI • Portal de Solicitações</p>
+
+        <div class="clinicas-container" id="clinicasContainer"></div>
+    </div>
+
+    <div class="index-footer">© 2026 <span>HRPI</span> • Selecione sua clínica para enviar uma solicitação</div>
+
+    <script>
+        const DB_URL = "https://centro-cirurgico-eaf76-default-rtdb.firebaseio.com";
+        fetch(DB_URL + "/settings/logo.json").then(r => r.json()).then(data => {
+            if (data) document.getElementById('hospitalLogo').innerHTML = `<img src="${data}" alt="Logo">`;
+        }).catch(() => {});
+        fetch(DB_URL + "/settings/govLogo.json").then(r => r.json()).then(data => {
+            if (data) document.getElementById('govLogo').innerHTML = `<img src="${data}" alt="Logo">`;
+        }).catch(() => {});
+
+        const clinicas = [
+            { nome: 'Clínica Médica I', setor: 'Clinica Medica I' },
+            { nome: 'Clínica Médica II', setor: 'Clinica Medica II' },
+            { nome: 'Clínica Cirúrgica', setor: 'Clinica Cirurgica' },
+            { nome: 'Pediatria', setor: 'Pediatria' },
+            { nome: 'Oncologia I', setor: 'Oncologia I' },
+            { nome: 'Oncologia II', setor: 'Oncologia II' },
+            { nome: 'Area Vermelha', setor: 'Area Vermelha' },
+            { nome: 'UTI I', setor: 'UTI I' },
+            { nome: 'UTI II', setor: 'UTI II' },
+            { nome: 'Outros', setor: 'Outros' }
+        ];
+
+        const container = document.getElementById('clinicasContainer');
+        clinicas.forEach(c => {
+            const btn = document.createElement('a');
+            btn.className = 'clinica-btn';
+            btn.href = `clinicas.html?setor=${encodeURIComponent(c.setor)}`;
+            btn.textContent = c.nome;
+            container.appendChild(btn);
+        });
+    </script>
+</body>
+</html>
