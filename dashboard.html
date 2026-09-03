@@ -798,6 +798,7 @@
                     <div class="stat-card" onclick="gerarRelatorio('mes')" style="cursor:pointer;--stat-color:#16a34a;"><div class="stat-icon"><i class="fa-solid fa-chart-bar"></i></div><div class="stat-value" style="font-size:16px;">Mensal</div><div class="stat-label">Mês atual</div></div>
                     <div class="stat-card" onclick="gerarRelatorio('mutiroes')" style="cursor:pointer;--stat-color:#f59e0b;"><div class="stat-icon"><i class="fa-solid fa-people-group"></i></div><div class="stat-value" style="font-size:16px;">Mutirões</div><div class="stat-label">Todos os mutirões</div></div>
                     <div class="stat-card" onclick="abrirModal('modalPersonalizado')" style="cursor:pointer;--stat-color:#7c5cfc;"><div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div><div class="stat-value" style="font-size:16px;">Personalizado</div><div class="stat-label">Escolha período</div></div>
+                    <div class="stat-card" onclick="abrirModal('modalMutiraoPersonalizado')" style="cursor:pointer;--stat-color:#f59e0b;"><div class="stat-icon"><i class="fa-solid fa-people-group"></i></div><div class="stat-value" style="font-size:16px;">Mutirão personalizado</div><div class="stat-label">Nome e período</div></div>
                     <div class="stat-card" onclick="abrirModal('modalEspecialidade')" style="cursor:pointer;--stat-color:#0fb5b0;"><div class="stat-icon"><i class="fa-solid fa-microscope"></i></div><div class="stat-value" style="font-size:16px;">Especialidade</div><div class="stat-label">Filtro</div></div>
                     <div class="stat-card" onclick="gerarRelatorio('cancelled')" style="cursor:pointer;--stat-color:#e5484d;"><div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-value" style="font-size:16px;">Canceladas</div><div class="stat-label">Com motivo</div></div>
                     <div class="stat-card" onclick="gerarRelatorio('geral')" style="cursor:pointer;--stat-color:#a6afbc;"><div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div><div class="stat-value" style="font-size:16px;">Geral</div><div class="stat-label">Todas</div></div>
@@ -958,6 +959,16 @@
             <div class="form-group"><label>Data Inicial</label><input type="date" id="customStartDate"></div>
             <div class="form-group"><label>Data Final</label><input type="date" id="customEndDate"></div>
             <button class="btn btn-primary" onclick="gerarRelatorioPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modalMutiraoPersonalizado">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalMutiraoPersonalizado')"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-people-group"></i> Relatório personalizado de mutirão</h3>
+            <div class="form-group"><label>Mutirão</label><select id="relMutiraoPersonalizado"><option value="todos">Todos os mutirões</option></select></div>
+            <div class="form-group"><label>Data Inicial</label><input type="date" id="relMutiraoStartDate"></div>
+            <div class="form-group"><label>Data Final</label><input type="date" id="relMutiraoEndDate"></div>
+            <button class="btn btn-primary" onclick="gerarRelatorioMutiraoPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
         </div>
     </div>
     <div class="modal-overlay" id="modalEspecialidade">
