@@ -71,9 +71,14 @@ origemSelect.addEventListener('change', function() {
 async function gerarCodigoCirurgia() {
     const year = new Date().getFullYear();
     const counterRef = ref(db, `counters/surgeryCode/${year}`);
-    const result = await runTransaction(counterRef, (current) => (current || 0) + 1);
-    const seq = result.snapshot.val();
-    return `CC-${year}-${String(seq).padStart(4, '0')}`;
+    try {
+        const result = await runTransaction(counterRef, (current) => (current || 0) + 1);
+        const seq = result.snapshot.val();
+        return `CC-${year}-${String(seq).padStart(4, '0')}`;
+    } catch (error) {
+        console.warn('Contador de códigos indisponível; usando código alternativo.', error);
+        return `CC-${year}-${Date.now().toString(36).toUpperCase()}`;
+    }
 }
 
 // ============ TODOS OS PROCEDIMENTOS (COMPLETO) ============
@@ -509,7 +514,7 @@ window.adicionarProc = function(nome, especialidade, codigo) {
 window.adicionarManual = function(nome) {
     const procedimento = (nome || '').trim().toUpperCase();
     if (!procedimento) return;
-    procedimentosSelecionados.push({ nome: procedimento, especialidade: '', codigo: 'MANUAL-' + Date.now().toString(36) });
+    procedimentosSelecionados.push({ nome: procedimento, especialidade: '', codigo:  + Date.now().toString(36) });
     atualizarProcVisuais();
     procInput.value = '';
     suggestionsBox.classList.remove('show');
@@ -618,7 +623,7 @@ document.getElementById('surgeryForm').addEventListener('submit', async function
         specialty: document.getElementById('specialty').value,
         doctor: document.getElementById('doctor').value.trim().toUpperCase(),
         anesthetist: document.getElementById('anesthetist').value.trim().toUpperCase(),
-        circulante: document.getElementById('circulante').value.trim().toUpperCase(),
+        circulante: document.getElementById('circulante')?.value.trim().toUpperCase() || '',
         room: document.getElementById('room').value,
         necessitaSangue: document.getElementById('necessitaSangue').value,
         necessitaUTI: document.getElementById('necessitaUTI').value,
@@ -720,9 +725,10 @@ window.cancelarEdicao = function() {
     document.getElementById('editId').value = '';
     document.getElementById('formTitle').textContent = 'Nova Cirurgia';
     document.getElementById('submitBtn').textContent = '✅ Registrar Cirurgia';
-    document.getElementById('cancelEditBtn').style.display = 'none';
-    document.getElementById('controleBlock').style.display = 'none';
-    document.getElementById('codeDisplay').textContent = '🔖 Código gerado automaticamente ao salvar';
+    document.getElementById('cancelEditBtn')?.style && (document.getElementById('cancelEditBtn').style.display = 'none');
+    document.getElementById('controleBlock')?.style && (document.getElementById('controleBlock').style.display = 'none');
+    const codeDisplay = document.getElementById('codeDisplay');
+    if (codeDisplay) codeDisplay.textContent = '🔖 Código gerado automaticamente ao salvar';
     limparFormulario();
 };
 
