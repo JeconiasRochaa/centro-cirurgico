@@ -623,7 +623,6 @@ document.getElementById('surgeryForm').addEventListener('submit', async function
         specialty: document.getElementById('specialty').value,
         doctor: document.getElementById('doctor').value.trim().toUpperCase(),
         anesthetist: document.getElementById('anesthetist').value.trim().toUpperCase(),
-        circulante: document.getElementById('circulante')?.value.trim().toUpperCase() || '',
         room: document.getElementById('room').value,
         necessitaSangue: document.getElementById('necessitaSangue').value,
         necessitaUTI: document.getElementById('necessitaUTI').value,
@@ -688,7 +687,6 @@ window.editarCirurgia = function(id) {
     document.getElementById('specialty').value = s.specialty || '';
     document.getElementById('doctor').value = s.doctor || '';
     document.getElementById('anesthetist').value = s.anesthetist || '';
-    document.getElementById('circulante').value = s.circulante || '';
     document.getElementById('room').value = s.room || '';
     document.getElementById('necessitaSangue').value = s.necessitaSangue || 'nao';
     document.getElementById('necessitaUTI').value = s.necessitaUTI || 'nao';
