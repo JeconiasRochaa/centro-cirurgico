@@ -194,6 +194,7 @@
             </div>
 
             <form id="clinicaForm">
+                <input type="hidden" id="editId">
                 <div class="form-group">
                     <label><i class="fa-solid fa-user"></i> Nome do Paciente <span class="required">*</span></label>
                     <input type="text" id="patient" placeholder="Nome completo" required>
@@ -232,6 +233,23 @@
 
                 <div class="form-row">
                     <div class="form-group">
+                        <label><i class="fa-solid fa-calendar-day"></i> Data do procedimento <span class="required">*</span></label>
+                        <input type="date" id="surgeryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-clock"></i> Horário</label>
+                        <input type="time" id="surgeryTime">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-door-open"></i> Sala</label>
+                        <select id="room">
+                            <option value="A Definir">A definir</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
                         <label><i class="fa-solid fa-user-doctor"></i> Médico Responsável </span></label>
                         <input type="text" id="doctor" placeholder="Nome do médico" required>
                         <div class="suggestions-box" id="doctorSuggestions"></div>
@@ -246,6 +264,10 @@
                             <option>Bucomaxilofacial</option>
                             <option>Outra</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user-nurse"></i> Anestesista</label>
+                        <input type="text" id="anesthetist" placeholder="Nome (se disponível)">
                     </div>
                 </div>
 
@@ -282,6 +304,7 @@
                 </div>
 
                 <button type="submit" class="btn-submit" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> Registrar Cirurgia</button>
+                <button type="button" class="btn-visualizar" id="cancelEditBtn" style="display:none;margin-top:8px;" onclick="cancelarEdicaoClinica()"><i class="fa-solid fa-xmark"></i> Cancelar edição</button>
                 <div class="feedback-message" id="feedback"></div>
             </form>
         </div>
@@ -614,6 +637,8 @@
             document.getElementById('age').value=idade>=0?idade:0;
         };
 
+        let cirurgiaEmEdicao = null;
+
         // ============ ENVIO ============
         document.getElementById('clinicaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -623,12 +648,12 @@
             btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Registrando...';
             try{
                 const sangue=document.getElementById('reservaSangue').value, uti=document.getElementById('necessidadeUTI').value;
-                const id='CLI-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);
-                const c={id,origem:document.getElementById('origem').value,mutiraoNome:document.getElementById('origem').value==='Mutirão'?document.getElementById('mutiraoNome').value.trim():'',patient:document.getElementById('patient').value.trim().toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,prontuario:document.getElementById('prontuario').value.trim(),type:surgeryTypeHidden.value,date:new Date().toISOString().split('T')[0],time:'',specialty:document.getElementById('specialty').value,doctor:document.getElementById('doctor').value.trim().toUpperCase(),anesthetist:'',circulante:'',room:'A Definir',necessitaSangue:sangue==='Sim'?'sim':'nao',necessitaUTI:uti==='Sim'?'sim':'nao',status:'pendente',setorSolicitante,clinicaOrigem:setorDisplayMap[setorSolicitante]||setorSolicitante,observacoes:document.getElementById('observacoes').value.trim(),dataSolicitacao:new Date().toISOString()};
+                const id=cirurgiaEmEdicao?.id||'CLI-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);
+                const c={...cirurgiaEmEdicao,id,origem:document.getElementById('origem').value,mutiraoNome:document.getElementById('origem').value==='Mutirão'?document.getElementById('mutiraoNome').value.trim():'',patient:document.getElementById('patient').value.trim().toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,prontuario:document.getElementById('prontuario').value.trim(),type:surgeryTypeHidden.value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,specialty:document.getElementById('specialty').value,doctor:document.getElementById('doctor').value.trim().toUpperCase(),anesthetist:document.getElementById('anesthetist').value.trim().toUpperCase(),room:document.getElementById('room').value,necessitaSangue:sangue==='Sim'?'sim':'nao',necessitaUTI:uti==='Sim'?'sim':'nao',status:cirurgiaEmEdicao?.status||'pendente',setorSolicitante,clinicaOrigem:setorDisplayMap[setorSolicitante]||setorSolicitante,observacoes:document.getElementById('observacoes').value.trim(),dataSolicitacao:cirurgiaEmEdicao?.dataSolicitacao||new Date().toISOString()};
                 const resp=await fetch(`${DB_URL}/surgeries/${id}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(c)});
                 if(!resp.ok)throw new Error('Erro '+resp.status);
-                fb.className='feedback-message success';fb.textContent='✅ Cirurgia registrada! Já está no painel TV.';
-                document.getElementById('clinicaForm').reset();document.getElementById('calculatedAge').textContent='';document.getElementById('age').value='';procedimentosSelecionados=[];atualizarProcVisuais();
+                fb.className='feedback-message success';fb.textContent=cirurgiaEmEdicao?'✅ Cirurgia atualizada!':'✅ Cirurgia registrada! Já está no painel TV.';
+                document.getElementById('clinicaForm').reset();document.getElementById('calculatedAge').textContent='';document.getElementById('age').value='';procedimentosSelecionados=[];atualizarProcVisuais();cancelarEdicaoClinica();
             }catch(err){console.error(err);fb.className='feedback-message error';fb.textContent='❌ Erro ao registrar.';}
             finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Registrar Cirurgia';}
         });
@@ -655,7 +680,7 @@
                     <p style="font-size:12px;color:#a6afbc;margin-bottom:8px;"><i class="fa-solid fa-clipboard-list"></i> ${cirurgias.length} cirurgia(s) encontrada(s)</p>
                     <div style="overflow-x:auto;">
                         <table class="cirurgias-table">
-                            <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Médico</th><th>Status</th></tr></thead>
+                            <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Médico</th><th>Status</th><th>Ação</th></tr></thead>
                             <tbody>${cirurgias.map(c => `
                                 <tr>
                                     <td>${c.date?new Date(c.date+'T00:00:00').toLocaleDateString('pt-BR'):'-'}</td>
@@ -663,6 +688,7 @@
                                     <td>${(c.type||'-').substring(0,40)}</td>
                                     <td>${c.doctor||'-'}</td>
                                     <td>${({pendente:'⏳ Aguardando',em_preparacao:'🧤 Em Preparação',em_andamento:'⚙️ Em Andamento',recuperacao:'💤 Recuperação',concluida:'✅ Finalizada',suspensa:'⏸ Suspensa',cancelada:'❌ Cancelada'})[c.status] || c.status}</td>
+                                    <td><button class="btn-sm btn-sm-edit" onclick='editarCirurgiaClinica(${JSON.stringify(c).replace(/'/g,"&#39;")})' title="Editar"><i class="fa-solid fa-pen-to-square"></i></button></td>
                                 </tr>
                             `).join('')}</tbody>
                         </table>
@@ -671,6 +697,49 @@
             } catch(err) {
                 container.innerHTML = '<p style="text-align:center;color:red;"><i class="fa-solid fa-circle-xmark"></i> Erro ao carregar</p>';
             }
+        };
+
+        window.editarCirurgiaClinica = function(c) {
+            cirurgiaEmEdicao = c;
+            document.getElementById('editId').value = c.id;
+            document.getElementById('patient').value = c.patient || '';
+            document.getElementById('birthDate').value = c.birthDate || '';
+            document.getElementById('age').value = c.age || '';
+            document.getElementById('calculatedAge').textContent = c.age ? `(${c.age} anos)` : '';
+            document.getElementById('prontuario').value = c.prontuario || '';
+            document.getElementById('origem').value = c.origem || '';
+            document.getElementById('origem').dispatchEvent(new Event('change'));
+            document.getElementById('mutiraoNome').value = c.mutiraoNome || '';
+            document.getElementById('surgeryDate').value = c.date || '';
+            document.getElementById('surgeryTime').value = c.time || '';
+            document.getElementById('room').value = c.room || 'A Definir';
+            document.getElementById('specialty').value = c.specialty || '';
+            document.getElementById('doctor').value = c.doctor || '';
+            document.getElementById('anesthetist').value = c.anesthetist || '';
+            document.getElementById('reservaSangue').value = c.necessitaSangue === 'sim' ? 'Sim' : 'Não';
+            document.getElementById('necessidadeUTI').value = c.necessitaUTI === 'sim' ? 'Sim' : 'Não';
+            document.getElementById('observacoes').value = c.observacoes || '';
+            procedimentosSelecionados = (c.type || '').split('\n').filter(Boolean).map(linha => {
+                const match = linha.match(/^([A-Z0-9-]+)\s*-\s*(.+)$/);
+                return match ? { codigo: match[1], nome: match[2].trim(), especialidade: c.specialty || '' } : { codigo: 'MANUAL-'+Date.now().toString(36), nome: linha.trim(), especialidade: '' };
+            });
+            atualizarProcVisuais();
+            document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar alterações';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            window.scrollTo({top:0,behavior:'smooth'});
+        };
+
+        window.cancelarEdicaoClinica = function() {
+            cirurgiaEmEdicao = null;
+            document.getElementById('editId').value = '';
+            document.getElementById('clinicaForm').reset();
+            document.getElementById('calculatedAge').textContent = '';
+            document.getElementById('age').value = '';
+            procedimentosSelecionados = [];
+            atualizarProcVisuais();
+            document.getElementById('mutiraoGroup').style.display = 'none';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+            document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Registrar Cirurgia';
         };
 
         console.log('🚀 Clínicas carregado! ✍️ Adição manual disponível');
