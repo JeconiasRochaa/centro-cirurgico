@@ -28,6 +28,7 @@ window.gerarRelatorio = gerarRelatorio;
 window.gerarRelatorioPersonalizado = gerarRelatorioPersonalizado;
 window.gerarRelatorioEspecialidade = gerarRelatorioEspecialidade;
 window.gerarRelatorioOrigem = gerarRelatorioOrigem;
+window.gerarRelatorioMutiraoPersonalizado = gerarRelatorioMutiraoPersonalizado;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('userNameDisplay').textContent = session.name;
@@ -632,12 +633,15 @@ function updateSelects() {
     const origens = [...new Set(allSurgeries.map(s=>s.origem).filter(Boolean))].sort();
     populateSelect('relEspecialidade', especialidades);
     populateSelect('relOrigem', origens);
+    const mutiroes = [...new Set(allSurgeries.filter(s => s.origem === 'Mutirão').map(s => s.mutiraoNome).filter(Boolean))].sort();
+    populateSelect('relMutiraoPersonalizado', mutiroes, 'Todos os mutirões');
 }
 
-function populateSelect(id, options) {
+function populateSelect(id, options, allLabel = 'Todas') {
     const select = document.getElementById(id);
     if (!select) return;
-    select.innerHTML = '<option value="todas">Todas</option>' + options.map(o=>`<option>${o}</option>`).join('');
+    const allValue = allLabel === 'Todos os mutirões' ? 'todos' : 'todas';
+    select.innerHTML = `<option value="${allValue}">${allLabel}</option>` + options.map(o=>`<option>${o}</option>`).join('');
 }
 
 function gerarRelatorioPersonalizado() {
@@ -668,6 +672,17 @@ function gerarRelatorioOrigem() {
     if (inicio && fim) dados = dados.filter(s => s.date >= inicio && s.date <= fim);
     gerarPDF(`Origem: ${orig}`, dados);
     fecharModal('modalOrigem');
+}
+
+function gerarRelatorioMutiraoPersonalizado() {
+    const mutirao = document.getElementById('relMutiraoPersonalizado').value;
+    const inicio = document.getElementById('relMutiraoStartDate').value;
+    const fim = document.getElementById('relMutiraoEndDate').value;
+    let dados = allSurgeries.filter(s => s.origem === 'Mutirão');
+    if (mutirao !== 'todos') dados = dados.filter(s => s.mutiraoNome === mutirao);
+    if (inicio && fim) dados = dados.filter(s => s.date >= inicio && s.date <= fim);
+    gerarPDF(`Mutirão: ${mutirao === 'todos' ? 'Todos' : mutirao}`, dados);
+    fecharModal('modalMutiraoPersonalizado');
 }
 
 document.getElementById('editForm')?.addEventListener('submit', function(e) {
