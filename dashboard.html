@@ -624,6 +624,7 @@
                 <div class="sidebar-brand-name">ExaGestão</div>
                 <div class="sidebar-brand-sub">HRPI • Centro Cirúrgico</div>
             </div>
+
         </div>
 
         <div class="sidebar-nav">
@@ -636,6 +637,9 @@
             </div>
             <div class="sidebar-item" onclick="switchTab('surgeries')" data-tab="surgeries">
                 <span class="icon"><i class="fa-solid fa-kit-medical"></i></span> Cirurgias
+            </div>
+            <div class="sidebar-item" onclick="switchTab('trash')" data-tab="trash">
+                <span class="icon"><i class="fa-solid fa-trash-can"></i></span> Lixeira
             </div>
             <div class="sidebar-item" onclick="switchTab('cancelled')" data-tab="cancelled">
                 <span class="icon"><i class="fa-solid fa-ban"></i></span> Canceladas
@@ -768,6 +772,17 @@
                     <table>
                         <thead><tr><th>Data</th><th>Paciente</th><th>Prontuário</th><th>Procedimento</th><th>Médico</th><th>Sala</th><th>Status</th><th>Ações</th></tr></thead>
                         <tbody id="surgeriesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-trash">
+                <h1 class="page-title">Lixeira de Cirurgias</h1>
+                <p class="page-subtitle">Registros removidos das telas, mantidos até a exclusão permanente</p>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Removida em</th><th>Usuário</th><th>Ações</th></tr></thead>
+                        <tbody id="deletedSurgeriesBody"><tr><td colspan="6" class="empty-state">Lixeira vazia</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -1000,6 +1015,8 @@
                 <div class="form-group"><label>Paciente</label><input type="text" id="editPatient" required></div>
                 <div class="form-group"><label>Procedimento</label><input type="text" id="editType" required></div>
                 <div class="form-group"><label>Médico</label><input type="text" id="editDoctor"></div>
+                <div class="form-group"><label>Enfermeiro(a)</label><input type="text" id="editInstrumentador"></div>
+                <div class="form-group"><label>Anestesista</label><input type="text" id="editAnesthetist"></div>
                 <div class="form-group"><label>Data</label><input type="date" id="editDate"></div>
                 <div class="form-group"><label>Horário</label><input type="time" id="editTime"></div>
                 <div class="form-group"><label>Sala</label><select id="editRoom"><option value="">Selecione</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option></select></div>
