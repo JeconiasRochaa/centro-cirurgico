@@ -5,6 +5,13 @@ import { getToday, getDoctorTitle } from './utils.js';
 let TODAY = getToday();
 let currentSurgeries = [];
 
+function limparProcedimento(texto) {
+    if (!texto) return '-';
+    return texto.split('\n')
+        .map(linha => linha.replace(/^[A-Z0-9]+(?:-[A-Z0-9]+)+\s*-\s*/i, '').trim())
+        .join('\n');
+}
+
 // ============ RELÓGIO ============
 function updateClock() {
     const n = new Date();
@@ -49,7 +56,7 @@ function updatePanel() {
             return `<tr class="${rowClass}">
                 <td><strong>${s.room||'-'}</strong></td>
                 <td><strong>${s.patient||'-'}</strong></td>
-                <td>${(s.type||'-').replace(/\n/g,'<br>')}</td>
+                <td>${limparProcedimento(s.type).replace(/\n/g,'<br>')}</td>
                 <td>${dTitle} ${s.doctor||'-'}</td>
                 <td>${sangueIcon}</td>
                 <td>${utiIcon}</td>
