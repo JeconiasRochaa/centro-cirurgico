@@ -491,6 +491,7 @@ function gerarRelatorio(tipo) {
         case 'hoje': titulo = 'Relatório Diário'; dados = allSurgeries.filter(s => s.date === today); break;
         case 'semana': const { inicioSemana, fimSemana } = getSemanaAtual(); titulo = 'Relatório Semanal'; dados = allSurgeries.filter(s => s.date >= inicioSemana && s.date <= fimSemana); break;
         case 'mes': const { inicioMes, fimMes } = getMesAtual(); titulo = 'Relatório Mensal'; dados = allSurgeries.filter(s => s.date >= inicioMes && s.date <= fimMes); break;
+        case 'mutiroes': titulo = 'Relatório de Mutirões'; dados = allSurgeries.filter(s => s.origem === 'Mutirão'); break;
         case 'cancelled': titulo = 'Relatório de Canceladas'; dados = allSurgeries.filter(s => s.status === 'cancelada'); break;
         case 'geral': titulo = 'Relatório Geral'; dados = allSurgeries; break;
     }
