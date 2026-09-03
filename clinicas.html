@@ -266,7 +266,11 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label><i class="fa-solid fa-user-nurse"></i> Anestesista</label>
+                        <label><i class="fa-solid fa-user-nurse"></i> Enfermeiro(a)</label>
+                        <input type="text" id="instrumentador" placeholder="Nome (se disponível)">
+                        <label><i class="fa-solid fa-syringe"></i> Anestesista</label>
+                        <input type="text" id="anesthetist" placeholder="Nome (se disponível)">
+                        <label><i class="fa-solid fa-syringe"></i> Anestesista</label>
                         <input type="text" id="anesthetist" placeholder="Nome (se disponível)">
                     </div>
                 </div>
@@ -649,7 +653,7 @@
             try{
                 const sangue=document.getElementById('reservaSangue').value, uti=document.getElementById('necessidadeUTI').value;
                 const id=cirurgiaEmEdicao?.id||'CLI-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);
-                const c={...cirurgiaEmEdicao,id,origem:document.getElementById('origem').value,mutiraoNome:document.getElementById('origem').value==='Mutirão'?document.getElementById('mutiraoNome').value.trim():'',patient:document.getElementById('patient').value.trim().toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,prontuario:document.getElementById('prontuario').value.trim(),type:surgeryTypeHidden.value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,specialty:document.getElementById('specialty').value,doctor:document.getElementById('doctor').value.trim().toUpperCase(),anesthetist:document.getElementById('anesthetist').value.trim().toUpperCase(),room:document.getElementById('room').value,necessitaSangue:sangue==='Sim'?'sim':'nao',necessitaUTI:uti==='Sim'?'sim':'nao',status:cirurgiaEmEdicao?.status||'pendente',setorSolicitante,clinicaOrigem:setorDisplayMap[setorSolicitante]||setorSolicitante,observacoes:document.getElementById('observacoes').value.trim(),dataSolicitacao:cirurgiaEmEdicao?.dataSolicitacao||new Date().toISOString()};
+                const c={...cirurgiaEmEdicao,id,origem:document.getElementById('origem').value,mutiraoNome:document.getElementById('origem').value==='Mutirão'?document.getElementById('mutiraoNome').value.trim():'',patient:document.getElementById('patient').value.trim().toUpperCase(),birthDate:document.getElementById('birthDate').value,age:document.getElementById('age').value,prontuario:document.getElementById('prontuario').value.trim(),type:surgeryTypeHidden.value,date:document.getElementById('surgeryDate').value,time:document.getElementById('surgeryTime').value,specialty:document.getElementById('specialty').value,doctor:document.getElementById('doctor').value.trim().toUpperCase(),instrumentador:document.getElementById('instrumentador').value.trim().toUpperCase(),anesthetist:document.getElementById('anesthetist').value.trim().toUpperCase(),room:document.getElementById('room').value,necessitaSangue:sangue==='Sim'?'sim':'nao',necessitaUTI:uti==='Sim'?'sim':'nao',status:cirurgiaEmEdicao?.status||'pendente',setorSolicitante,clinicaOrigem:setorDisplayMap[setorSolicitante]||setorSolicitante,observacoes:document.getElementById('observacoes').value.trim(),dataSolicitacao:cirurgiaEmEdicao?.dataSolicitacao||new Date().toISOString()};
                 const resp=await fetch(`${DB_URL}/surgeries/${id}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(c)});
                 if(!resp.ok)throw new Error('Erro '+resp.status);
                 fb.className='feedback-message success';fb.textContent=cirurgiaEmEdicao?'✅ Cirurgia atualizada!':'✅ Cirurgia registrada! Já está no painel TV.';
@@ -667,7 +671,7 @@
                 const query = `orderBy="setorSolicitante"&equalTo=${encodeURIComponent(JSON.stringify(setorSolicitante))}`;
                 const resp = await fetch(`${DB_URL}/surgeries.json?${query}`);
                 const data = await resp.json();
-                const cirurgias = data ? Object.values(data) : [];
+                const cirurgias = data ? Object.values(data).filter(c => !c.deletedAt) : [];
                 
                 if (!cirurgias.length) {
                     container.innerHTML = '<p style="text-align:center;color:#a6afbc;"><i class="fa-solid fa-inbox"></i> Nenhuma cirurgia registrada por este setor</p>';
@@ -715,6 +719,7 @@
             document.getElementById('room').value = c.room || 'A Definir';
             document.getElementById('specialty').value = c.specialty || '';
             document.getElementById('doctor').value = c.doctor || '';
+            document.getElementById('instrumentador').value = c.instrumentador || c.circulante || '';
             document.getElementById('anesthetist').value = c.anesthetist || '';
             document.getElementById('reservaSangue').value = c.necessitaSangue === 'sim' ? 'Sim' : 'Não';
             document.getElementById('necessidadeUTI').value = c.necessitaUTI === 'sim' ? 'Sim' : 'Não';
