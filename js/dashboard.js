@@ -564,14 +564,14 @@ function gerarPDF(titulo, dados) {
     const body = [...dados].sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (a.time||'').localeCompare(b.time||'')).map((s,i)=>[
         i+1, formatDate(s.date), s.time||'-', s.patient||'-', s.age||'-',
         (s.type||'-').replace(/\n/g, ', ').substring(0,40), `${getDoctorTitle(s.doctor)} ${s.doctor||'-'}`,
-        s.specialty||'-', s.room||'-', s.origem||'-',
+        `${getDoctorTitle(s.anesthetist)} ${s.anesthetist||'-'}`, s.specialty||'-', s.room||'-', s.origem||'-',
         s.necessitaSangue==='sim'?'Sim':'Não', s.necessitaUTI==='sim'?'Sim':'Não',
         statusText[s.status]||'Não informado', s.cancelReason||'-'
     ]);
     
     doc.autoTable({
         startY: statusCounts.length ? 50 : 42,
-        head: [['Nº','Data','Hora','Paciente','Idade','Procedimento','Médico','Especialidade','Sala','Origem','Sangue','UTI','Status','Motivo']],
+        head: [['Nº','Data','Hora','Paciente','Idade','Procedimento','Médico','Anestesista','Especialidade','Sala','Origem','Sangue','UTI','Status','Motivo']],
         body,
         theme: 'grid',
         styles:{fontSize:6.5,cellPadding:1.5,overflow:'linebreak',valign:'middle',lineColor:[226,232,240],lineWidth:0.15},
@@ -580,11 +580,11 @@ function gerarPDF(titulo, dados) {
         columnStyles:{
             0:{cellWidth:8,halign:'center'}, 1:{cellWidth:17,halign:'center'}, 2:{cellWidth:11,halign:'center'},
             3:{cellWidth:25}, 4:{cellWidth:8,halign:'center'}, 5:{cellWidth:33}, 6:{cellWidth:29},
-            7:{cellWidth:21}, 8:{cellWidth:14,halign:'center'}, 9:{cellWidth:20}, 10:{cellWidth:11,halign:'center'},
-            11:{cellWidth:9,halign:'center'}, 12:{cellWidth:20,halign:'center'}, 13:{cellWidth:23}
+            7:{cellWidth:25}, 8:{cellWidth:21}, 9:{cellWidth:14,halign:'center'}, 10:{cellWidth:20}, 11:{cellWidth:11,halign:'center'},
+            12:{cellWidth:9,halign:'center'}, 13:{cellWidth:20,halign:'center'}, 14:{cellWidth:23}
         },
         didParseCell(data) {
-            if (data.section === 'body' && data.column.index === 12) {
+            if (data.section === 'body' && data.column.index === 13) {
                 const value = data.cell.raw;
                 const colors = { 'Aguardando':[245,158,11], 'Em preparo':[124,92,252], 'Em andamento':[47,111,237], 'Recuperacao':[14,165,164], 'Finalizada':[22,163,74], 'Suspensa':[100,116,139], 'Cancelada':[229,72,77] };
                 if (colors[value]) data.cell.styles.textColor = colors[value];
