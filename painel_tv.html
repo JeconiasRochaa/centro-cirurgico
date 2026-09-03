@@ -469,7 +469,7 @@
     // Esses códigos servem para relatórios administrativos; no painel público só o nome interessa.
     function limparProcedimento(texto) {
         if (!texto) return '-';
-        return texto.split('\n').map(linha => linha.replace(/^[A-Z0-9]+-[A-Z0-9]+\s*-\s*/, '').trim()).join('\n');
+        return texto.split('\n').map(linha => linha.replace(/^[A-Z0-9]+(?:-[A-Z0-9]+)+\s*-\s*/i, '').trim()).join('\n');
     }
 
     function getDoctorTitle(name) {
@@ -481,6 +481,7 @@
             'LAURA', 'LETÍCIA', 'LUCIANA', 'MARCIA', 'MARINA', 'NATALIA',
             'PATRICIA', 'PAULA', 'RAFAELA', 'RENATA', 'ROBERTA', 'SANDRA',
             'SARA', 'SOFIA', 'TATIANA', 'VANESSA', 'VERA', 'VIVIANE'
+            ,'ISABEL', 'NICOLE', 'NOEMI', 'ESTER', 'RUTE', 'EDUARDA', 'YASMIN', 'INGRID', 'CHARMYLLY'
         ];
         const firstName = cleanName.split(' ')[0].toUpperCase();
         if (femaleNames.includes(firstName)) return 'Dra.';
