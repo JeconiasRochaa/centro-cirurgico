@@ -19,9 +19,13 @@
             padding: 20px;
         }
 
-        .container { max-width: 750px; width: 100%; }
+        .container {
+            max-width: 1400px; width: 100%;
+            display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+            gap: 18px; align-items: start;
+        }
 
-        .header { text-align: center; margin-bottom: 22px; }
+        .header { grid-column: 1 / -1; text-align: center; margin-bottom: 0; }
         .logos { display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 12px; }
         .logo-circle {
             width: 54px; height: 54px; background: white; border-radius: 12px;
@@ -47,15 +51,16 @@
 
         .card {
             background: #ffffff;
-            border-radius: 14px; padding: 28px 24px;
+            border-radius: 14px; padding: 20px 22px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-            margin-bottom: 18px;
+            margin-bottom: 0;
         }
         .card h2 { font-size: 17px; color: #0b2340; text-align: center; margin-bottom: 8px; }
         .card .subtitle { font-size: 12px; color: #7c8797; text-align: center; margin-bottom: 22px; }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .form-group { margin-bottom: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .form-group { margin-bottom: 8px; }
         .form-group-relativa { position: relative; }
         label { display: block; font-size: 12px; font-weight: 600; color: #7c8797; margin-bottom: 4px; }
         label .required { color: #e5484d; }
@@ -125,7 +130,7 @@
 
         .info-box {
             background: #eaf1fe; border: 1px solid #8fb2f7;
-            border-radius: 8px; padding: 12px; margin-bottom: 20px;
+            border-radius: 8px; padding: 9px 12px; margin-bottom: 12px;
             font-size: 12px; color: #2f6fed; text-align: center;
         }
         .selected-procedures {
@@ -166,8 +171,18 @@
         .cirurgias-table td { padding: 8px 6px; border-bottom: 1px solid #e6eaf2; }
         .cirurgias-table tr:hover { background: #f3f6fb; }
 
+        .footer-text { grid-column: 1 / -1; margin-top: 0; }
+
         @media (max-width: 500px) {
+            .container { display: block; max-width: 750px; }
+            .card { margin-bottom: 18px; }
             .form-row { grid-template-columns: 1fr; }
+        }
+
+        @media (min-width: 501px) and (max-width: 950px) {
+            .container { grid-template-columns: 1fr; max-width: 750px; }
+            .header, .footer-text { grid-column: auto; }
+            .card { margin-bottom: 18px; }
         }
     </style>
 </head>
@@ -231,7 +246,7 @@
                     <input type="text" id="mutiraoNome" placeholder="Ex: Mutirão de Catarata Ago/2026">
                 </div>
 
-                <div class="form-row">
+                <div class="form-row form-row-3">
                     <div class="form-group">
                         <label><i class="fa-solid fa-calendar-day"></i> Data do procedimento <span class="required">*</span></label>
                         <input type="date" id="surgeryDate" required>
@@ -265,11 +280,14 @@
                             <option>Outra</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label><i class="fa-solid fa-user-nurse"></i> Enfermeiro(a)</label>
                         <input type="text" id="instrumentador" placeholder="Nome (se disponível)">
-                        <label><i class="fa-solid fa-syringe"></i> Anestesista</label>
-                        <input type="text" id="anesthetist" placeholder="Nome (se disponível)">
+                    </div>
+                    <div class="form-group">
                         <label><i class="fa-solid fa-syringe"></i> Anestesista</label>
                         <input type="text" id="anesthetist" placeholder="Nome (se disponível)">
                     </div>
@@ -316,7 +334,7 @@
         <!-- CARD: CIRURGIAS DO SETOR -->
         <div class="card">
             <button class="btn-visualizar" onclick="carregarCirurgiasSetor()">
-                <i class="fa-solid fa-eye"></i> Visualizar Cirurgias Registradas por Este Setor
+                <i class="fa-solid fa-eye"></i> Visualizar Cirurgias de Hoje
             </button>
             <div id="cirurgiasSetorContainer">
                 <p style="text-align:center;color:#a6afbc;font-size:12px;">Clique no botão acima para visualizar</p>
@@ -662,23 +680,25 @@
             finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Registrar Cirurgia';}
         });
 
-        // ============ VISUALIZAR CIRURGIAS DO SETOR ============
+        // ============ VISUALIZAR CIRURGIAS DO DIA ============
+        let carregandoCirurgias = false;
         window.carregarCirurgiasSetor = async function() {
+            if (carregandoCirurgias) return;
+            carregandoCirurgias = true;
             const container = document.getElementById('cirurgiasSetorContainer');
-            container.innerHTML = '<p style="text-align:center;">⏳ Carregando...</p>';
             try {
-                // Consulta filtrada no servidor (não baixa os dados de outras clínicas para o navegador)
-                const query = `orderBy="setorSolicitante"&equalTo=${encodeURIComponent(JSON.stringify(setorSolicitante))}`;
-                const resp = await fetch(`${DB_URL}/surgeries.json?${query}`);
+                const resp = await fetch(`${DB_URL}/surgeries.json`);
                 const data = await resp.json();
-                const cirurgias = data ? Object.values(data).filter(c => !c.deletedAt) : [];
+                const hoje = new Date();
+                const hojeLocal = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
+                const cirurgias = data ? Object.values(data).filter(c => !c.deletedAt && c.date === hojeLocal) : [];
                 
                 if (!cirurgias.length) {
-                    container.innerHTML = '<p style="text-align:center;color:#a6afbc;"><i class="fa-solid fa-inbox"></i> Nenhuma cirurgia registrada por este setor</p>';
+                    container.innerHTML = '<p style="text-align:center;color:#a6afbc;"><i class="fa-solid fa-inbox"></i> Nenhuma cirurgia registrada hoje</p>';
                     return;
                 }
                 
-                cirurgias.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+                cirurgias.sort((a,b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
                 
                 container.innerHTML = `
                     <p style="font-size:12px;color:#a6afbc;margin-bottom:8px;"><i class="fa-solid fa-clipboard-list"></i> ${cirurgias.length} cirurgia(s) encontrada(s)</p>
@@ -700,6 +720,8 @@
                 `;
             } catch(err) {
                 container.innerHTML = '<p style="text-align:center;color:red;"><i class="fa-solid fa-circle-xmark"></i> Erro ao carregar</p>';
+            } finally {
+                carregandoCirurgias = false;
             }
         };
 
@@ -747,6 +769,8 @@
             document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Registrar Cirurgia';
         };
 
+        carregarCirurgiasSetor();
+        setInterval(carregarCirurgiasSetor, 10000);
         console.log('🚀 Clínicas carregado! ✍️ Adição manual disponível');
     </script>
 </body>
