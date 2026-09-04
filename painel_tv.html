@@ -256,7 +256,7 @@
             white-space: nowrap; font-weight: 700;
         }
         
-        /* Larguras das 11 colunas visiveis */
+        /* Larguras das 12 colunas visiveis */
         thead th:nth-child(1){width:6%}   /* Sala */
         thead th:nth-child(2){width:7%}   /* Horário */
         thead th:nth-child(3){width:12%}  /* Paciente */
@@ -555,6 +555,16 @@
                 const mh=s.cancelReason?`<br><span class="cancel-badge" title="${s.cancelReason}">Motivo: ${s.cancelReason.substring(0,15)}${s.cancelReason.length>15?'...':''}</span>`:'';
                 const pr=limparProcedimento(s.type).replace(/\n/g,'<br>');
                 const origemCurta = origemMap[s.origem] || s.origem || '-';
+                const clinicaMap = {
+                    'Clínica Médica I': 'CM I', 'Clínica Médica II': 'CM II',
+                    'Clínica Cirúrgica': 'CC', Pediatria: 'PED',
+                    'Oncologia I': 'ONC I', 'Oncologia II': 'ONC II',
+                    Emergência: 'EMERG', 'Área Vermelha': 'AV',
+                    'UTI I': 'UTI I', 'UTI II': 'UTI II', Outros: 'OUTROS',
+                    'Clinica Medica I': 'CM I', 'Clinica Medica II': 'CM II',
+                    'Clinica Cirurgica': 'CC', Emergencia: 'EMERG'
+                };
+                const clinicaOrigem = clinicaMap[s.clinicaOrigem] || clinicaMap[s.setorSolicitante] || s.clinicaOrigem || s.setorSolicitante || '';
                 const doctorTitle = getDoctorTitle(s.doctor);
                 const instrumentador = s.instrumentador || s.circulante;
                 const anesthetist = s.anesthetist;
@@ -577,7 +587,7 @@
                     <td>${s.time||'-'}</td>
                     <td><span class="cell-content">${s.patient||'-'}</span></td>
                     <td>${idadeExibida}</td>
-                    <td>${origemCurta}</td>
+                    <td><span class="cell-content">${origemCurta}${clinicaOrigem?`<br><span class="specialty-tag">${clinicaOrigem}</span>`:''}</span></td>
                     <td><span class="cell-content">${pr}${mh}</span></td>
                     <td><span class="cell-content">${doctorTitle} ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td>
                     <td><span class="cell-content">${instrumentador||'-'}</span></td>
