@@ -1,7 +1,7 @@
 // ============ js/registro.js ============
 import { db, ref, onValue, set, push, update, remove, runTransaction, get } from './firebase.js';
 import { requireAuth, logout, hasPermission } from './auth.js';
-import { getToday, calculateAge, statusLabels, statusBadgeClass } from './utils.js';
+import { getToday, calculateAge, statusLabels, statusBadgeClass, getDoctorTitle } from './utils.js';
 
 const session = requireAuth('registro');
 if (!session) throw new Error('Acesso negado');
@@ -47,6 +47,7 @@ onValue(ref(db, '.info/connected'), (snap) => {
 });
 
 let allSurgeries = [];
+let allPatients = [];
 let abaAtual = 'hoje';
 let procedimentosSelecionados = [];
 
@@ -57,6 +58,23 @@ onValue(ref(db, 'surgeries'), (snap) => {
     allSurgeries = snap.val() ? Object.values(snap.val()) : [];
     atualizarLista();
 });
+
+// Carrega os prontuários (fichas de pacientes) para exibir alergias e outros dados
+// no detalhamento da cirurgia, sem precisar abrir o Dashboard.
+onValue(ref(db, 'patients'), (snap) => {
+    const data = snap.val() || {};
+    allPatients = Object.values(data);
+});
+
+// Busca a ficha do paciente correspondente a uma cirurgia (por prontuário ou nome)
+function buscarFichaPaciente(s) {
+    if (!s) return null;
+    if (s.prontuario && s.prontuario.trim()) {
+        const porProntuario = allPatients.find(p => (p.prontuario || '').trim().toUpperCase() === s.prontuario.trim().toUpperCase());
+        if (porProntuario) return porProntuario;
+    }
+    return allPatients.find(p => (p.nome || '').trim().toUpperCase() === (s.patient || '').trim().toUpperCase()) || null;
+}
 
 // ============ ORIGEM / MUTIRÃO ============
 const origemSelect = document.getElementById('origem');
@@ -622,6 +640,7 @@ document.getElementById('surgeryForm').addEventListener('submit', async function
         time: document.getElementById('surgeryTime').value,
         specialty: document.getElementById('specialty').value,
         doctor: document.getElementById('doctor').value.trim().toUpperCase(),
+        instrumentador: document.getElementById('instrumentador').value.trim().toUpperCase(),
         anesthetist: document.getElementById('anesthetist').value.trim().toUpperCase(),
         room: document.getElementById('room').value,
         necessitaSangue: document.getElementById('necessitaSangue').value,
@@ -686,6 +705,7 @@ window.editarCirurgia = function(id) {
     document.getElementById('surgeryTime').value = s.time || '';
     document.getElementById('specialty').value = s.specialty || '';
     document.getElementById('doctor').value = s.doctor || '';
+    document.getElementById('instrumentador').value = s.instrumentador || '';
     document.getElementById('anesthetist').value = s.anesthetist || '';
     document.getElementById('room').value = s.room || '';
     document.getElementById('necessitaSangue').value = s.necessitaSangue || 'nao';
@@ -836,16 +856,20 @@ function atualizarLista() {
         const badgeCls = BADGE_CLASS[s.status] || 'waiting';
         const badgeText = statusLabels[s.status] || s.status || '-';
 
+        const doctorTitle = getDoctorTitle(s.doctor);
+        const anesthetistTitle = getDoctorTitle(s.anesthetist);
+
         return `<div class="surgery-item ${cls}">
             <div class="surgery-header">
-                <span class="surgery-patient">${s.patient||'-'} ${s.age?`(${s.age}a)`:''}</span>
+                <span class="surgery-patient surgery-patient-clickable" onclick="window.verDetalhesCirurgia('${s.id}')" title="Clique para ver todos os detalhes"><i class="fa-solid fa-circle-info"></i> ${s.patient||'-'} ${s.age?`(${s.age}a)`:''}</span>
                 <span class="surgery-badge ${badgeCls}">${badgeText}</span>
             </div>
             <div class="surgery-info">
                 ${s.code?`<strong><i class="fa-solid fa-hashtag"></i></strong> ${s.code}<br>`:''}
                 <strong><i class="fa-solid fa-kit-medical"></i></strong> ${(s.type||'-').replace(/\n/g,'<br><i class="fa-solid fa-kit-medical"></i> ')}<br>
                 <strong><i class="fa-solid fa-calendar-day"></i></strong> ${s.date||'-'} | <strong><i class="fa-solid fa-clock"></i></strong> ${s.time||'--:--'} | <strong><i class="fa-solid fa-hospital"></i></strong> ${s.room||'-'}<br>
-                <strong><i class="fa-solid fa-user-doctor"></i></strong> ${s.doctor||'-'} | <strong><i class="fa-solid fa-syringe"></i></strong> ${s.anesthetist||'-'}<br>
+                <strong><i class="fa-solid fa-user-doctor"></i></strong> ${s.doctor?`${doctorTitle} ${s.doctor}`:'-'} | <strong><i class="fa-solid fa-syringe"></i></strong> ${s.anesthetist?`${anesthetistTitle} ${s.anesthetist}`:'-'}<br>
+                <strong><i class="fa-solid fa-hand-holding-medical"></i></strong> ${s.instrumentador||'-'}<br>
                 <strong><i class="fa-solid fa-droplet"></i></strong> ${s.necessitaSangue==='sim'?'Sim':'Não'} | <strong><i class="fa-solid fa-bed-pulse"></i></strong> ${s.necessitaUTI==='sim'?'Sim':'Não'}
                 ${s.origem==='Mutirão'&&s.mutiraoNome?`<br><strong><i class="fa-solid fa-users"></i></strong> ${s.mutiraoNome}`:''}
                 ${s.observacoes?`<br><strong><i class="fa-solid fa-note-sticky"></i></strong> ${s.observacoes}`:''}
@@ -860,6 +884,63 @@ function atualizarLista() {
         </div>`;
     }).join('');
 }
+
+// ============ DETALHAMENTO COMPLETO (clique no nome do paciente) ============
+window.verDetalhesCirurgia = function(id) {
+    const s = allSurgeries.find(s => s.id === id);
+    if (!s) return;
+    const ficha = buscarFichaPaciente(s);
+
+    const linha = (icone, label, valor) => valor ? `<div class="detail-row"><i class="fa-solid ${icone}"></i> <strong>${label}:</strong> <span>${valor}</span></div>` : '';
+
+    let html = '';
+    html += linha('fa-hashtag', 'Código', s.code);
+    html += linha('fa-id-card', 'Prontuário', s.prontuario);
+    html += linha('fa-cake-candles', 'Idade', s.age ? `${s.age} anos` : '');
+    html += linha('fa-kit-medical', 'Procedimento(s)', (s.type || '-').replace(/\n/g, '<br>'));
+    html += linha('fa-calendar-day', 'Data', s.date);
+    html += linha('fa-clock', 'Horário', s.time);
+    html += linha('fa-hospital', 'Sala', s.room);
+    html += linha('fa-microscope', 'Especialidade', s.specialty);
+    html += linha('fa-user-doctor', 'Médico', s.doctor ? `${getDoctorTitle(s.doctor)} ${s.doctor}` : '');
+    html += linha('fa-hand-holding-medical', 'Instrumentador(a)', s.instrumentador);
+    html += linha('fa-syringe', 'Anestesista', s.anesthetist ? `${getDoctorTitle(s.anesthetist)} ${s.anesthetist}` : '');
+    html += linha('fa-droplet', 'Reserva de sangue', s.necessitaSangue === 'sim' ? 'Sim' : s.necessitaSangue === 'talvez' ? 'Possivelmente' : 'Não');
+    html += linha('fa-bed-pulse', 'Necessidade de UTI', s.necessitaUTI === 'sim' ? 'Sim' : s.necessitaUTI === 'talvez' ? 'Possivelmente' : 'Não');
+    html += linha('fa-toolbox', 'Materiais especiais', s.materiaisEspeciais);
+    html += linha('fa-people-group', 'Origem', s.origem === 'Mutirão' && s.mutiraoNome ? `Mutirão — ${s.mutiraoNome}` : s.origem);
+    html += linha('fa-note-sticky', 'Observações da cirurgia', s.observacoes);
+    html += linha('fa-circle-info', 'Status', statusLabels[s.status] || s.status);
+
+    if (s.status === 'cancelada' && s.cancelReason) {
+        html += `<div class="detail-row detail-alert"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Motivo do cancelamento:</strong> <span>${s.cancelReason}</span></div>`;
+    }
+    if (s.status === 'suspensa' && s.suspendReason) {
+        html += `<div class="detail-row detail-alert"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Motivo da suspensão:</strong> <span>${s.suspendReason}</span></div>`;
+    }
+
+    html += '<hr class="detail-divider">';
+    if (ficha) {
+        html += linha('fa-droplet', 'Tipo sanguíneo', ficha.tipoSanguineo);
+        if ((ficha.alergias || '').trim()) {
+            html += `<div class="detail-row detail-alert"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Alergias:</strong> <span>${ficha.alergias}</span></div>`;
+        } else {
+            html += `<div class="detail-row"><i class="fa-solid fa-circle-check"></i> <strong>Alergias:</strong> <span>Nenhuma alergia registrada na ficha</span></div>`;
+        }
+        html += linha('fa-notes-medical', 'Comorbidades/Observações do paciente', ficha.observacoes);
+        html += linha('fa-phone', 'Contato de emergência', ficha.emergenciaNome ? `${ficha.emergenciaNome}${ficha.emergenciaTelefone ? ' — ' + ficha.emergenciaTelefone : ''}` : '');
+    } else {
+        html += `<div class="detail-row"><i class="fa-solid fa-circle-info"></i> <span>Este paciente ainda não possui ficha (prontuário) cadastrada com alergias/comorbidades. Cadastre em Prontuários no Dashboard.</span></div>`;
+    }
+
+    document.getElementById('detalhesCirurgiaTitulo').innerHTML = `<i class="fa-solid fa-user"></i> ${s.patient || '-'}`;
+    document.getElementById('detalhesCirurgiaConteudo').innerHTML = html;
+    document.getElementById('modalDetalhesCirurgia').classList.add('active');
+};
+
+window.fecharModalDetalhes = function() {
+    document.getElementById('modalDetalhesCirurgia')?.classList.remove('active');
+};
 
 atualizarLista();
 console.log('🚀 Registro de Cirurgias carregado!');
