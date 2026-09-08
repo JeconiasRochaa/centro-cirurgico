@@ -567,6 +567,40 @@
         .btn { padding: 11px 20px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.25s; width: 100%; color: #fff; }
         .btn-primary { background: var(--blue); }
         .btn-primary:hover { background: #2456c4; }
+        .btn-compact {
+            width: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            font-size: 12.5px;
+        }
+        .modal-wide { max-width: 700px; }
+
+        /* ============ AUTOCOMPLETE (prontuários) ============ */
+        .suggestions-box {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: var(--bg-card);
+            border: 2px solid var(--blue); border-radius: 8px;
+            max-height: 240px; overflow-y: auto;
+            z-index: 100; display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .suggestions-box.show { display: block; }
+        .suggestion-item {
+            padding: 10px 14px; cursor: pointer;
+            font-size: 12px; border-bottom: 1px solid var(--border);
+            transition: 0.2s; color: var(--text-primary);
+            display: flex; align-items: center; justify-content: space-between; gap: 8px;
+        }
+        .suggestion-item:hover { background: rgba(47,111,237,0.1); }
+        .suggestion-item:last-child { border-bottom: none; }
+
+        /* ============ RELATÓRIO NA TELA ============ */
+        .report-table-wrap { max-height: 55vh; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+        .report-table-wrap table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .report-table-wrap th, .report-table-wrap td { padding: 7px 9px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+        .report-table-wrap th { background: var(--bg-input); position: sticky; top: 0; }
 
         .btn-sm {
             padding: 5px 10px; border: none; border-radius: 6px;
@@ -808,16 +842,17 @@
                 <h1 class="page-title">Relatórios</h1>
                 <p class="page-subtitle">Geração de documentos e análises</p>
                 <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
-                    <div class="stat-card" onclick="gerarRelatorio('hoje')" style="cursor:pointer;--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div><div class="stat-value" style="font-size:16px;">Diário</div><div class="stat-label">Hoje</div></div>
-                    <div class="stat-card" onclick="gerarRelatorio('semana')" style="cursor:pointer;--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div><div class="stat-value" style="font-size:16px;">Semanal</div><div class="stat-label">Segunda a domingo</div></div>
-                    <div class="stat-card" onclick="gerarRelatorio('mes')" style="cursor:pointer;--stat-color:#16a34a;"><div class="stat-icon"><i class="fa-solid fa-chart-bar"></i></div><div class="stat-value" style="font-size:16px;">Mensal</div><div class="stat-label">Mês atual</div></div>
-                    <div class="stat-card" onclick="gerarRelatorio('mutiroes')" style="cursor:pointer;--stat-color:#f59e0b;"><div class="stat-icon"><i class="fa-solid fa-people-group"></i></div><div class="stat-value" style="font-size:16px;">Mutirões</div><div class="stat-label">Todos os mutirões</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorio('hoje')" style="cursor:pointer;--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div><div class="stat-value" style="font-size:16px;">Diário</div><div class="stat-label">Hoje</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorio('semana')" style="cursor:pointer;--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-calendar-days"></i></div><div class="stat-value" style="font-size:16px;">Semanal</div><div class="stat-label">Segunda a domingo</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorio('mes')" style="cursor:pointer;--stat-color:#16a34a;"><div class="stat-icon"><i class="fa-solid fa-chart-bar"></i></div><div class="stat-value" style="font-size:16px;">Mensal</div><div class="stat-label">Mês atual</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorio('mutiroes')" style="cursor:pointer;--stat-color:#f59e0b;"><div class="stat-icon"><i class="fa-solid fa-people-group"></i></div><div class="stat-value" style="font-size:16px;">Mutirões</div><div class="stat-label">Todos os mutirões</div></div>
                     <div class="stat-card" onclick="abrirModal('modalPersonalizado')" style="cursor:pointer;--stat-color:#7c5cfc;"><div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div><div class="stat-value" style="font-size:16px;">Personalizado</div><div class="stat-label">Escolha período</div></div>
                     <div class="stat-card" onclick="abrirModal('modalMutiraoPersonalizado')" style="cursor:pointer;--stat-color:#f59e0b;"><div class="stat-icon"><i class="fa-solid fa-people-group"></i></div><div class="stat-value" style="font-size:16px;">Mutirão personalizado</div><div class="stat-label">Nome e período</div></div>
                     <div class="stat-card" onclick="abrirModal('modalEspecialidade')" style="cursor:pointer;--stat-color:#0fb5b0;"><div class="stat-icon"><i class="fa-solid fa-microscope"></i></div><div class="stat-value" style="font-size:16px;">Especialidade</div><div class="stat-label">Filtro</div></div>
-                    <div class="stat-card" onclick="gerarRelatorio('cancelled')" style="cursor:pointer;--stat-color:#e5484d;"><div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-value" style="font-size:16px;">Canceladas</div><div class="stat-label">Com motivo</div></div>
-                    <div class="stat-card" onclick="gerarRelatorio('geral')" style="cursor:pointer;--stat-color:#a6afbc;"><div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div><div class="stat-value" style="font-size:16px;">Geral</div><div class="stat-label">Todas</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorio('cancelled')" style="cursor:pointer;--stat-color:#e5484d;"><div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-value" style="font-size:16px;">Canceladas</div><div class="stat-label">Com motivo</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorio('geral')" style="cursor:pointer;--stat-color:#a6afbc;"><div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div><div class="stat-value" style="font-size:16px;">Geral</div><div class="stat-label">Todas</div></div>
                 </div>
+                <p class="page-subtitle" style="margin-top:10px;"><i class="fa-solid fa-circle-info"></i> Clique em qualquer card para visualizar o relatório na tela — o PDF só é gerado se você quiser baixar.</p>
             </div>
 
             <!-- AUDITORIA -->
@@ -838,8 +873,9 @@
                 <p class="page-subtitle">Cadastro interno completo do paciente — busque um existente ou crie um novo</p>
                 <div class="card" style="margin-bottom:20px;">
                     <div style="display:flex;gap:10px;align-items:center;">
-                        <div class="search-bar" style="margin-bottom:0;flex:1;">
-                            <input type="text" id="prontuarioSearch" placeholder="Buscar por nome do paciente ou número de prontuário..." oninput="buscarPacientes()">
+                        <div class="search-bar" style="margin-bottom:0;flex:1;position:relative;">
+                            <input type="text" id="prontuarioSearch" placeholder="Buscar por nome do paciente ou número de prontuário..." oninput="buscarPacientes()" onkeydown="if(event.key==='Enter'){event.preventDefault();document.querySelector('#prontuarioSuggestions .suggestion-item')?.click();}" autocomplete="off" style="width:100%;">
+                            <div class="suggestions-box" id="prontuarioSuggestions"></div>
                         </div>
                         <button class="btn btn-primary btn-compact" onclick="abrirNovoPaciente()"><i class="fa-solid fa-user-plus"></i> Novo Paciente</button>
                     </div>
@@ -973,7 +1009,10 @@
             <h3><i class="fa-solid fa-clipboard-list"></i> Relatório Personalizado</h3>
             <div class="form-group"><label>Data Inicial</label><input type="date" id="customStartDate"></div>
             <div class="form-group"><label>Data Final</label><input type="date" id="customEndDate"></div>
-            <button class="btn btn-primary" onclick="gerarRelatorioPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary btn-compact" onclick="visualizarRelatorioPersonalizado()"><i class="fa-solid fa-eye"></i> Visualizar</button>
+                <button class="btn btn-primary btn-compact" onclick="gerarRelatorioPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            </div>
         </div>
     </div>
     <div class="modal-overlay" id="modalMutiraoPersonalizado">
@@ -983,7 +1022,10 @@
             <div class="form-group"><label>Mutirão</label><select id="relMutiraoPersonalizado"><option value="todos">Todos os mutirões</option></select></div>
             <div class="form-group"><label>Data Inicial</label><input type="date" id="relMutiraoStartDate"></div>
             <div class="form-group"><label>Data Final</label><input type="date" id="relMutiraoEndDate"></div>
-            <button class="btn btn-primary" onclick="gerarRelatorioMutiraoPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary btn-compact" onclick="visualizarRelatorioMutiraoPersonalizado()"><i class="fa-solid fa-eye"></i> Visualizar</button>
+                <button class="btn btn-primary btn-compact" onclick="gerarRelatorioMutiraoPersonalizado()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            </div>
         </div>
     </div>
     <div class="modal-overlay" id="modalEspecialidade">
@@ -993,7 +1035,10 @@
             <div class="form-group"><label>Especialidade</label><select id="relEspecialidade"><option value="todas">Todas</option></select></div>
             <div class="form-group"><label>Data Inicial</label><input type="date" id="relEspStartDate"></div>
             <div class="form-group"><label>Data Final</label><input type="date" id="relEspEndDate"></div>
-            <button class="btn btn-primary" onclick="gerarRelatorioEspecialidade()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary btn-compact" onclick="visualizarRelatorioEspecialidade()"><i class="fa-solid fa-eye"></i> Visualizar</button>
+                <button class="btn btn-primary btn-compact" onclick="gerarRelatorioEspecialidade()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            </div>
         </div>
     </div>
     <div class="modal-overlay" id="modalOrigem">
@@ -1003,9 +1048,23 @@
             <div class="form-group"><label>Origem</label><select id="relOrigem"><option value="todas">Todas</option></select></div>
             <div class="form-group"><label>Data Inicial</label><input type="date" id="relOrigStartDate"></div>
             <div class="form-group"><label>Data Final</label><input type="date" id="relOrigEndDate"></div>
-            <button class="btn btn-primary" onclick="gerarRelatorioOrigem()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary btn-compact" onclick="visualizarRelatorioOrigem()"><i class="fa-solid fa-eye"></i> Visualizar</button>
+                <button class="btn btn-primary btn-compact" onclick="gerarRelatorioOrigem()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+            </div>
         </div>
     </div>
+    <!-- MODAL: PRÉVIA DO RELATÓRIO NA TELA -->
+    <div class="modal-overlay" id="modalRelatorioPrevia">
+        <div class="modal modal-wide">
+            <button class="btn-close" onclick="fecharModal('modalRelatorioPrevia')"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="relatorioPreviaTitulo"><i class="fa-solid fa-file-lines"></i> Relatório</h3>
+            <p class="page-subtitle" id="relatorioPreviaResumo" style="margin-top:-14px;margin-bottom:14px;"></p>
+            <div id="relatorioPreviaConteudo"></div>
+            <button class="btn btn-primary btn-compact" style="margin-top:16px;" onclick="baixarRelatorioAtual()"><i class="fa-solid fa-file-pdf"></i> Baixar em PDF</button>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="editModal">
         <div class="modal">
             <button class="btn-close" onclick="fecharModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -1015,7 +1074,7 @@
                 <div class="form-group"><label>Paciente</label><input type="text" id="editPatient" required></div>
                 <div class="form-group"><label>Procedimento</label><input type="text" id="editType" required></div>
                 <div class="form-group"><label>Médico</label><input type="text" id="editDoctor"></div>
-                <div class="form-group"><label>Enfermeiro(a)</label><input type="text" id="editInstrumentador"></div>
+                <div class="form-group"><label>Instrumentador(a)</label><input type="text" id="editInstrumentador"></div>
                 <div class="form-group"><label>Anestesista</label><input type="text" id="editAnesthetist"></div>
                 <div class="form-group"><label>Data</label><input type="date" id="editDate"></div>
                 <div class="form-group"><label>Horário</label><input type="time" id="editTime"></div>
