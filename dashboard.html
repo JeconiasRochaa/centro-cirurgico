@@ -1072,13 +1072,23 @@
             <form id="editForm">
                 <input type="hidden" id="editId">
                 <div class="form-group"><label>Paciente</label><input type="text" id="editPatient" required></div>
-                <div class="form-group"><label>Procedimento</label><input type="text" id="editType" required></div>
+                <div class="form-group"><label>Prontuário</label><input type="text" id="editProntuario"></div>
+                <div class="form-group"><label>Data de nascimento</label><input type="date" id="editBirthDate"></div>
+                <div class="form-group"><label>Idade</label><input type="number" id="editAge" min="0"></div>
+                <div class="form-group"><label>Origem</label><select id="editOrigem"><option value="">Selecione</option><option value="Interno">Interno</option><option value="Eletivo">Eletivo</option><option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option><option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option><option value="Transferência">Transferência</option><option value="Urgência/Emergência">Urgência/Emergência</option><option value="Mutirão">Mutirão</option></select></div>
+                <div class="form-group"><label>Nome do mutirão</label><input type="text" id="editMutiraoNome"></div>
+                <div class="form-group"><label>Procedimento(s)</label><textarea id="editType" rows="3" required></textarea></div>
+                <div class="form-group"><label>Data</label><input type="date" id="editDate"></div>
+                <div class="form-group"><label>Horário</label><input type="time" id="editTime"></div>
+                <div class="form-group"><label>Sala</label><select id="editRoom"><option value="">Selecione</option><option>A Definir</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option></select></div>
+                <div class="form-group"><label>Especialidade</label><select id="editSpecialty"><option value="">Selecione</option><option>Cirurgia Geral</option><option>Ortopedia</option><option>Coloproctologia</option><option>Bucomaxilofacial</option><option>Outra</option></select></div>
                 <div class="form-group"><label>Médico</label><input type="text" id="editDoctor"></div>
                 <div class="form-group"><label>Instrumentador(a)</label><input type="text" id="editInstrumentador"></div>
                 <div class="form-group"><label>Anestesista</label><input type="text" id="editAnesthetist"></div>
-                <div class="form-group"><label>Data</label><input type="date" id="editDate"></div>
-                <div class="form-group"><label>Horário</label><input type="time" id="editTime"></div>
-                <div class="form-group"><label>Sala</label><select id="editRoom"><option value="">Selecione</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option></select></div>
+                <div class="form-group"><label>Reserva de sangue</label><select id="editNecessitaSangue"><option value="nao">Não</option><option value="sim">Sim</option><option value="talvez">Possivelmente</option></select></div>
+                <div class="form-group"><label>Necessidade de UTI</label><select id="editNecessitaUTI"><option value="nao">Não</option><option value="sim">Sim</option><option value="talvez">Possivelmente</option></select></div>
+                <div class="form-group"><label>Materiais especiais</label><input type="text" id="editMateriaisEspeciais"></div>
+                <div class="form-group"><label>Observações</label><textarea id="editObservacoes" rows="3"></textarea></div>
                 <div class="form-group"><label>Status</label><select id="editStatus">
                     <option value="pendente">Aguardando</option>
                     <option value="em_preparacao">Em Preparação</option>
@@ -1089,6 +1099,7 @@
                     <option value="cancelada">Cancelada</option>
                 </select></div>
                 <div class="form-group"><label>Motivo Cancelamento</label><input type="text" id="editCancelReason"></div>
+                <div class="form-group"><label>Motivo da Suspensão</label><input type="text" id="editSuspendReason"></div>
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
             </form>
         </div>
