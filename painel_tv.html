@@ -264,7 +264,7 @@
         thead th:nth-child(5){width:7%}   /* Origem */
         thead th:nth-child(6){width:14%}  /* Procedimento */
         thead th:nth-child(7){width:12%}  /* Médico */
-        thead th:nth-child(8){width:7%}   /* Enfermeiro(a) */
+        thead th:nth-child(8){width:7%}   /* Instrumentador(a) */
         thead th:nth-child(9){width:7%}   /* Anestesista */
         thead th:nth-child(10){width:6%}  /* Sangue */
         thead th:nth-child(11){width:6%}  /* UTI */
@@ -413,7 +413,7 @@
                             <th>Origem</th>
                             <th>Procedimento</th>
                             <th>Médico</th>
-                            <th>Enfermeiro(a)</th>
+                            <th>Ic</th>
                             <th>Anestesista</th>
                             <th><i class="fa-solid fa-droplet"></i> Sangue</th>
                             <th><i class="fa-solid fa-bed-pulse"></i> UTI</th>
@@ -568,6 +568,7 @@
                 const doctorTitle = getDoctorTitle(s.doctor);
                 const instrumentador = s.instrumentador || s.circulante;
                 const anesthetist = s.anesthetist;
+                const anesthetistTitle = getDoctorTitle(s.anesthetist);
                 const idade = Number(s.age);
                 const idadeExibida = Number.isFinite(idade) && idade >= 0 ? idade : '-';
                 
@@ -591,7 +592,7 @@
                     <td><span class="cell-content">${pr}${mh}</span></td>
                     <td><span class="cell-content">${doctorTitle} ${s.doctor||'-'}${s.specialty?`<br><span class="specialty-tag">${s.specialty}</span>`:''}</span></td>
                     <td><span class="cell-content">${instrumentador||'-'}</span></td>
-                    <td><span class="cell-content">${anesthetist||'-'}</span></td>
+                    <td><span class="cell-content">${anesthetist?`${anesthetistTitle} ${anesthetist}`:'-'}</span></td>
                     <td>${bloodBadge}</td>
                     <td>${icuBadge}</td>
                     <td>${sh}</td>
