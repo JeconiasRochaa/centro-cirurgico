@@ -29,6 +29,12 @@ window.gerarRelatorioPersonalizado = gerarRelatorioPersonalizado;
 window.gerarRelatorioEspecialidade = gerarRelatorioEspecialidade;
 window.gerarRelatorioOrigem = gerarRelatorioOrigem;
 window.gerarRelatorioMutiraoPersonalizado = gerarRelatorioMutiraoPersonalizado;
+window.visualizarRelatorio = visualizarRelatorio;
+window.visualizarRelatorioPersonalizado = visualizarRelatorioPersonalizado;
+window.visualizarRelatorioEspecialidade = visualizarRelatorioEspecialidade;
+window.visualizarRelatorioOrigem = visualizarRelatorioOrigem;
+window.visualizarRelatorioMutiraoPersonalizado = visualizarRelatorioMutiraoPersonalizado;
+window.baixarRelatorioAtual = baixarRelatorioAtual;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('userNameDisplay').textContent = session.name;
@@ -485,18 +491,117 @@ function updateAuditTable() {
 }
 
 // ============ RELATÓRIOS ============
-function gerarRelatorio(tipo) {
+function obterDadosRelatorio(tipo) {
     let titulo = '', dados = [];
     const today = getToday();
     switch(tipo) {
         case 'hoje': titulo = 'Relatório Diário'; dados = allSurgeries.filter(s => s.date === today); break;
-        case 'semana': const { inicioSemana, fimSemana } = getSemanaAtual(); titulo = 'Relatório Semanal'; dados = allSurgeries.filter(s => s.date >= inicioSemana && s.date <= fimSemana); break;
-        case 'mes': const { inicioMes, fimMes } = getMesAtual(); titulo = 'Relatório Mensal'; dados = allSurgeries.filter(s => s.date >= inicioMes && s.date <= fimMes); break;
+        case 'semana': { const { inicioSemana, fimSemana } = getSemanaAtual(); titulo = 'Relatório Semanal'; dados = allSurgeries.filter(s => s.date >= inicioSemana && s.date <= fimSemana); break; }
+        case 'mes': { const { inicioMes, fimMes } = getMesAtual(); titulo = 'Relatório Mensal'; dados = allSurgeries.filter(s => s.date >= inicioMes && s.date <= fimMes); break; }
         case 'mutiroes': titulo = 'Relatório de Mutirões'; dados = allSurgeries.filter(s => s.origem === 'Mutirão'); break;
         case 'cancelled': titulo = 'Relatório de Canceladas'; dados = allSurgeries.filter(s => s.status === 'cancelada'); break;
         case 'geral': titulo = 'Relatório Geral'; dados = allSurgeries; break;
     }
+    return { titulo, dados };
+}
+
+function gerarRelatorio(tipo) {
+    const { titulo, dados } = obterDadosRelatorio(tipo);
     gerarPDF(titulo, dados);
+}
+
+// ============ RELATÓRIO NA TELA (sem precisar gerar PDF) ============
+let relatorioAtual = { titulo: '', dados: [] };
+const statusTextRelatorio = {
+    pendente: 'Aguardando', em_preparacao: 'Em preparo', em_andamento: 'Em andamento',
+    recuperacao: 'Recuperação', concluida: 'Finalizada', suspensa: 'Suspensa', cancelada: 'Cancelada'
+};
+
+function montarTabelaRelatorio(dados) {
+    if (!dados.length) return '<div class="empty-state">Nenhuma cirurgia encontrada para este filtro.</div>';
+    const linhas = [...dados]
+        .sort((a,b) => (b.date||'').localeCompare(a.date||'') || (a.time||'').localeCompare(b.time||''))
+        .map((s,i) => `<tr>
+            <td>${i+1}</td>
+            <td>${formatDate(s.date)}</td>
+            <td>${s.time||'-'}</td>
+            <td>${s.patient||'-'}</td>
+            <td>${s.age||'-'}</td>
+            <td>${(s.type||'-').replace(/\n/g,', ')}</td>
+            <td>${s.doctor?`${getDoctorTitle(s.doctor)} ${s.doctor}`:'-'}</td>
+            <td>${s.anesthetist?`${getDoctorTitle(s.anesthetist)} ${s.anesthetist}`:'-'}</td>
+            <td>${s.instrumentador||'-'}</td>
+            <td>${s.specialty||'-'}</td>
+            <td>${s.room||'-'}</td>
+            <td>${s.origem||'-'}</td>
+            <td>${s.necessitaSangue==='sim'?'Sim':'Não'}</td>
+            <td>${s.necessitaUTI==='sim'?'Sim':'Não'}</td>
+            <td>${statusTextRelatorio[s.status]||s.status||'-'}</td>
+            <td>${s.cancelReason||s.suspendReason||'-'}</td>
+        </tr>`).join('');
+    return `<div class="report-table-wrap"><table>
+        <thead><tr><th>Nº</th><th>Data</th><th>Hora</th><th>Paciente</th><th>Idade</th><th>Procedimento</th><th>Médico</th><th>Anestesista</th><th>Instrumentador(a)</th><th>Especialidade</th><th>Sala</th><th>Origem</th><th>Sangue</th><th>UTI</th><th>Status</th><th>Motivo</th></tr></thead>
+        <tbody>${linhas}</tbody>
+    </table></div>`;
+}
+
+function abrirPreviaRelatorio(titulo, dados) {
+    relatorioAtual = { titulo, dados };
+    document.getElementById('relatorioPreviaTitulo').textContent = titulo;
+    document.getElementById('relatorioPreviaResumo').textContent = `Total: ${dados.length} cirurgia(s)`;
+    document.getElementById('relatorioPreviaConteudo').innerHTML = montarTabelaRelatorio(dados);
+    abrirModal('modalRelatorioPrevia');
+}
+
+function visualizarRelatorio(tipo) {
+    const { titulo, dados } = obterDadosRelatorio(tipo);
+    abrirPreviaRelatorio(titulo, dados);
+}
+
+function visualizarRelatorioPersonalizado() {
+    const inicio = document.getElementById('customStartDate').value;
+    const fim = document.getElementById('customEndDate').value;
+    if (!inicio || !fim) { alert('Selecione as datas!'); return; }
+    fecharModal('modalPersonalizado');
+    abrirPreviaRelatorio(`Relatório: ${formatDate(inicio)} a ${formatDate(fim)}`, allSurgeries.filter(s => s.date >= inicio && s.date <= fim));
+}
+
+function visualizarRelatorioEspecialidade() {
+    const esp = document.getElementById('relEspecialidade').value;
+    const inicio = document.getElementById('relEspStartDate').value;
+    const fim = document.getElementById('relEspEndDate').value;
+    let dados = allSurgeries;
+    if (esp !== 'todas') dados = dados.filter(s => s.specialty === esp);
+    if (inicio && fim) dados = dados.filter(s => s.date >= inicio && s.date <= fim);
+    fecharModal('modalEspecialidade');
+    abrirPreviaRelatorio(`Especialidade: ${esp}`, dados);
+}
+
+function visualizarRelatorioOrigem() {
+    const orig = document.getElementById('relOrigem').value;
+    const inicio = document.getElementById('relOrigStartDate').value;
+    const fim = document.getElementById('relOrigEndDate').value;
+    let dados = allSurgeries;
+    if (orig !== 'todas') dados = dados.filter(s => s.origem === orig);
+    if (inicio && fim) dados = dados.filter(s => s.date >= inicio && s.date <= fim);
+    fecharModal('modalOrigem');
+    abrirPreviaRelatorio(`Origem: ${orig}`, dados);
+}
+
+function visualizarRelatorioMutiraoPersonalizado() {
+    const mutirao = document.getElementById('relMutiraoPersonalizado').value;
+    const inicio = document.getElementById('relMutiraoStartDate').value;
+    const fim = document.getElementById('relMutiraoEndDate').value;
+    let dados = allSurgeries.filter(s => s.origem === 'Mutirão');
+    if (mutirao !== 'todos') dados = dados.filter(s => s.mutiraoNome === mutirao);
+    if (inicio && fim) dados = dados.filter(s => s.date >= inicio && s.date <= fim);
+    fecharModal('modalMutiraoPersonalizado');
+    abrirPreviaRelatorio(`Mutirão: ${mutirao === 'todos' ? 'Todos' : mutirao}`, dados);
+}
+
+function baixarRelatorioAtual() {
+    if (!relatorioAtual.titulo) return;
+    gerarPDF(relatorioAtual.titulo, relatorioAtual.dados);
 }
 
 function getSemanaAtual() {
@@ -610,6 +715,8 @@ function editarCirurgia(id) {
     setValue('editPatient', s.patient||'');
     setValue('editType', s.type||'');
     setValue('editDoctor', s.doctor||'');
+    setValue('editInstrumentador', s.instrumentador||'');
+    setValue('editAnesthetist', s.anesthetist||'');
     setValue('editDate', s.date||'');
     setValue('editTime', s.time||'');
     setValue('editRoom', s.room||'');
@@ -696,6 +803,8 @@ document.getElementById('editForm')?.addEventListener('submit', function(e) {
         patient: document.getElementById('editPatient').value.toUpperCase(),
         type: document.getElementById('editType').value.toUpperCase(),
         doctor: document.getElementById('editDoctor').value.toUpperCase(),
+        instrumentador: document.getElementById('editInstrumentador').value.toUpperCase(),
+        anesthetist: document.getElementById('editAnesthetist').value.toUpperCase(),
         date: document.getElementById('editDate').value,
         time: document.getElementById('editTime').value,
         room: document.getElementById('editRoom').value,
@@ -948,11 +1057,7 @@ function safeFbKey(key) {
     return key.replace(/[.#$\[\]\/]/g, '_');
 }
 
-function buscarPacientes() {
-    const termo = (document.getElementById('prontuarioSearch')?.value || '').trim().toUpperCase();
-    const resultadosDiv = document.getElementById('prontuarioResultados');
-    document.getElementById('prontuarioFicha').style.display = 'none';
-
+function listaDePacientesAgrupados() {
     // Base 1: pacientes com ficha própria já cadastrada (Firebase patients/)
     const grupos = {};
     allPatients.forEach(p => {
@@ -966,10 +1071,33 @@ function buscarPacientes() {
         if (!grupos[key]) grupos[key] = { patient: s.patient||'-', prontuario: s.prontuario||'', age: s.age||'', count: 0, key, temFicha: false };
         grupos[key].count++;
     });
+    return Object.values(grupos);
+}
 
-    let lista = Object.values(grupos);
+function buscarPacientes() {
+    const termo = (document.getElementById('prontuarioSearch')?.value || '').trim().toUpperCase();
+    const resultadosDiv = document.getElementById('prontuarioResultados');
+    document.getElementById('prontuarioFicha').style.display = 'none';
+
+    let lista = listaDePacientesAgrupados();
     if (termo) lista = lista.filter(p => (p.patient||'').toUpperCase().includes(termo) || (p.prontuario||'').toUpperCase().includes(termo));
     lista.sort((a,b) => a.patient.localeCompare(b.patient));
+
+    // ===== Autocomplete: dropdown de acesso rápido enquanto digita =====
+    const sugestoesBox = document.getElementById('prontuarioSuggestions');
+    if (sugestoesBox) {
+        if (termo.length >= 2 && lista.length) {
+            sugestoesBox.innerHTML = lista.slice(0, 8).map(p => `
+                <div class="suggestion-item" onclick='window.selecionarSugestaoPaciente(${JSON.stringify(p.key)})'>
+                    <span><i class="fa-solid fa-user"></i> <strong>${p.patient}</strong>${p.age ? ` (${p.age}a)` : ''}</span>
+                    <span style="color:var(--text-muted);font-size:11px;">${p.prontuario ? 'Prontuário: '+p.prontuario : 'Sem prontuário'}</span>
+                </div>
+            `).join('');
+            sugestoesBox.classList.add('show');
+        } else {
+            sugestoesBox.classList.remove('show');
+        }
+    }
 
     if (!termo) { resultadosDiv.innerHTML = '<div class="empty-state">Digite um nome ou número de prontuário para buscar, ou cadastre um novo paciente.</div>'; return; }
     if (!lista.length) { resultadosDiv.innerHTML = '<div class="empty-state">Nenhum paciente encontrado.</div>'; return; }
@@ -987,6 +1115,20 @@ function buscarPacientes() {
         `).join('') + `</tbody></table></div>`;
 }
 window.buscarPacientes = buscarPacientes;
+
+window.selecionarSugestaoPaciente = function(key) {
+    const sugestoesBox = document.getElementById('prontuarioSuggestions');
+    sugestoesBox?.classList.remove('show');
+    abrirFichaPaciente(key);
+};
+
+document.addEventListener('click', (e) => {
+    const box = document.getElementById('prontuarioSuggestions');
+    const input = document.getElementById('prontuarioSearch');
+    if (box && input && !input.contains(e.target) && !box.contains(e.target)) {
+        box.classList.remove('show');
+    }
+});
 
 function calcularIdadeSimples(dataNasc) {
     if (!dataNasc) return '';
