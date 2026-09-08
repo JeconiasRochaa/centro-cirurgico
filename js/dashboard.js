@@ -713,15 +713,26 @@ function editarCirurgia(id) {
     if (!s) return;
     setValue('editId', s.id);
     setValue('editPatient', s.patient||'');
+    setValue('editProntuario', s.prontuario||'');
+    setValue('editBirthDate', s.birthDate||'');
+    setValue('editAge', s.age||'');
+    setValue('editOrigem', s.origem||'');
+    setValue('editMutiraoNome', s.mutiraoNome||'');
     setValue('editType', s.type||'');
+    setValue('editSpecialty', s.specialty||'');
     setValue('editDoctor', s.doctor||'');
     setValue('editInstrumentador', s.instrumentador||'');
     setValue('editAnesthetist', s.anesthetist||'');
     setValue('editDate', s.date||'');
     setValue('editTime', s.time||'');
     setValue('editRoom', s.room||'');
+    setValue('editNecessitaSangue', s.necessitaSangue||'nao');
+    setValue('editNecessitaUTI', s.necessitaUTI||'nao');
+    setValue('editMateriaisEspeciais', s.materiaisEspeciais||'');
+    setValue('editObservacoes', s.observacoes||'');
     setValue('editStatus', s.status||'pendente');
     setValue('editCancelReason', s.cancelReason||'');
+    setValue('editSuspendReason', s.suspendReason||'');
     document.getElementById('editModal')?.classList.add('active');
 }
 
@@ -801,15 +812,26 @@ document.getElementById('editForm')?.addEventListener('submit', function(e) {
 
     update(ref(db, `surgeries/${id}`), {
         patient: document.getElementById('editPatient').value.toUpperCase(),
+        prontuario: document.getElementById('editProntuario').value.trim(),
+        birthDate: document.getElementById('editBirthDate').value,
+        age: document.getElementById('editAge').value,
+        origem: document.getElementById('editOrigem').value,
+        mutiraoNome: document.getElementById('editMutiraoNome').value.trim(),
         type: document.getElementById('editType').value.toUpperCase(),
+        specialty: document.getElementById('editSpecialty').value,
         doctor: document.getElementById('editDoctor').value.toUpperCase(),
         instrumentador: document.getElementById('editInstrumentador').value.toUpperCase(),
         anesthetist: document.getElementById('editAnesthetist').value.toUpperCase(),
         date: document.getElementById('editDate').value,
         time: document.getElementById('editTime').value,
         room: document.getElementById('editRoom').value,
+        necessitaSangue: document.getElementById('editNecessitaSangue').value,
+        necessitaUTI: document.getElementById('editNecessitaUTI').value,
+        materiaisEspeciais: document.getElementById('editMateriaisEspeciais').value.trim(),
+        observacoes: document.getElementById('editObservacoes').value.trim(),
         status: statusNovo,
-        cancelReason: document.getElementById('editCancelReason').value || null
+        cancelReason: document.getElementById('editCancelReason').value.trim() || null,
+        suspendReason: document.getElementById('editSuspendReason').value.trim() || null
     }).then(() => {
         if (statusAnterior && statusAnterior !== statusNovo) {
             set(push(ref(db, 'audit_logs')), {
