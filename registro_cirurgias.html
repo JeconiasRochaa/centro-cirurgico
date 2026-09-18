@@ -161,6 +161,7 @@
                                             <option>SALA B</option>
                                             <option>SALA C</option>
                                             <option>SALA D</option>
+                                            <option>SALA E</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -184,7 +185,7 @@
                                                 <div id="proceduresList"></div>
                                             </div>
                                         </div>
-                                        <input type="hidden" id="surgeryType" required>
+                                        <input type="hidden" id="surgeryType">
                                     </div>
                                     <div class="form-group">
                                         <label>Médico <span class="required">*</span></label>
@@ -255,7 +256,7 @@
                         <div class="tabs">
                             <button class="tab-btn active" onclick="mudarAba('hoje')"><i class="fa-solid fa-calendar-day"></i> Hoje</button>
                             <button class="tab-btn" onclick="mudarAba('todas')"><i class="fa-solid fa-folder-open"></i> Todas</button>
-                            <button class="tab-btn" onclick="mudarAba('futuras')"><i class="fa-solid fa-calendar-days"></i> Futuras</button>
+                            <button class="tab-btn" onclick="mudarAba('futuras')"><i class="fa-solid fa-calendar-days"></i> Futuras <span class="tab-count" id="futurasCount"></span></button>
                         </div>
                         <div class="surgery-list" id="surgeryList">
                             <div class="empty-state">Carregando...</div>

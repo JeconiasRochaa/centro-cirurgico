@@ -1,10 +1,12 @@
 // ============ js/registro.js ============
 import { db, ref, onValue, set, push, update, remove, runTransaction, get } from './firebase.js';
 import { requireAuth, logout, hasPermission } from './auth.js';
-import { getToday, calculateAge, statusLabels, statusBadgeClass, getDoctorTitle } from './utils.js';
+import { getToday, calculateAge, statusLabels, statusBadgeClass, getDoctorTitle, ativarFechamentoModalAoClicarFora } from './utils.js';
 
 const session = requireAuth('registro');
 if (!session) throw new Error('Acesso negado');
+
+ativarFechamentoModalAoClicarFora();
 
 document.getElementById('userInfo').textContent = session.name;
 window.logout = logout;
@@ -532,7 +534,7 @@ window.adicionarProc = function(nome, especialidade, codigo) {
 window.adicionarManual = function(nome) {
     const procedimento = (nome || '').trim().toUpperCase();
     if (!procedimento) return;
-    procedimentosSelecionados.push({ nome: procedimento, especialidade: '', codigo:  + Date.now().toString(36) });
+    procedimentosSelecionados.push({ nome: procedimento, especialidade: '', codigo: 'MANUAL-' + Date.now().toString(36) });
     atualizarProcVisuais();
     procInput.value = '';
     suggestionsBox.classList.remove('show');
@@ -715,10 +717,15 @@ window.editarCirurgia = function(id) {
 
     procedimentosSelecionados = [];
     if (s.type) {
-        s.type.split('\n').forEach(linha => {
-            const match = linha.match(/^([A-Z0-9-]+)\s*-\s*(.+)$/);
+        // Nunca descarta um procedimento ao editar: se a linha não bater com o padrão
+        // "CÓDIGO - NOME" (ex: procedimentos digitados manualmente em cadastros antigos),
+        // preserva a linha inteira como procedimento manual em vez de apagá-la do formulário.
+        s.type.split('\n').filter(Boolean).forEach((linha, idx) => {
+            const match = linha.match(/^([A-Z0-9-]+)\s*-\s*(.+)$/i);
             if (match) {
-                procedimentosSelecionados.push({ codigo: match[1], nome: match[2].trim(), especialidade: s.specialty || '' });
+                procedimentosSelecionados.push({ codigo: match[1].toUpperCase(), nome: match[2].trim(), especialidade: s.specialty || '' });
+            } else {
+                procedimentosSelecionados.push({ codigo: `MANUAL-${Date.now().toString(36)}-${idx}`, nome: linha.trim(), especialidade: s.specialty || '' });
             }
         });
     }
@@ -798,6 +805,38 @@ window.cancelarCirurgia = (id) => {
     if (motivo) mudarStatus(id, 'cancelada', 'Cancelamento de cirurgia', { cancelReason: motivo });
 };
 
+// ============ FALTA DE PACIENTE (mesma lógica do cancelamento, mas também
+// registra o caso na aba "Faltas" — usado para as estatísticas de absenteísmo) ============
+async function registrarFaltaAusencia({ patient, date, municipio, procedure, reason }) {
+    const faltaRef = push(ref(db, 'absences'));
+    const registro = {
+        id: faltaRef.key,
+        patient: (patient || '').trim().toUpperCase(),
+        date: date || getToday(),
+        municipio: (municipio || '').trim().toUpperCase(),
+        procedure: (procedure || '').trim().toUpperCase(),
+        reason: (reason || '').trim(),
+        registradoPor: session.name,
+        criadoEm: new Date().toISOString()
+    };
+    await set(faltaRef, registro);
+}
+
+window.registrarFaltaCirurgia = async (id) => {
+    const s = allSurgeries.find(x => x.id === id);
+    if (!s) return;
+    if (!confirm(`🚫 Confirmar que ${s.patient || 'o paciente'} FALTOU a esta cirurgia agendada?\n\nA cirurgia será cancelada e a falta entrará na lista de Faltas (absenteísmo).`)) return;
+    const municipio = prompt('📍 Município do paciente (opcional):') || '';
+    const motivo = prompt('📝 Observação sobre a falta (opcional):') || '';
+    try {
+        await registrarFaltaAusencia({ patient: s.patient, date: s.date, municipio, procedure: s.type, reason: motivo });
+        await mudarStatus(id, 'cancelada', 'Cancelamento por falta do paciente (absenteísmo)', { cancelReason: `Falta do paciente${motivo ? ': ' + motivo : ''}` });
+    } catch (err) {
+        console.error(err);
+        alert('❌ Não foi possível registrar a falta.');
+    }
+};
+
 window.excluirCirurgia = (id) => {
     if (confirm('⚠️ Tem certeza que deseja excluir esta cirurgia permanentemente?')) remove(ref(db, `surgeries/${id}`));
 };
@@ -822,6 +861,7 @@ function botoesAcao(s) {
     switch (s.status) {
         case 'pendente':
             return `<button class="btn-sm btn-sm-prep" onclick="iniciarPreparo('${s.id}')"><i class="fa-solid fa-hand-holding-medical"></i> Iniciar Preparo</button>
+                    <button class="btn-sm btn-sm-absent" onclick="registrarFaltaCirurgia('${s.id}')"><i class="fa-solid fa-user-slash"></i> Faltou</button>
                     <button class="btn-sm btn-sm-cancel-btn" onclick="cancelarCirurgia('${s.id}')"><i class="fa-solid fa-xmark"></i> Cancelar</button>`;
         case 'em_preparacao':
             return `<button class="btn-sm btn-sm-progress" onclick="iniciarCirurgia('${s.id}')">▶ Iniciar Cirurgia</button>
@@ -843,6 +883,11 @@ function botoesAcao(s) {
 function atualizarLista() {
     const list = document.getElementById('surgeryList');
     const today = getToday();
+
+    const futurasCount = allSurgeries.filter(s => s.date > today && s.status !== 'cancelada').length;
+    const badgeFuturas = document.getElementById('futurasCount');
+    if (badgeFuturas) badgeFuturas.textContent = futurasCount > 0 ? futurasCount : '';
+
     let cirurgias;
     if (abaAtual === 'hoje') cirurgias = allSurgeries.filter(s => s.date === today);
     else if (abaAtual === 'futuras') cirurgias = allSurgeries.filter(s => s.date > today);

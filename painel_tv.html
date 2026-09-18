@@ -465,11 +465,18 @@
         'Mutirão': '<i class="fa-solid fa-users"></i> Mutirão'
     };
 
-    // Remove códigos internos de procedimento (ex: "APEN-01 - ") do texto exibido no painel.
-    // Esses códigos servem para relatórios administrativos; no painel público só o nome interessa.
+    // Remove códigos internos de procedimento (ex: "APEN-01 - ", "MANUAL-xyz - ") do texto
+    // exibido no painel. Esses códigos servem só para relatórios administrativos; no painel
+    // público (TV) apenas o nome do procedimento pode aparecer, nunca o código.
+    // Cada procedimento é sempre salvo no formato "CÓDIGO - NOME", então basta remover tudo
+    // até o primeiro " - " de cada linha — isso funciona para qualquer formato de código,
+    // ao contrário de uma regex que só reconhece um padrão específico.
     function limparProcedimento(texto) {
         if (!texto) return '-';
-        return texto.split('\n').map(linha => linha.replace(/^[A-Z0-9]+(?:-[A-Z0-9]+)+\s*-\s*/i, '').trim()).join('\n');
+        return texto.split('\n').map(linha => {
+            const separador = linha.indexOf(' - ');
+            return (separador !== -1 ? linha.slice(separador + 3) : linha).trim();
+        }).filter(Boolean).join('\n') || '-';
     }
 
     function getDoctorTitle(name) {

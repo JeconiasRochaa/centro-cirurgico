@@ -436,7 +436,7 @@
         // Se já houver sessão ativa, respeita o papel do usuário em vez de mandar todo mundo pro dashboard
         const sessaoAtual = getSession();
         if (sessaoAtual) {
-            window.location.replace(homePageFor(sessaoAtual.role));
+            window.location.replace(sessaoAtual.mustChangePassword ? 'trocar-senha.html' : homePageFor(sessaoAtual.role));
         }
 
         const togglePwBtn = document.getElementById('togglePw');
@@ -512,7 +512,7 @@
                 successDiv.classList.add('show');
 
                 setTimeout(() => {
-                    window.location.href = homePageFor(result.user.role);
+                    window.location.href = result.user.mustChangePassword ? 'trocar-senha.html' : homePageFor(result.user.role);
                 }, 500);
             } catch (err) {
                 console.error(err);

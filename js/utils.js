@@ -68,3 +68,16 @@ export const statusBadgeClass = {
     'suspensa': 'badge-gray',
     'cancelada': 'badge-danger'
 };
+
+// Fecha qualquer modal (".modal-overlay.active") ao clicar fora da caixa,
+// isto é, quando o clique acontece no próprio fundo escurecido e não em algum
+// elemento dentro de ".modal". Basta chamar uma vez por página — cobre todos
+// os modais existentes e os que forem criados depois, sem precisar repetir
+// esse código em cada modal.
+export function ativarFechamentoModalAoClicarFora() {
+    document.addEventListener('click', (event) => {
+        if (event.target.classList && event.target.classList.contains('modal-overlay')) {
+            event.target.classList.remove('active');
+        }
+    });
+}

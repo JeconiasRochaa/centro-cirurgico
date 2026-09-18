@@ -5,11 +5,15 @@ import { getToday, getDoctorTitle } from './utils.js';
 let TODAY = getToday();
 let currentSurgeries = [];
 
+// Remove o código interno do procedimento (ex: "APEN-01 - ") antes de exibir na TV.
+// Os procedimentos são sempre salvos como "CÓDIGO - NOME", então cortar tudo até o
+// primeiro " - " remove o código independentemente do formato usado.
 function limparProcedimento(texto) {
     if (!texto) return '-';
-    return texto.split('\n')
-        .map(linha => linha.replace(/^[A-Z0-9]+(?:-[A-Z0-9]+)+\s*-\s*/i, '').trim())
-        .join('\n');
+    return texto.split('\n').map(linha => {
+        const separador = linha.indexOf(' - ');
+        return (separador !== -1 ? linha.slice(separador + 3) : linha).trim();
+    }).filter(Boolean).join('\n') || '-';
 }
 
 // ============ RELÓGIO ============

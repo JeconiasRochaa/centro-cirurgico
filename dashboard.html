@@ -678,13 +678,16 @@
             <div class="sidebar-item" onclick="switchTab('cancelled')" data-tab="cancelled">
                 <span class="icon"><i class="fa-solid fa-ban"></i></span> Canceladas
             </div>
-            <div class="sidebar-item" onclick="window.open('painel_tv.html','_blank')">
+            <div class="sidebar-item" onclick="switchTab('faltas')" data-tab="faltas">
+                <span class="icon"><i class="fa-solid fa-user-slash"></i></span> Faltas
+            </div>
+            <div class="sidebar-item" onclick="window.open('painel_tv.html','_blank')" id="navPainelTV">
                 <span class="icon"><i class="fa-solid fa-tv"></i></span> Painel TV
             </div>
-            <div class="sidebar-item" onclick="window.open('painel_espera.html','_blank')">
+            <div class="sidebar-item" onclick="window.open('painel_espera.html','_blank')" id="navSalaEspera">
                 <span class="icon"><i class="fa-solid fa-heart-pulse"></i></span> Sala de Espera
             </div>
-            <div class="sidebar-item" onclick="window.open('portal_clinicas.html','_blank')">
+            <div class="sidebar-item" onclick="window.open('portal_clinicas.html','_blank')" id="navPortalClinicas">
                 <span class="icon"><i class="fa-solid fa-file-medical"></i></span> Portal das Clínicas
             </div>
             <div class="sidebar-item" onclick="switchTab('prontuarios')" data-tab="prontuarios">
@@ -740,6 +743,19 @@
                     <p class="welcome-greeting" id="welcomeGreeting">Bem-vindo(a) de volta.</p>
                     <div class="welcome-date" id="welcomeDate"></div>
                 </div>
+
+                <div class="card" style="margin-top:24px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                        <h2 style="margin-bottom:2px;"><i class="fa-solid fa-calendar-plus"></i> Cirurgias Futuras Agendadas <span class="badge-status badge-info" id="futureSurgeriesCount">0</span></h2>
+                        <button class="btn btn-outline btn-compact" onclick="switchTab('surgeries')">Ver todas <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="table-card" style="margin-top:12px;">
+                        <table>
+                            <thead><tr><th>Data</th><th>Horário</th><th>Paciente</th><th>Procedimento</th><th>Médico</th><th>Sala</th></tr></thead>
+                            <tbody id="futureSurgeriesBody"><tr><td colspan="6" class="empty-state">Carregando...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div class="tab-content" id="tab-overview">
@@ -781,6 +797,9 @@
                 <div class="charts-grid">
                     <div class="chart-card"><h3><i class="fa-solid fa-arrow-trend-down"></i> Taxa de Cancelamento</h3><div class="chart-container"><canvas id="cancellationRateChart"></canvas></div></div>
                     <div class="chart-card"><h3><i class="fa-solid fa-chart-line"></i> Últimos 15 dias</h3><div class="chart-container"><canvas id="dailyChart"></canvas></div></div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card"><h3><i class="fa-solid fa-user-slash"></i> Faltas por Município</h3><div class="chart-container"><canvas id="faltasMunicipioChart"></canvas></div></div>
                 </div>
             </div>
 
@@ -837,6 +856,28 @@
                 </div>
             </div>
 
+            <!-- FALTAS (ABSENTEÍSMO) -->
+            <div class="tab-content" id="tab-faltas">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                    <div>
+                        <h1 class="page-title">Faltas de Pacientes</h1>
+                        <p class="page-subtitle">Registro de absenteísmo — pacientes que não compareceram</p>
+                    </div>
+                    <button class="btn btn-primary btn-compact" id="btnRegistrarFalta" onclick="abrirModalFalta()"><i class="fa-solid fa-user-slash"></i> Registrar Falta</button>
+                </div>
+                <div class="table-card">
+                    <div class="search-bar">
+                        <input type="text" id="searchFalta" placeholder="Buscar paciente..." oninput="filtrarFaltas()">
+                        <input type="text" id="searchFaltaMunicipio" placeholder="Município..." oninput="filtrarFaltas()">
+                        <input type="date" id="filterFaltaDate" onchange="filtrarFaltas()">
+                    </div>
+                    <table>
+                        <thead><tr><th>Data</th><th>Paciente</th><th>Município</th><th>Procedimento</th><th>Motivo</th><th>Registrado por</th><th>Ações</th></tr></thead>
+                        <tbody id="faltasTableBody"><tr><td colspan="7" class="empty-state">Carregando...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- RELATÓRIOS -->
             <div class="tab-content" id="tab-reports">
                 <h1 class="page-title">Relatórios</h1>
@@ -849,7 +890,9 @@
                     <div class="stat-card" onclick="abrirModal('modalPersonalizado')" style="cursor:pointer;--stat-color:#7c5cfc;"><div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div><div class="stat-value" style="font-size:16px;">Personalizado</div><div class="stat-label">Escolha período</div></div>
                     <div class="stat-card" onclick="abrirModal('modalMutiraoPersonalizado')" style="cursor:pointer;--stat-color:#f59e0b;"><div class="stat-icon"><i class="fa-solid fa-people-group"></i></div><div class="stat-value" style="font-size:16px;">Mutirão personalizado</div><div class="stat-label">Nome e período</div></div>
                     <div class="stat-card" onclick="abrirModal('modalEspecialidade')" style="cursor:pointer;--stat-color:#0fb5b0;"><div class="stat-icon"><i class="fa-solid fa-microscope"></i></div><div class="stat-value" style="font-size:16px;">Especialidade</div><div class="stat-label">Filtro</div></div>
+                    <div class="stat-card" onclick="abrirModal('modalOrigem')" style="cursor:pointer;--stat-color:#7c5cfc;"><div class="stat-icon"><i class="fa-solid fa-chart-bar"></i></div><div class="stat-value" style="font-size:16px;">Origem</div><div class="stat-label">Filtro</div></div>
                     <div class="stat-card" onclick="visualizarRelatorio('cancelled')" style="cursor:pointer;--stat-color:#e5484d;"><div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-value" style="font-size:16px;">Canceladas</div><div class="stat-label">Com motivo</div></div>
+                    <div class="stat-card" onclick="visualizarRelatorioFaltas()" style="cursor:pointer;--stat-color:#8a5a2b;"><div class="stat-icon"><i class="fa-solid fa-user-slash"></i></div><div class="stat-value" style="font-size:16px;">Faltantes</div><div class="stat-label">Absenteísmo</div></div>
                     <div class="stat-card" onclick="visualizarRelatorio('geral')" style="cursor:pointer;--stat-color:#a6afbc;"><div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div><div class="stat-value" style="font-size:16px;">Geral</div><div class="stat-label">Todas</div></div>
                 </div>
                 <p class="page-subtitle" style="margin-top:10px;"><i class="fa-solid fa-circle-info"></i> Clique em qualquer card para visualizar o relatório na tela — o PDF só é gerado se você quiser baixar.</p>
@@ -987,11 +1030,15 @@
                 <div class="form-group"><label>Usuário (login)</label><input type="text" id="userUsername" required></div>
                 <div class="form-group"><label>Senha</label><input type="text" id="userPassword" required></div>
                 <div class="form-group">
+                    <label><input type="checkbox" id="userForcarTroca" checked style="width:auto;"> Forçar troca de senha no próximo login</label>
+                </div>
+                <div class="form-group">
                     <label>Papel</label>
                     <select id="userRoleSelect">
                         <option value="admin">Administrador — acesso total</option>
                         <option value="diretor">Diretor(a) — acesso total, exceto Configurações</option>
                         <option value="cirurgico">Centro Cirúrgico — apenas registro de cirurgias</option>
+                        <option value="faturamento">Faturamento — apenas relatórios e informações das cirurgias</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1054,6 +1101,22 @@
             </div>
         </div>
     </div>
+    <!-- MODAL: REGISTRAR/EDITAR FALTA (ABSENTEÍSMO) -->
+    <div class="modal-overlay" id="modalFalta">
+        <div class="modal">
+            <button class="btn-close" onclick="fecharModal('modalFalta')"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="modalFaltaTitulo"><i class="fa-solid fa-user-slash"></i> Registrar Falta</h3>
+            <form id="faltaForm">
+                <input type="hidden" id="faltaId">
+                <div class="form-group"><label>Paciente</label><input type="text" id="faltaPatient" required></div>
+                <div class="form-group"><label>Data</label><input type="date" id="faltaDate" required></div>
+                <div class="form-group"><label>Município</label><input type="text" id="faltaMunicipio" placeholder="Ex.: Palmeira dos Índios"></div>
+                <div class="form-group"><label>Procedimento (opcional)</label><input type="text" id="faltaProcedure" placeholder="Cirurgia que seria realizada"></div>
+                <div class="form-group"><label>Motivo / Observação (opcional)</label><textarea id="faltaReason" rows="2"></textarea></div>
+                <button type="submit" class="btn btn-primary btn-compact"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+            </form>
+        </div>
+    </div>
     <!-- MODAL: PRÉVIA DO RELATÓRIO NA TELA -->
     <div class="modal-overlay" id="modalRelatorioPrevia">
         <div class="modal modal-wide">
@@ -1076,11 +1139,10 @@
                 <div class="form-group"><label>Data de nascimento</label><input type="date" id="editBirthDate"></div>
                 <div class="form-group"><label>Idade</label><input type="number" id="editAge" min="0"></div>
                 <div class="form-group"><label>Origem</label><select id="editOrigem"><option value="">Selecione</option><option value="Interno">Interno</option><option value="Eletivo">Eletivo</option><option value="CR - Bucomaxilofacial">CR - Bucomaxilofacial</option><option value="Solicitação Externa">Solicitação Externa (Outra Unidade)</option><option value="Transferência">Transferência</option><option value="Urgência/Emergência">Urgência/Emergência</option><option value="Mutirão">Mutirão</option></select></div>
-                <div class="form-group"><label>Nome do mutirão</label><input type="text" id="editMutiraoNome"></div>
                 <div class="form-group"><label>Procedimento(s)</label><textarea id="editType" rows="3" required></textarea></div>
                 <div class="form-group"><label>Data</label><input type="date" id="editDate"></div>
                 <div class="form-group"><label>Horário</label><input type="time" id="editTime"></div>
-                <div class="form-group"><label>Sala</label><select id="editRoom"><option value="">Selecione</option><option>A Definir</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option></select></div>
+                <div class="form-group"><label>Sala</label><select id="editRoom"><option value="">Selecione</option><option>A Definir</option><option>SALA A</option><option>SALA B</option><option>SALA C</option><option>SALA D</option><option>SALA E</option></select></div>
                 <div class="form-group"><label>Especialidade</label><select id="editSpecialty"><option value="">Selecione</option><option>Cirurgia Geral</option><option>Ortopedia</option><option>Coloproctologia</option><option>Bucomaxilofacial</option><option>Outra</option></select></div>
                 <div class="form-group"><label>Médico</label><input type="text" id="editDoctor"></div>
                 <div class="form-group"><label>Instrumentador(a)</label><input type="text" id="editInstrumentador"></div>
@@ -1102,6 +1164,15 @@
                 <div class="form-group"><label>Motivo da Suspensão</label><input type="text" id="editSuspendReason"></div>
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL: DETALHES COMPLETOS DA CIRURGIA (clique no nome do paciente) -->
+    <div class="modal-overlay" id="modalDetalhesCirurgia">
+        <div class="modal modal-wide">
+            <button class="btn-close" onclick="fecharModalDetalhes()"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="detalhesCirurgiaTitulo"><i class="fa-solid fa-user"></i> Detalhes</h3>
+            <div id="detalhesCirurgiaConteudo"></div>
         </div>
     </div>
 

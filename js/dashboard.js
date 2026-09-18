@@ -1,14 +1,17 @@
 // ============ js/dashboard.js ============
 import { db, ref, onValue, update, remove, push, set, get } from './firebase.js';
 import { requireAuth, logout, roleLabel, hasPermission, listUsers, saveUser, deleteUser } from './auth.js';
-import { getToday, formatDate, getDoctorTitle, statusLabels, statusBadgeClass } from './utils.js';
+import { getToday, formatDate, getDoctorTitle, statusLabels, statusBadgeClass, ativarFechamentoModalAoClicarFora } from './utils.js';
 
 const session = requireAuth('dashboard');
 if (!session) throw new Error('Acesso negado');
 
+ativarFechamentoModalAoClicarFora();
+
 let allSurgeries = [];
+let allFaltas = [];
 const TODAY = getToday();
-let specialtyChart, originChart, monthlyChart, dailyChart, cancellationRateChart, hourlyChart;
+let specialtyChart, originChart, monthlyChart, dailyChart, cancellationRateChart, hourlyChart, faltasMunicipioChart;
 let hospitalLogo = null, govLogo = null;
 let systemName = 'ExaGestão', hospitalName = 'Hospital Regional de Palmeira dos Índios';
 let auditLogs = [];
@@ -35,6 +38,8 @@ window.visualizarRelatorioEspecialidade = visualizarRelatorioEspecialidade;
 window.visualizarRelatorioOrigem = visualizarRelatorioOrigem;
 window.visualizarRelatorioMutiraoPersonalizado = visualizarRelatorioMutiraoPersonalizado;
 window.baixarRelatorioAtual = baixarRelatorioAtual;
+window.verDetalhesCirurgia = verDetalhesCirurgia;
+window.fecharModalDetalhes = fecharModalDetalhes;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('userNameDisplay').textContent = session.name;
@@ -47,6 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
     onValue(ref(db, 'surgeries'), (snap) => {
         allSurgeries = snap.val() ? Object.values(snap.val()) : [];
         updateAll();
+    });
+
+    onValue(ref(db, 'absences'), (snap) => {
+        allFaltas = snap.val() ? Object.values(snap.val()) : [];
+        if (document.getElementById('tab-faltas')?.classList.contains('active')) filtrarFaltas();
+        if (document.getElementById('tab-overview')?.classList.contains('active')) renderCharts();
+        updateKPIs();
+        updateAlerts();
     });
     
     onValue(ref(db, 'audit_logs'), (snap) => {
@@ -109,9 +122,17 @@ function toggleTheme() {
     localStorage.setItem('hrpi_theme', next);
 }
 
+// Abas que o papel "Faturamento" não pode acessar — só relatórios e
+// informações das cirurgias (dashboard/overview/surgeries/cancelled/reports).
+const ABAS_BLOQUEADAS_FATURAMENTO = ['trash', 'prontuarios', 'audit', 'configuracoes'];
+
 function switchTab(tab) {
     if (tab === 'configuracoes' && !hasPermission(session, 'configuracoes')) {
         alert('Seu perfil não tem acesso às Configurações.');
+        return;
+    }
+    if (session.role === 'faturamento' && ABAS_BLOQUEADAS_FATURAMENTO.includes(tab)) {
+        alert('Seu perfil tem acesso apenas a relatórios e informações das cirurgias.');
         return;
     }
 
@@ -128,6 +149,7 @@ function switchTab(tab) {
         'overview': 'Visão Geral',
         'surgeries': 'Cirurgias',
         'cancelled': 'Canceladas',
+        'faltas': 'Faltas',
         'reports': 'Relatórios',
         'audit': 'Auditoria',
         'prontuarios': 'Prontuários',
@@ -137,6 +159,7 @@ function switchTab(tab) {
     
     if (tab === 'overview') renderCharts();
     if (tab === 'cancelled') filtrarCanceladas();
+    if (tab === 'faltas') filtrarFaltas();
     if (tab === 'configuracoes') { carregarIdentidade(); carregarUsuarios(); carregarMedicos(); }
     if (tab === 'prontuarios') buscarPacientes();
     
@@ -147,12 +170,23 @@ function switchTab(tab) {
 // Permite links externos como "dashboard.html#reports" abrirem direto na aba certa
 window.addEventListener('DOMContentLoaded', () => {
     const hashTab = (location.hash || '').replace('#', '');
-    const validTabs = ['inicial', 'overview', 'surgeries', 'cancelled', 'reports', 'audit', 'prontuarios', 'configuracoes'];
+    const validTabs = ['inicial', 'overview', 'surgeries', 'cancelled', 'faltas', 'reports', 'audit', 'prontuarios', 'configuracoes'];
     if (hashTab && validTabs.includes(hashTab)) switchTab(hashTab);
 
     // Mostra o item "Configurações" na sidebar somente para quem tem permissão
     if (hasPermission(session, 'configuracoes')) {
         document.getElementById('navConfiguracoes').style.display = 'flex';
+    }
+
+    // Papel "Faturamento": esconde tudo que não seja relatório/informação de cirurgia
+    if (session.role === 'faturamento') {
+        ['trash', 'prontuarios', 'audit'].forEach(tab => {
+            document.querySelector(`.sidebar-item[data-tab="${tab}"]`)?.style.setProperty('display', 'none');
+        });
+        ['navPainelTV', 'navSalaEspera', 'navPortalClinicas'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
     }
 
     // Saudação e data na tela Inicial
@@ -167,6 +201,7 @@ function updateAll() {
     updateAlerts();
     updateRooms();
     updateUpcoming();
+    updateFutureSurgeries();
     updateResourcesPending();
     renderCharts();
     filtrarCirurgias();
@@ -179,9 +214,10 @@ function updateKPIs() {
     const hoje = allSurgeries.filter(s => s.date === TODAY);
     const agendadas = allSurgeries.filter(s => s.date > TODAY && s.status !== 'cancelada');
     const canceladas = hoje.filter(s => s.status === 'cancelada').length;
+    const faltasHoje = allFaltas.filter(f => f.date === TODAY).length;
     const taxa = hoje.length > 0 ? ((canceladas / hoje.length) * 100).toFixed(1) : 0;
 
-    const TOTAL_SALAS = ['SALA A', 'SALA B', 'SALA C', 'SALA D'];
+    const TOTAL_SALAS = ['SALA A', 'SALA B', 'SALA C', 'SALA D', 'SALA E'];
     const salasOcupadas = TOTAL_SALAS.filter(sala =>
         hoje.some(s => s.room === sala && (s.status === 'em_andamento' || s.status === 'em_preparacao'))
     ).length;
@@ -192,6 +228,7 @@ function updateKPIs() {
         <div class="stat-card" style="--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-circle-play"></i></div><div class="stat-value">${hoje.filter(s=>s.status==='em_andamento').length}</div><div class="stat-label">Em Andamento</div></div>
         <div class="stat-card" style="--stat-color:#16a34a;"><div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div><div class="stat-value">${hoje.filter(s=>s.status==='concluida').length}</div><div class="stat-label">Finalizadas</div></div>
         <div class="stat-card" style="--stat-color:#e5484d;"><div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-value">${canceladas}</div><div class="stat-label">Canceladas</div></div>
+        <div class="stat-card" style="--stat-color:#8a5a2b;"><div class="stat-icon"><i class="fa-solid fa-user-slash"></i></div><div class="stat-value">${faltasHoje}</div><div class="stat-label">Faltas (Absenteísmo)</div></div>
         <div class="stat-card" style="--stat-color:#0fb5b0;"><div class="stat-icon"><i class="fa-solid fa-hospital"></i></div><div class="stat-value">${salasOcupadas} / ${TOTAL_SALAS.length}</div><div class="stat-label">Salas Ocupadas</div></div>
         <div class="stat-card" style="--stat-color:#7c5cfc;"><div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div><div class="stat-value">${agendadas.length}</div><div class="stat-label">Agendadas</div></div>
         <div class="stat-card" style="--stat-color:#2f6fed;"><div class="stat-icon"><i class="fa-solid fa-arrow-trend-down"></i></div><div class="stat-value">${taxa}%</div><div class="stat-label">Taxa Cancel.</div></div>
@@ -204,10 +241,12 @@ function updateAlerts() {
     const comSangue = hoje.filter(s => s.necessitaSangue === 'sim').length;
     const comUTI = hoje.filter(s => s.necessitaUTI === 'sim').length;
     const canceladas = hoje.filter(s => s.status === 'cancelada').length;
+    const faltasHoje = allFaltas.filter(f => f.date === TODAY).length;
     const aguardando = hoje.filter(s => s.status === 'pendente').length;
     
     const alertas = [];
     if (canceladas > 0) alertas.push(`<div class="alert-item red"><i class="fa-solid fa-circle-exclamation"></i> ${canceladas} cirurgia(s) cancelada(s) hoje</div>`);
+    if (faltasHoje > 0) alertas.push(`<div class="alert-item red"><i class="fa-solid fa-user-slash"></i> ${faltasHoje} falta(s) registrada(s) hoje</div>`);
     if (comSangue > 0) alertas.push(`<div class="alert-item red"><i class="fa-solid fa-droplet"></i> ${comSangue} cirurgia(s) necessitam reserva de sangue</div>`);
     if (comUTI > 0) alertas.push(`<div class="alert-item purple"><i class="fa-solid fa-bed-pulse"></i> ${comUTI} cirurgia(s) necessitam UTI</div>`);
     if (aguardando > 0) alertas.push(`<div class="alert-item orange">⏳ ${aguardando} cirurgia(s) aguardando início</div>`);
@@ -221,7 +260,7 @@ function updateAlerts() {
 
 // ============ SALAS (VISÃO GERAL) ============
 function updateRooms() {
-    const salas = ['SALA A', 'SALA B', 'SALA C', 'SALA D'];
+    const salas = ['SALA A', 'SALA B', 'SALA C', 'SALA D', 'SALA E'];
     const hoje = allSurgeries.filter(s => s.date === TODAY);
     
     document.getElementById('roomsGrid').innerHTML = salas.map(sala => {
@@ -271,6 +310,12 @@ function calcularProgresso(surgery) {
 }
 
 // ============ PRÓXIMAS CIRURGIAS ============
+// Nome do paciente clicável — abre a caixa de detalhes da cirurgia (mesmo
+// comportamento já usado em registro_cirurgias.html).
+function nomeClicavel(s) {
+    return `<span class="surgery-patient-clickable" onclick="window.verDetalhesCirurgia('${s.id}')" title="Clique para ver todos os detalhes"><i class="fa-solid fa-circle-info"></i> ${s.patient||'-'}</span>`;
+}
+
 function updateUpcoming() {
     const proximas = allSurgeries
         .filter(s => s.date === TODAY && ['pendente','em_preparacao','em_andamento','recuperacao'].includes(s.status))
@@ -288,11 +333,38 @@ function updateUpcoming() {
         <tr>
             <td><strong>${s.time||'--:--'}</strong></td>
             <td>${s.room||'-'}</td>
-            <td>${s.patient||'-'}</td>
+            <td>${nomeClicavel(s)}</td>
             <td>${(s.type||'-').substring(0,35)}</td>
             <td>${getDoctorTitle(s.doctor)} ${s.doctor||'-'}</td>
             <td>${s.origem||'-'}</td>
             <td><span class="badge-status ${statusBadgeClass[s.status]||''}">${statusLabels[s.status]||s.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+// Cirurgias com data futura (depois de hoje) — mostrado na tela Inicial para
+// deixar visível de cara que existe agenda futura, sem precisar entrar na
+// aba Cirurgias e filtrar manualmente.
+function updateFutureSurgeries() {
+    const futuras = allSurgeries
+        .filter(s => s.date > TODAY && s.status !== 'cancelada')
+        .sort((a,b) => (a.date||'').localeCompare(b.date||'') || (a.time||'').localeCompare(b.time||''));
+
+    const badge = document.getElementById('futureSurgeriesCount');
+    if (badge) badge.textContent = futuras.length;
+
+    const tbody = document.getElementById('futureSurgeriesBody');
+    if (!tbody) return;
+    if (!futuras.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Nenhuma cirurgia futura agendada</td></tr>'; return; }
+
+    tbody.innerHTML = futuras.slice(0, 8).map(s => `
+        <tr>
+            <td>${formatDate(s.date)}</td>
+            <td>${s.time||'--:--'}</td>
+            <td>${nomeClicavel(s)}</td>
+            <td>${(s.type||'-').substring(0,35)}</td>
+            <td>${getDoctorTitle(s.doctor)} ${s.doctor||'-'}</td>
+            <td>${s.room||'-'}</td>
         </tr>
     `).join('');
 }
@@ -418,6 +490,24 @@ function renderCharts() {
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
         });
     }
+
+    const ctx6 = document.getElementById('faltasMunicipioChart')?.getContext('2d');
+    if (ctx6) {
+        if (faltasMunicipioChart) faltasMunicipioChart.destroy();
+        const municipios = {};
+        allFaltas.forEach(f => { const m = (f.municipio||'').trim() || 'Não informado'; municipios[m] = (municipios[m]||0)+1; });
+        const sortedMun = Object.entries(municipios).sort((a,b) => b[1]-a[1]).slice(0, 10);
+        faltasMunicipioChart = new Chart(ctx6, {
+            type: 'bar',
+            data: { labels: sortedMun.map(([n])=>n), datasets: [{ data: sortedMun.map(([,c])=>c), backgroundColor: '#8a5a2b', borderRadius: 6 }] },
+            options: {
+                indexAxis: 'y',
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+    }
 }
 
 // ============ CIRURGIAS ============
@@ -437,13 +527,13 @@ function filtrarCirurgias() {
     tbody.innerHTML = f.map(s => `
         <tr>
             <td>${formatDate(s.date)}</td>
-            <td><strong>${s.patient||'-'}</strong></td>
+            <td>${nomeClicavel(s)}</td>
             <td>${s.prontuario||'-'}</td>
             <td>${(s.type||'-').substring(0,35)}</td>
             <td>${getDoctorTitle(s.doctor)} ${s.doctor||'-'}</td>
             <td>${s.room||'-'}</td>
             <td><span class="badge-status ${statusBadgeClass[s.status]||''}">${statusLabels[s.status]||s.status}</span></td>
-            <td><button class="btn-sm btn-sm-primary" onclick="editarCirurgia('${s.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="btn-sm btn-sm-danger" onclick="excluirCirurgia('${s.id}')"><i class="fa-solid fa-trash"></i></button></td>
+            <td>${session.role === 'faturamento' ? '-' : `<button class="btn-sm btn-sm-primary" onclick="editarCirurgia('${s.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="btn-sm btn-sm-danger" onclick="excluirCirurgia('${s.id}')"><i class="fa-solid fa-trash"></i></button>`}</td>
         </tr>
     `).join('');
 }
@@ -463,12 +553,166 @@ function filtrarCanceladas() {
     tbody.innerHTML = f.map(s => `
         <tr>
             <td>${formatDate(s.date)}</td>
-            <td><strong>${s.patient||'-'}</strong></td>
+            <td>${nomeClicavel(s)}</td>
             <td>${(s.type||'-').substring(0,35)}</td>
             <td>${getDoctorTitle(s.doctor)} ${s.doctor||'-'}</td>
             <td>${s.cancelReason||'Sem motivo informado'}</td>
         </tr>
     `).join('');
+}
+
+// ============ FALTAS (ABSENTEÍSMO) — registro independente, não é status de cirurgia ============
+function filtrarFaltas() {
+    const search = (document.getElementById('searchFalta')?.value || '').toLowerCase();
+    const municipio = (document.getElementById('searchFaltaMunicipio')?.value || '').toLowerCase();
+    const date = document.getElementById('filterFaltaDate')?.value || '';
+    let f = allFaltas;
+    if (search) f = f.filter(x => (x.patient||'').toLowerCase().includes(search));
+    if (municipio) f = f.filter(x => (x.municipio||'').toLowerCase().includes(municipio));
+    if (date) f = f.filter(x => x.date === date);
+    f = [...f].sort((a,b) => (b.date||'').localeCompare(a.date||''));
+
+    const tbody = document.getElementById('faltasTableBody');
+    if (!tbody) return;
+    if (!f.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhuma falta registrada</td></tr>'; return; }
+
+    const podeEditar = session.role !== 'faturamento';
+    tbody.innerHTML = f.map(x => `
+        <tr>
+            <td>${formatDate(x.date)}</td>
+            <td><strong>${x.patient||'-'}</strong></td>
+            <td>${x.municipio||'-'}</td>
+            <td>${x.procedure||'-'}</td>
+            <td>${x.reason||'-'}</td>
+            <td>${x.registradoPor||'-'}</td>
+            <td>${podeEditar ? `<button class="btn-sm btn-sm-primary" onclick="editarFalta('${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="btn-sm btn-sm-danger" onclick="excluirFalta('${x.id}')"><i class="fa-solid fa-trash"></i></button>` : '-'}</td>
+        </tr>
+    `).join('');
+}
+window.filtrarFaltas = filtrarFaltas;
+
+function abrirModalFalta() {
+    if (session.role === 'faturamento') return;
+    document.getElementById('faltaForm').reset();
+    document.getElementById('faltaId').value = '';
+    document.getElementById('faltaDate').value = TODAY;
+    document.getElementById('modalFaltaTitulo').innerHTML = '<i class="fa-solid fa-user-slash"></i> Registrar Falta';
+    abrirModal('modalFalta');
+}
+window.abrirModalFalta = abrirModalFalta;
+
+window.editarFalta = function(id) {
+    if (session.role === 'faturamento') return;
+    const f = allFaltas.find(x => x.id === id);
+    if (!f) return;
+    document.getElementById('faltaId').value = f.id;
+    document.getElementById('faltaPatient').value = f.patient||'';
+    document.getElementById('faltaDate').value = f.date||'';
+    document.getElementById('faltaMunicipio').value = f.municipio||'';
+    document.getElementById('faltaProcedure').value = f.procedure||'';
+    document.getElementById('faltaReason').value = f.reason||'';
+    document.getElementById('modalFaltaTitulo').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Falta';
+    abrirModal('modalFalta');
+};
+
+window.excluirFalta = async function(id) {
+    if (session.role === 'faturamento') return;
+    if (!confirm('Excluir este registro de falta?')) return;
+    try {
+        await remove(ref(db, `absences/${id}`));
+    } catch (err) {
+        console.error(err);
+        alert('❌ Não foi possível excluir o registro.');
+    }
+};
+
+document.getElementById('faltaForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const id = document.getElementById('faltaId').value;
+    const patient = document.getElementById('faltaPatient').value.trim().toUpperCase();
+    const date = document.getElementById('faltaDate').value;
+    if (!patient || !date) { alert('Preencha ao menos o paciente e a data.'); return; }
+
+    const registro = {
+        patient,
+        date,
+        municipio: document.getElementById('faltaMunicipio').value.trim().toUpperCase(),
+        procedure: document.getElementById('faltaProcedure').value.trim().toUpperCase(),
+        reason: document.getElementById('faltaReason').value.trim(),
+        registradoPor: session.name
+    };
+    try {
+        const faltaRef = id ? ref(db, `absences/${id}`) : push(ref(db, 'absences'));
+        registro.id = id || faltaRef.key;
+        if (!id) registro.criadoEm = new Date().toISOString();
+        await set(faltaRef, registro);
+        fecharModal('modalFalta');
+    } catch (err) {
+        console.error(err);
+        alert('❌ Não foi possível salvar o registro de falta.');
+    }
+});
+
+function montarTabelaFaltas(dados) {
+    if (!dados.length) return '<div class="empty-state">Nenhuma falta encontrada para este filtro.</div>';
+    const linhas = [...dados]
+        .sort((a,b) => (b.date||'').localeCompare(a.date||''))
+        .map((f,i) => `<tr>
+            <td>${i+1}</td>
+            <td>${formatDate(f.date)}</td>
+            <td>${f.patient||'-'}</td>
+            <td>${f.municipio||'-'}</td>
+            <td>${f.procedure||'-'}</td>
+            <td>${f.reason||'-'}</td>
+            <td>${f.registradoPor||'-'}</td>
+        </tr>`).join('');
+    return `<div class="table-card"><table>
+        <thead><tr><th>Nº</th><th>Data</th><th>Paciente</th><th>Município</th><th>Procedimento</th><th>Motivo</th><th>Registrado por</th></tr></thead>
+        <tbody>${linhas}</tbody>
+    </table></div>`;
+}
+
+function visualizarRelatorioFaltas() {
+    abrirPreviaRelatorio('Relatório de Faltantes (Absenteísmo)', allFaltas, 'faltas');
+}
+window.visualizarRelatorioFaltas = visualizarRelatorioFaltas;
+
+function gerarPDFFaltas(titulo, dados) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    try { if (hospitalLogo) doc.addImage(hospitalLogo, 'PNG', 14, 8, 22, 22); } catch(e) {}
+    try { if (govLogo) doc.addImage(govLogo, 'PNG', 40, 8, 22, 22); } catch(e) {}
+    doc.setFillColor(11,35,64);
+    doc.rect(0, 0, 297, 8, 'F');
+    doc.setFontSize(14); doc.setTextColor(11,35,64); doc.setFont('helvetica','bold');
+    doc.text(`${systemName} - Gestão de Centro Cirúrgico`, 148, 16, { align: 'center' });
+    doc.setFontSize(10); doc.setTextColor(47,111,237); doc.setFont('helvetica','normal');
+    doc.text(hospitalName, 148, 22, { align: 'center' });
+    doc.setFontSize(12); doc.setTextColor(11,35,64); doc.setFont('helvetica','bold');
+    doc.text(titulo, 148, 29, { align: 'center' });
+    doc.setDrawColor(47,111,237); doc.setLineWidth(0.8); doc.line(14, 32, 283, 32);
+    doc.setFontSize(8); doc.setTextColor(100,116,139); doc.setFont('helvetica','normal');
+    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')} | Total: ${dados.length}`, 14, 37);
+
+    const body = [...dados].sort((a,b) => (b.date||'').localeCompare(a.date||'')).map((f,i) => [
+        i+1, formatDate(f.date), f.patient||'-', f.municipio||'-', f.procedure||'-', f.reason||'-', f.registradoPor||'-'
+    ]);
+    doc.autoTable({
+        startY: 42,
+        head: [['Nº','Data','Paciente','Município','Procedimento','Motivo','Registrado por']],
+        body,
+        theme: 'grid',
+        styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak', valign: 'middle', lineColor: [226,232,240], lineWidth: 0.15 },
+        headStyles: { fillColor: [11,35,64], textColor: 255, fontStyle: 'bold', fontSize: 8, halign: 'center' },
+        alternateRowStyles: { fillColor: [248,250,252] }
+    });
+    const pages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(7); doc.setTextColor(150,150,150);
+        doc.text(`${systemName} - Página ${i}/${pages}`, 148, doc.internal.pageSize.height - 8, { align: 'center' });
+    }
+    doc.save(`relatorio_faltas_${getToday()}.pdf`);
 }
 
 // ============ AUDITORIA ============
@@ -511,7 +755,7 @@ function gerarRelatorio(tipo) {
 }
 
 // ============ RELATÓRIO NA TELA (sem precisar gerar PDF) ============
-let relatorioAtual = { titulo: '', dados: [] };
+let relatorioAtual = { titulo: '', dados: [], tipo: 'cirurgias' };
 const statusTextRelatorio = {
     pendente: 'Aguardando', em_preparacao: 'Em preparo', em_andamento: 'Em andamento',
     recuperacao: 'Recuperação', concluida: 'Finalizada', suspensa: 'Suspensa', cancelada: 'Cancelada'
@@ -545,11 +789,11 @@ function montarTabelaRelatorio(dados) {
     </table></div>`;
 }
 
-function abrirPreviaRelatorio(titulo, dados) {
-    relatorioAtual = { titulo, dados };
+function abrirPreviaRelatorio(titulo, dados, tipo = 'cirurgias') {
+    relatorioAtual = { titulo, dados, tipo };
     document.getElementById('relatorioPreviaTitulo').textContent = titulo;
-    document.getElementById('relatorioPreviaResumo').textContent = `Total: ${dados.length} cirurgia(s)`;
-    document.getElementById('relatorioPreviaConteudo').innerHTML = montarTabelaRelatorio(dados);
+    document.getElementById('relatorioPreviaResumo').textContent = `Total: ${dados.length} ${tipo === 'faltas' ? 'falta(s)' : 'cirurgia(s)'}`;
+    document.getElementById('relatorioPreviaConteudo').innerHTML = tipo === 'faltas' ? montarTabelaFaltas(dados) : montarTabelaRelatorio(dados);
     abrirModal('modalRelatorioPrevia');
 }
 
@@ -601,7 +845,8 @@ function visualizarRelatorioMutiraoPersonalizado() {
 
 function baixarRelatorioAtual() {
     if (!relatorioAtual.titulo) return;
-    gerarPDF(relatorioAtual.titulo, relatorioAtual.dados);
+    if (relatorioAtual.tipo === 'faltas') gerarPDFFaltas(relatorioAtual.titulo, relatorioAtual.dados);
+    else gerarPDF(relatorioAtual.titulo, relatorioAtual.dados);
 }
 
 function getSemanaAtual() {
@@ -669,27 +914,27 @@ function gerarPDF(titulo, dados) {
     const body = [...dados].sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (a.time||'').localeCompare(b.time||'')).map((s,i)=>[
         i+1, formatDate(s.date), s.time||'-', s.patient||'-', s.age||'-',
         (s.type||'-').replace(/\n/g, ', ').substring(0,40), `${getDoctorTitle(s.doctor)} ${s.doctor||'-'}`,
-        `${getDoctorTitle(s.anesthetist)} ${s.anesthetist||'-'}`, s.specialty||'-', s.room||'-', s.origem||'-',
+        `${getDoctorTitle(s.anesthetist)} ${s.anesthetist||'-'}`, s.instrumentador||'-', s.specialty||'-', s.room||'-', s.origem||'-',
         s.necessitaSangue==='sim'?'Sim':'Não', s.necessitaUTI==='sim'?'Sim':'Não',
         statusText[s.status]||'Não informado', s.cancelReason||'-'
     ]);
     
     doc.autoTable({
         startY: statusCounts.length ? 50 : 42,
-        head: [['Nº','Data','Hora','Paciente','Idade','Procedimento','Médico','Anestesista','Especialidade','Sala','Origem','Sangue','UTI','Status','Motivo']],
+        head: [['Nº','Data','Hora','Paciente','Idade','Procedimento','Médico','Anestesista','Instrumentador(a)','Especialidade','Sala','Origem','Sangue','UTI','Status','Motivo']],
         body,
         theme: 'grid',
         styles:{fontSize:6.5,cellPadding:1.5,overflow:'linebreak',valign:'middle',lineColor:[226,232,240],lineWidth:0.15},
         headStyles:{fillColor:[11,35,64],textColor:255,fontStyle:'bold',fontSize:6.5,halign:'center'},
         alternateRowStyles:{fillColor:[248,250,252]},
         columnStyles:{
-            0:{cellWidth:8,halign:'center'}, 1:{cellWidth:17,halign:'center'}, 2:{cellWidth:11,halign:'center'},
-            3:{cellWidth:25}, 4:{cellWidth:8,halign:'center'}, 5:{cellWidth:33}, 6:{cellWidth:29},
-            7:{cellWidth:25}, 8:{cellWidth:21}, 9:{cellWidth:14,halign:'center'}, 10:{cellWidth:20}, 11:{cellWidth:11,halign:'center'},
-            12:{cellWidth:9,halign:'center'}, 13:{cellWidth:20,halign:'center'}, 14:{cellWidth:23}
+            0:{cellWidth:7,halign:'center'}, 1:{cellWidth:15,halign:'center'}, 2:{cellWidth:10,halign:'center'},
+            3:{cellWidth:22}, 4:{cellWidth:7,halign:'center'}, 5:{cellWidth:29}, 6:{cellWidth:24},
+            7:{cellWidth:22}, 8:{cellWidth:20}, 9:{cellWidth:18}, 10:{cellWidth:13,halign:'center'}, 11:{cellWidth:17},
+            12:{cellWidth:10,halign:'center'}, 13:{cellWidth:9,halign:'center'}, 14:{cellWidth:18,halign:'center'}, 15:{cellWidth:20}
         },
         didParseCell(data) {
-            if (data.section === 'body' && data.column.index === 13) {
+            if (data.section === 'body' && data.column.index === 14) {
                 const value = data.cell.raw;
                 const colors = { 'Aguardando':[245,158,11], 'Em preparo':[124,92,252], 'Em andamento':[47,111,237], 'Recuperacao':[14,165,164], 'Finalizada':[22,163,74], 'Suspensa':[100,116,139], 'Cancelada':[229,72,77] };
                 if (colors[value]) data.cell.styles.textColor = colors[value];
@@ -709,6 +954,7 @@ function gerarPDF(titulo, dados) {
 
 // ============ UTILITÁRIOS ============
 function editarCirurgia(id) {
+    if (session.role === 'faturamento') return;
     const s = allSurgeries.find(s => s.id === id);
     if (!s) return;
     setValue('editId', s.id);
@@ -717,7 +963,6 @@ function editarCirurgia(id) {
     setValue('editBirthDate', s.birthDate||'');
     setValue('editAge', s.age||'');
     setValue('editOrigem', s.origem||'');
-    setValue('editMutiraoNome', s.mutiraoNome||'');
     setValue('editType', s.type||'');
     setValue('editSpecialty', s.specialty||'');
     setValue('editDoctor', s.doctor||'');
@@ -739,6 +984,7 @@ function editarCirurgia(id) {
 function setValue(id, value) { const el = document.getElementById(id); if (el) el.value = value; }
 
 function excluirCirurgia(id) {
+    if (session.role === 'faturamento') return;
     if (!confirm('EXCLUIR permanentemente?')) return;
     remove(ref(db, `surgeries/${id}`));
 }
@@ -816,7 +1062,6 @@ document.getElementById('editForm')?.addEventListener('submit', function(e) {
         birthDate: document.getElementById('editBirthDate').value,
         age: document.getElementById('editAge').value,
         origem: document.getElementById('editOrigem').value,
-        mutiraoNome: document.getElementById('editMutiraoNome').value.trim(),
         type: document.getElementById('editType').value.toUpperCase(),
         specialty: document.getElementById('editSpecialty').value,
         doctor: document.getElementById('editDoctor').value.toUpperCase(),
@@ -935,7 +1180,7 @@ async function carregarUsuarios() {
             <tr>
                 <td>${u.name}</td>
                 <td>${u.username}</td>
-                <td><span class="badge ${u.role==='admin'?'badge-purple':u.role==='diretor'?'badge-info':'badge-warning'}">${roleLabel(u.role)}</span></td>
+                <td><span class="badge ${u.role==='admin'?'badge-purple':u.role==='diretor'?'badge-info':u.role==='faturamento'?'badge-teal':'badge-warning'}">${roleLabel(u.role)}</span></td>
                 <td><span class="badge ${u.active?'badge-success':'badge-danger'}">${u.active?'Ativo':'Inativo'}</span></td>
                 <td class="action-btns">
                     <button class="btn-sm btn-sm-edit" onclick='editarUsuario(${JSON.stringify(u.username)})'><i class="fa-solid fa-pen-to-square"></i></button>
@@ -1011,6 +1256,8 @@ function abrirModalUsuario() {
     document.getElementById('userForm').reset();
     document.getElementById('userOriginalUsername').value = '';
     document.getElementById('userAtivo').checked = true;
+    document.getElementById('userPassword').value = '12345';
+    document.getElementById('userForcarTroca').checked = true;
     document.getElementById('modalUsuarioTitulo').innerHTML = '<i class="fa-solid fa-user-plus"></i> Novo Usuário';
     document.getElementById('userUsername').disabled = false;
     abrirModal('modalUsuario');
@@ -1025,6 +1272,7 @@ window.editarUsuario = function(username) {
     document.getElementById('userUsername').value = u.username;
     document.getElementById('userUsername').disabled = true;
     document.getElementById('userPassword').value = u.password;
+    document.getElementById('userForcarTroca').checked = !!u.mustChangePassword;
     document.getElementById('userRoleSelect').value = u.role;
     document.getElementById('userAtivo').checked = !!u.active;
     document.getElementById('modalUsuarioTitulo').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Usuário';
@@ -1051,7 +1299,8 @@ document.getElementById('userForm')?.addEventListener('submit', async function(e
         username,
         password: document.getElementById('userPassword').value.trim(),
         role: document.getElementById('userRoleSelect').value,
-        active: document.getElementById('userAtivo').checked
+        active: document.getElementById('userAtivo').checked,
+        mustChangePassword: document.getElementById('userForcarTroca').checked
     };
     if (!username || !user.password) { alert('Preencha usuário e senha.'); return; }
     try {
@@ -1077,6 +1326,78 @@ function pacienteKey(s) {
 }
 function safeFbKey(key) {
     return key.replace(/[.#$\[\]\/]/g, '_');
+}
+
+// Busca a ficha do paciente (prontuário) correspondente a uma cirurgia, por
+// prontuário ou, na falta dele, por nome — mesma lógica usada em registro.js.
+function buscarFichaPacientePorCirurgia(s) {
+    if (!s) return null;
+    if (s.prontuario && s.prontuario.trim()) {
+        const porProntuario = allPatients.find(p => (p.prontuario || '').trim().toUpperCase() === s.prontuario.trim().toUpperCase());
+        if (porProntuario) return porProntuario;
+    }
+    return allPatients.find(p => (p.nome || '').trim().toUpperCase() === (s.patient || '').trim().toUpperCase()) || null;
+}
+
+// ============ DETALHAMENTO COMPLETO (clique no nome do paciente) ============
+function verDetalhesCirurgia(id) {
+    const s = allSurgeries.find(s => s.id === id);
+    if (!s) return;
+    const ficha = buscarFichaPacientePorCirurgia(s);
+
+    const linha = (icone, label, valor) => valor ? `<div class="detail-row"><i class="fa-solid ${icone}"></i> <strong>${label}:</strong> <span>${valor}</span></div>` : '';
+
+    let html = '';
+    html += linha('fa-hashtag', 'Código', s.code);
+    html += linha('fa-id-card', 'Prontuário', s.prontuario);
+    html += linha('fa-cake-candles', 'Idade', s.age ? `${s.age} anos` : '');
+    html += linha('fa-kit-medical', 'Procedimento(s)', (s.type || '-').replace(/\n/g, '<br>'));
+    html += linha('fa-calendar-day', 'Data', s.date);
+    html += linha('fa-clock', 'Horário', s.time);
+    html += linha('fa-hospital', 'Sala', s.room);
+    html += linha('fa-microscope', 'Especialidade', s.specialty);
+    html += linha('fa-user-doctor', 'Médico', s.doctor ? `${getDoctorTitle(s.doctor)} ${s.doctor}` : '');
+    html += linha('fa-hand-holding-medical', 'Instrumentador(a)', s.instrumentador);
+    html += linha('fa-syringe', 'Anestesista', s.anesthetist ? `${getDoctorTitle(s.anesthetist)} ${s.anesthetist}` : '');
+    html += linha('fa-droplet', 'Reserva de sangue', s.necessitaSangue === 'sim' ? 'Sim' : s.necessitaSangue === 'talvez' ? 'Possivelmente' : 'Não');
+    html += linha('fa-bed-pulse', 'Necessidade de UTI', s.necessitaUTI === 'sim' ? 'Sim' : s.necessitaUTI === 'talvez' ? 'Possivelmente' : 'Não');
+    html += linha('fa-toolbox', 'Materiais especiais', s.materiaisEspeciais);
+    html += linha('fa-people-group', 'Origem', s.origem === 'Mutirão' && s.mutiraoNome ? `Mutirão — ${s.mutiraoNome}` : s.origem);
+    html += linha('fa-note-sticky', 'Observações da cirurgia', s.observacoes);
+    html += linha('fa-circle-info', 'Status', statusLabels[s.status] || s.status);
+
+    if (s.status === 'cancelada' && s.cancelReason) {
+        html += `<div class="detail-row detail-alert"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Motivo do cancelamento:</strong> <span>${s.cancelReason}</span></div>`;
+    }
+    if (s.status === 'suspensa' && s.suspendReason) {
+        html += `<div class="detail-row detail-alert"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Motivo da suspensão:</strong> <span>${s.suspendReason}</span></div>`;
+    }
+
+    // Dados de ficha (alergias etc.) não fazem sentido para o papel de Faturamento,
+    // que só precisa de informações operacionais/administrativas da cirurgia.
+    if (session.role !== 'faturamento') {
+        html += '<hr class="detail-divider">';
+        if (ficha) {
+            html += linha('fa-droplet', 'Tipo sanguíneo', ficha.tipoSanguineo);
+            if ((ficha.alergias || '').trim()) {
+                html += `<div class="detail-row detail-alert"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Alergias:</strong> <span>${ficha.alergias}</span></div>`;
+            } else {
+                html += `<div class="detail-row"><i class="fa-solid fa-circle-check"></i> <strong>Alergias:</strong> <span>Nenhuma alergia registrada na ficha</span></div>`;
+            }
+            html += linha('fa-notes-medical', 'Comorbidades/Observações do paciente', ficha.observacoes);
+            html += linha('fa-phone', 'Contato de emergência', ficha.emergenciaNome ? `${ficha.emergenciaNome}${ficha.emergenciaTelefone ? ' — ' + ficha.emergenciaTelefone : ''}` : '');
+        } else {
+            html += `<div class="detail-row"><i class="fa-solid fa-circle-info"></i> <span>Este paciente ainda não possui ficha (prontuário) cadastrada com alergias/comorbidades.</span></div>`;
+        }
+    }
+
+    document.getElementById('detalhesCirurgiaTitulo').innerHTML = `<i class="fa-solid fa-user"></i> ${s.patient || '-'}`;
+    document.getElementById('detalhesCirurgiaConteudo').innerHTML = html;
+    document.getElementById('modalDetalhesCirurgia').classList.add('active');
+}
+
+function fecharModalDetalhes() {
+    document.getElementById('modalDetalhesCirurgia')?.classList.remove('active');
 }
 
 function listaDePacientesAgrupados() {

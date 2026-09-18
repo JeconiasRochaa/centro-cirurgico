@@ -18,13 +18,16 @@ const SEED_USERS = {
 // admin: acesso total, incluindo Configurações.
 // diretor: acesso total, EXCETO Configurações.
 // cirurgico: acesso restrito — apenas Registrar Cirurgia e Painel TV (somente leitura).
+// faturamento: acesso restrito — apenas relatórios e informações das cirurgias (dashboard),
+// sem edição/exclusão de cirurgias, sem prontuários, sem auditoria, sem configurações/usuários.
 const ROLE_PERMISSIONS = {
     admin: { dashboard: true, configuracoes: true, usuarios: true, registro: true, prontuarios: true },
     diretor: { dashboard: true, configuracoes: false, usuarios: false, registro: true, prontuarios: true },
-    cirurgico: { dashboard: false, configuracoes: false, usuarios: false, registro: true, prontuarios: true }
+    cirurgico: { dashboard: false, configuracoes: false, usuarios: false, registro: true, prontuarios: true },
+    faturamento: { dashboard: true, configuracoes: false, usuarios: false, registro: false, prontuarios: false }
 };
 
-const ROLE_LABELS = { admin: 'Administrador', diretor: 'Diretor(a)', cirurgico: 'Centro Cirúrgico' };
+const ROLE_LABELS = { admin: 'Administrador', diretor: 'Diretor(a)', cirurgico: 'Centro Cirúrgico', faturamento: 'Faturamento' };
 
 export function roleLabel(role) { return ROLE_LABELS[role] || role; }
 
@@ -77,11 +80,34 @@ export async function login(username, password) {
         username: user.username,
         name: user.name,
         role: user.role,
+        mustChangePassword: !!user.mustChangePassword,
         loginTime: new Date().toISOString()
     };
 
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
     return { success: true, user: session };
+}
+
+// Troca a senha do próprio usuário logado (usada no primeiro acesso e sempre
+// que quiser trocar a senha). Grava no Firebase e atualiza a sessão ativa,
+// sem precisar fazer login novamente. Preserva os demais dados do usuário
+// (inclusive quando ele ainda só existe como usuário padrão/seed).
+export async function changeOwnPassword(username, newPassword) {
+    const uname = (username || '').trim().toLowerCase();
+    if (!uname) throw new Error('Sessão inválida');
+    if (!newPassword || newPassword.length < 4) throw new Error('Senha muito curta');
+
+    const users = await getUsersMap();
+    const atual = users[uname];
+    if (!atual) throw new Error('Usuário não encontrado');
+
+    await set(ref(db, `settings/users/${uname}`), { ...atual, username: uname, password: newPassword, mustChangePassword: false });
+
+    const session = getSession();
+    if (session && session.username === uname) {
+        session.mustChangePassword = false;
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    }
 }
 
 export function getSession() {
@@ -100,6 +126,14 @@ export function requireAuth(requiredFeature) {
 
     if (!session) {
         window.location.href = 'login.html';
+        return null;
+    }
+
+    // Se a senha ainda é a padrão / foi marcada para troca obrigatória, força a
+    // troca antes de liberar qualquer outra tela do sistema.
+    const paginaAtual = (window.location.pathname.split('/').pop() || '').toLowerCase();
+    if (session.mustChangePassword && paginaAtual !== 'trocar-senha.html') {
+        window.location.href = 'trocar-senha.html';
         return null;
     }
 
