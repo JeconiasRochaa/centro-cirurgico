@@ -1,0 +1,2 @@
+IMAGEM DA TELA DE LOGIN: login-bg.jpg (embutida no código; não depende de internet).
+Para trocar: substitua este arquivo por outro com o mesmo nome (.jpg/.jpeg/.png/.webp), de preferência com menos de 500 KB, e rode "npm run build".
